@@ -30,7 +30,7 @@ jobs:
           fi
           date -u +"%Y-%m-%d %H:%M:%S" > .keepalive
           git add .keepalive
-          git diff --staged --quiet || git commit -m "chore: keepalive $TODAY"
+          git diff --staged --quiet || git commit -m "Chore: keep cron active $TODAY"
           git push || true
 
   bluebuild:
