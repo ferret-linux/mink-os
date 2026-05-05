@@ -1,0 +1,25 @@
+---
+# yaml-language-server: $schema=https://schema.blue-build.org/module-list-v1.json
+
+modules:
+ - type: script
+   snippets:
+      - |
+        dnf install -y --setopt=install_weak_deps=False dnf5-plugins
+        dnf config-manager addrepo --from-repofile=https://negativo17.org/repos/fedora-multimedia.repo
+        dnf config-manager addrepo --from-repofile=https://ferret-project.github.io/repo/ferret-kmods.repo
+        dnf config-manager addrepo --from-repofile=https://ferret-project.github.io/repo/ferret-pkgs.repo
+        dnf config-manager setopt fedora-multimedia.enabled=1
+        dnf config-manager setopt ferret-kmods.enabled=1
+        dnf config-manager setopt ferret-pkgs.enabled=1
+        dnf config-manager setopt fedora-multimedia.priority=90
+        dnf config-manager setopt ferret-kmods.priority=90
+        dnf config-manager setopt ferret-pkgs.priority=90
+        dnf remove -y fedora-repos-archive
+        rm -f /etc/yum.repos.d/fedora-updates-testing.repo
+        rm -f /etc/yum.repos.d/fedora-updates-archive.repo
+        rm -f /etc/yum.repos.d/fedora-cisco-openh264.repo
+        dnf autoremove -y
+        dnf clean packages
+        dnf clean all
+        dnf upgrade --refresh --setopt=install_weak_deps=False -y

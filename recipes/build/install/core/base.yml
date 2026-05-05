@@ -1,0 +1,69 @@
+---
+# yaml-language-server: $schema=https://schema.blue-build.org/module-list-v1.json
+
+modules:
+ - type: dnf
+   install:
+     install-weak-deps: false
+     packages:
+    # => Alsa Core
+      - alsa-ucm
+      - alsa-firmware
+      - alsa-sof-firmware
+      - alsa-tools-firmware
+     # => Firmwares 
+      - iwlwifi-mvm-firmware
+      - iwlwifi-mld-firmware
+    # => LibCamera
+      - libcamera
+      - libcamera-ipa
+      - libcamera-v4l2
+      - libcamera-gstreamer
+      - pipewire-plugin-libcamera
+    # => V4l & libGP
+      - gphoto2
+      - libgphoto2
+      - pipewire-v4l2
+    # => Kernel Modules
+      - linux-firmware
+      - kernel-tools-libs
+      - kernel-modules-extra
+    # => Init & Defaults
+      - i2c-tools
+      - uresourced
+      - dbus-daemon
+      - shadow-utils
+      - vulkan-tools
+      - inotify-tools
+      - unbound-anchor
+      - zram-generator
+      - usb_modeswitch
+      - systemd-oomd-defaults
+    # => User Apps
+      - flatpak
+    # => Nix
+      - nix
+      - make
+      - patch
+      - glibc
+      - sqlite
+      - busybox
+      - nix-daemon
+    # => Performance & stats apps
+      - falcond
+      - mangohud
+      - scx-tools
+      - scx-scheds
+    # => TPM2.0 Support
+      - tpm2-tools
+    # => fuse (Appimage & winboat)
+      - fuse
+      - freerdp
+      - fuse-libs
+    #=> Zsh Shell
+      - zsh
+      - zsh-autosuggestions
+      - zsh-syntax-highlighting
+    #=> Plymouth
+      - plymouth
+      - plymouth-plugin-two-step

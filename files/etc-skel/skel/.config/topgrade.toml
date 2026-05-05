@@ -1,0 +1,15 @@
+[misc]
+no_self_update = true
+only = ["system", "flatpak", "distrobox", "nix", "brew_cask", "brew_formula"]
+ignore_failures = ["flatpak", "distrobox", "nix", "brew_cask", "brew_formula"]
+assume_yes = true
+ask_retry = false
+auto_retry = 0
+pre_sudo = true
+sudo_loop = true
+sudo_loop_interval = 180
+sudo_command = "sudo"
+cleanup = true
+
+[linux]
+bootc = true

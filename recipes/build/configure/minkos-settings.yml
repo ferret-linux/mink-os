@@ -1,0 +1,50 @@
+---
+# yaml-language-server: $schema=https://schema.blue-build.org/module-list-v1.json
+
+modules:
+  - type: kargs
+    kargs:
+      - split_lock_detect=off
+      - split_lock_mitigate=0
+
+  - type: files
+    files:
+      - source: etc-skel
+        destination: /etc
+      - source: user-scripts
+        destination: /usr/lib/zrun-scripts
+
+  - type: script
+    snippets:
+      - |
+        dnf install ferret-settings -y
+        sed -i 's|^SHELL=.*|SHELL=/usr/bin/zsh|' /etc/default/useradd
+        rm -rf /usr/share/plymouth/themes/charge
+        rm -rf /usr/share/plymouth/themes/details
+        rm -rf /usr/share/plymouth/themes/spinner
+        rm -rf /usr/share/plymouth/themes/text
+        rm -rf /usr/share/plymouth/themes/tribar
+
+  - type: script
+    snippets:
+      - |
+        systemctl mask systemd-remount-fs.service
+        systemctl disable bootc-fetch-apply-updates.timer
+        systemctl mask bootc-fetch-apply-updates.timer
+        systemctl disable flatpak-add-fedora-repos.service
+        systemctl mask flatpak-add-fedora-repos.service
+
+  - type: script
+    snippets:
+      - |
+        mkdir -p /nix
+        mkdir -p /var/nix
+        systemctl enable falcond
+        systemctl enable nix.mount
+        systemctl enable nix-daemon
+        systemctl enable systemd-timesyncd.service
+        systemctl enable ferret-hostname.service
+        systemctl enable ferret-flatpak.service
+        systemctl enable ferret-groups.service
+        systemctl enable ferret-rfkill.service
+        plymouth-set-default-theme zomac

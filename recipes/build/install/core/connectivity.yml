@@ -1,0 +1,34 @@
+---
+# yaml-language-server: $schema=https://schema.blue-build.org/module-list-v1.json
+
+modules:
+ - type: dnf
+   install:
+     install-weak-deps: false
+     packages:
+     # => BlueTooth
+       - bluez
+       - bluez-libs
+     # => Firewall
+       - firewalld
+     # => VPN's
+       - openvpn
+       - openconnect
+       - wireguard-tools
+     # => Backends
+       - iwd
+       - cifs-utils
+       - fuse-sshfs
+       - avahi-tools
+       - ModemManager
+       - iptables-nft
+       - wpa_supplicant
+       - mobile-broadband-provider-info
+     # => Network Manager
+       - NetworkManager
+       - NetworkManager-wifi
+       - NetworkManager-wwan
+       - NetworkManager-openvpn
+       - NetworkManager-bluetooth
+       - NetworkManager-openconnect
+       - NetworkManager-config-connectivity-fedora

@@ -1,0 +1,57 @@
+---
+# yaml-language-server: $schema=https://schema.blue-build.org/module-list-v1.json
+
+modules:
+  - type: dnf
+    install:
+      install-weak-deps: false
+      packages:
+      # => gnu tools replacement
+       - bat
+       - eza
+       - fzf
+       - btop
+       - zoxide
+       - fd-find
+       - ripgrep
+       - starship
+       - trash-cli
+       - eza-zsh-completion
+      # => Compilers & libraries
+       - gcc
+       - curl
+       - zstd
+       - gcc-c++
+      # => text-editors
+       - neovim
+      # => common user utils
+       - zrun
+       - zfetch
+       - topgrade
+      #=> git & git-extras
+       - git
+       - git-lfs
+       - git-annex
+       - git-delta
+      #=> podman (containers)
+       - crun
+       - podman
+       - buildah
+      #=> LXC (VM-like containers)
+       - lxc
+       - lxc-libs
+       - lxc-templates
+      #=> User Container Management tools
+       - distrobox
+      #=> docker-ce (containers)
+       - docker-ce
+       - docker-ce-cli
+       - containerd.io
+       - docker-buildx-plugin
+       - docker-compose-plugin
+
+  - type: script
+    snippets:
+      - |
+        systemctl enable docker.service
+        systemctl enable containerd.service

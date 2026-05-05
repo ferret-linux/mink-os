@@ -1,0 +1,50 @@
+---
+# yaml-language-server: $schema=https://schema.blue-build.org/module-list-v1.json
+
+modules:
+  - type: script
+    snippets:
+      - |
+        dnf config-manager setopt fedora-multimedia.enabled=0
+        dnf config-manager addrepo --from-repofile=https://negativo17.org/repos/fedora-nvidia.repo
+        dnf config-manager setopt fedora-nvidia.enabled=1
+        dnf config-manager setopt fedora-nvidia.priority=90
+        dnf makecache --refresh
+        dnf install -y nvidia-modprobe nvidia-kmod-common kmod-nvidia-"$(rpm -q kernel --queryformat '%{VERSION}-%{RELEASE}.%{ARCH}' | tail -1)"
+
+  - type: dnf
+    install:
+      install-weak-deps: false
+      packages:
+        - prime-run
+        - libnvidia-fbc
+        - nvidia-driver
+        - nvidia-settings
+        - nvidia-driver-cuda
+        - libva-nvidia-driver
+        - nvidia-persistenced
+        - nvidia-driver-selinux
+        - nvidia-container-toolkit
+        - nvidia-container-services
+        - nvidia-driver-NvFBCOpenGL
+        - nvidia-container-toolkit-selinux
+
+  - type: kargs
+    kargs:
+      - rd.driver.blacklist=nouveau,nova_core
+      - modprobe.blacklist=nouveau,nova_core
+
+  - type: script
+    snippets:
+      - |
+        systemctl enable nvidia-persistenced.service
+        depmod -a "$(rpm -q kernel --queryformat '%{VERSION}-%{RELEASE}.%{ARCH}' | tail -1)"
+        sed -i 's/omit_drivers/force_drivers/g' /usr/lib/dracut/dracut.conf.d/99-nvidia.conf
+        sed -i 's/ nvidia / i915 amdgpu nvidia /g' /usr/lib/dracut/dracut.conf.d/99-nvidia.conf
+
+  - type: script
+    snippets:
+      - |
+        dnf config-manager setopt fedora-nvidia.enabled=0
+        rm -f /etc/yum.repos.d/fedora-nvidia.repo
+        dnf config-manager setopt fedora-multimedia.enabled=1

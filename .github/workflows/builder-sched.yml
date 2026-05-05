@@ -1,0 +1,60 @@
+name: builder (scheduled)
+on:
+  schedule:
+    - cron: "25 06 * * *"
+    - cron: "25 16 * * *"
+
+  workflow_dispatch:
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref || github.run_id }}
+  cancel-in-progress: true
+jobs:
+  keepalive:
+    name: Keep-Cron Active
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v6
+
+      - name: Keepalive
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          TODAY=$(date -u +"%Y-%m-%d")
+          LAST=$(cat .keepalive 2>/dev/null | grep -oP '^\d{4}-\d{2}-\d{2}' || echo "")
+          if [ "$LAST" = "$TODAY" ]; then
+            echo "Keepalive already ran today ($TODAY), skipping."
+            exit 0
+          fi
+          date -u +"%Y-%m-%d %H:%M:%S" > .keepalive
+          git add .keepalive
+          git diff --staged --quiet || git commit -m "chore: keepalive $TODAY"
+          git push || true
+
+  bluebuild:
+    name: Building-Image (${{ matrix.recipe }})
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      packages: write
+      id-token: write
+    strategy:
+      fail-fast: false
+      matrix:
+        recipe:
+          - mesa.yml
+          - nvidia.yml
+
+    steps:
+      - name: BlueBuild-Image Builder
+        uses: blue-build/github-action@v1.11
+        with:
+          recipe: ${{ matrix.recipe }}
+          cosign_private_key: ${{ secrets.SIGNING_SECRET }}
+          registry_token: ${{ github.token }}
+          pr_event_number: ${{ github.event.number }}
+          maximize_build_space: true
+          build_chunked_oci: true
+          verify_install: true

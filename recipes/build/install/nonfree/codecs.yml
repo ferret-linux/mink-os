@@ -1,0 +1,50 @@
+---
+# yaml-language-server: $schema=https://schema.blue-build.org/module-list-v1.json
+
+modules:
+ - type: dnf
+   install:
+     install-weak-deps: false
+     packages:
+      # => Image Codecs
+      - libjxl
+      - libheif
+      - libwebp
+      - libavif
+      # => FFmpeg
+      - exiv2
+      - ffmpeg
+      - libldac
+      - libfdk-aac
+      - ffmpeg-libs
+      - libfreeaptx
+      # => Mesa Drivers
+      - mesa-libGL
+      - mesa-libgbm
+      - mesa-libEGL
+      - mesa-filesystem
+      - mesa-dri-drivers
+      # => intel media drivers
+      - intel-gmmlib
+      - intel-vpl-gpu-rt
+      - libva-intel-media-driver
+      # => AMD media drivers
+      - mesa-va-drivers
+      - mesa-vulkan-drivers
+      # => Gstreamer Plugins
+      - gstreamer1-plugins-bad
+      - gstreamer1-plugin-libav
+      - gstreamer1-plugins-ugly
+      - gstreamer1-plugins-good
+      - gstreamer1-plugins-good-extras
+      # => Pipewire stack
+      - pipewire
+      - wireplumber
+      - pipewire-alsa
+      - pipewire-libs
+      - pipewire-gstreamer
+      - pipewire-libs-extra
+      - pipewire-pulseaudio
+      - pipewire-config-raop
+      - pipewire-jack-audio-connection-kit
+      - pipewire-jack-audio-connection-kit-libs

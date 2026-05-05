@@ -1,0 +1,17 @@
+---
+# yaml-language-server: $schema=https://schema.blue-build.org/module-list-v1.json
+
+modules:
+  - type: script
+    snippets:
+      - |
+        dnf upgrade --refresh --setopt=install_weak_deps=False -y
+        dnf config-manager setopt fedora-multimedia.enabled=0
+        dnf config-manager setopt ferret-kmods.enabled=0
+        dnf config-manager setopt ferret-pkgs.enabled=0
+        rm -f /etc/yum.repos.d/fedora-multimedia.repo
+        rm -f /etc/yum.repos.d/ferret-kmods.repo
+        rm -f /etc/yum.repos.d/ferret-pkgs.repo
+        dnf5 autoremove -y
+        dnf5 clean packages
+        dnf5 clean all

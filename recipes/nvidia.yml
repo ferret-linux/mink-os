@@ -1,0 +1,37 @@
+---
+# yaml-language-server: $schema=https://schema.blue-build.org/recipe-v1.json
+# image will be published to ghcr.io/<user>/<name>
+
+name: mink-os-nvidia
+description: MinkOS image for NVIDIA GPUs
+base-image: quay.io/fedora/fedora-bootc
+image-version: 44
+blue-build-tag: none
+cosign-version: none
+nushell-version: none
+platforms:
+  - linux/amd64
+
+modules:
+## Import Modules/Scripts ##
+  - from-file: build/configure/pre-requisite.yml
+#### => Core Packages / Tweaks to install.
+  - from-file: build/install/core/base.yml
+  - from-file: build/install/core/hardware.yml
+  - from-file: build/install/core/printers.yml
+  - from-file: build/install/core/connectivity.yml
+#### => Nonfree Packages / Tweaks to install.
+  - from-file: build/install/nonfree/codecs.yml
+  - from-file: build/install/nonfree/modules.yml
+  - from-file: build/install/nonfree/nvidia-open.yml
+#### => Extra Packages / Tweaks to install.
+  - from-file: build/install/extras/fonts.yml
+  - from-file: build/install/extras/devtools.yml
+  - from-file: build/install/extras/debug-utils.yml
+### => Removal Modules/Scripts
+  - from-file: build/uninstall/image-pkgs.yml
+  - from-file: build/uninstall/pulled-pkgs.yml
+### => Post Install Configuration
+  - from-file: build/configure/minkos-settings.yml
+  - from-file: build/configure/post-requisite.yml
+  - from-file: build/configure/os-release.yml
