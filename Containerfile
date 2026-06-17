@@ -7,6 +7,9 @@ COPY build_files /
 # Base Image
 FROM ${BASE_IMAGE}
 
+ARG IMAGE_NAME
+ENV IMAGE_NAME=${IMAGE_NAME}
+
 # Copy system files
 COPY system_files/ /
 

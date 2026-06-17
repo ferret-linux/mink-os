@@ -11,6 +11,10 @@ SCRIPTS=(
     "kvm.sh"
 )
 
+if [[ "${IMAGE_NAME:-}" == *"nvidia"* ]]; then
+    SCRIPTS+=("nvidia.sh")
+fi
+
 TOTAL=${#SCRIPTS[@]}
 
 for i in "${!SCRIPTS[@]}"; do
