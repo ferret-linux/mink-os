@@ -8,7 +8,6 @@ SCRIPTS=(
     "base.sh"
     "kmods.sh"
     "locales.sh"
-    "kvm.sh"
 )
 
 if [[ "${IMAGE_NAME:-}" == *"nvidia"* ]]; then
