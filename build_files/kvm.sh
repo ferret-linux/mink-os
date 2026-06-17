@@ -1,0 +1,76 @@
+#!/bin/bash
+set -eoux pipefail
+
+# KVM Requirements
+dnf install -y --setopt=install_weak_deps=False \
+  lshw \
+  tuna \
+  passt \
+  swtpm \
+  nbdkit \
+  libnbd \
+  numactl \
+  virt-top \
+  pciutils \
+  usbredir \
+  driverctl \
+  sg3_utils \
+  edk2-ovmf \
+  libguestfs \
+  swtpm-tools \
+  bridge-utils \
+  iptables-nft \
+  guestfs-tools
+
+# QEMU-KVM
+dnf install -y --setopt=install_weak_deps=False \
+  qemu-kvm \
+  qemu-img \
+  qemu-tools \
+  qemu-ui-sdl \
+  qemu-ui-gtk \
+  spice-server \
+  qemu-kvm-core \
+  qemu-ui-opengl \
+  qemu-pr-helper \
+  qemu-block-rbd \
+  qemu-block-ssh \
+  qemu-block-nfs \
+  qemu-char-spice \
+  qemu-audio-alsa \
+  qemu-block-curl \
+  qemu-audio-spice \
+  qemu-ui-spice-app \
+  qemu-ui-spice-core \
+  qemu-audio-pipewire \
+  qemu-device-usb-host \
+  qemu-device-display-qxl \
+  qemu-device-usb-redirect \
+  qemu-device-usb-smartcard \
+  qemu-device-display-virtio-gpu \
+  qemu-device-display-virtio-vga \
+  qemu-device-display-virtio-gpu-gl \
+  qemu-device-display-virtio-vga-gl \
+  qemu-device-display-virtio-gpu-pci \
+  qemu-device-display-virtio-gpu-pci-gl \
+  qemu-device-display-virtio-gpu-rutabaga
+
+# libvirt
+dnf install -y --setopt=install_weak_deps=False \
+  libvirt \
+  libvirt-nss \
+  libvirt-client \
+  python3-libvirt \
+  libvirt-daemon-kvm \
+  libvirt-daemon-driver-qemu \
+  libvirt-daemon-config-network \
+  libvirt-daemon-driver-nodedev \
+  libvirt-daemon-config-nwfilter \
+  libvirt-daemon-driver-storage-core
+
+# Virt Extras
+dnf install -y --setopt=install_weak_deps=False \
+  virtiofsd \
+  virt-viewer \
+  virt-install \
+  virt-manager

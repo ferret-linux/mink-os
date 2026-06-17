@@ -1,0 +1,78 @@
+# SPDX-License-Identifier: GPL-3.0-only
+#
+# This file is part of the mink-os project:
+#    https://github.com/ferret-linux/mink-os
+# Copyright (C) 2026 Ferret Linux contributors
+
+name: rechunk (internal)
+
+on:
+  workflow_call:
+
+jobs:
+  rechunk:
+    name: Rechunk ${{ matrix.image_name }}
+    runs-on: ubuntu-26.04
+    permissions:
+      contents: read
+
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - image_name: mink-os
+          - image_name: mink-os-nvidia
+
+    steps:
+      - name: Free Disk Space
+        uses: hastd/free-disk-space@68572aeaadb7f76bd408246328e95926323402b5 # v0.1.2
+        with:
+          exclude: |
+            /opt/hostedtoolcache/Python
+          skip-if-available: "64G"
+
+      - name: Download Artifact
+        uses: actions/download-artifact@3e5f45b2cfb9172054b4087a40e8e0b5a5461e7c # v8
+        with:
+          name: image-${{ matrix.image_name }}
+          path: /home/runner/work
+
+      - name: Verify Checksum
+        run: sha256sum -c /home/runner/work/${{ matrix.image_name }}.tar.sha256
+
+      - name: Load Image
+        run: podman image load -i /home/runner/work/${{ matrix.image_name }}.tar
+
+      - name: Rechunk
+        run: |
+          export CHUNKAH_CONFIG_STR="$(podman inspect ghcr.io/ferret-linux/${{ matrix.image_name }}:latest)"
+          podman run --rm \
+            "--mount=type=image,src=ghcr.io/ferret-linux/${{ matrix.image_name }}:latest,target=/chunkah" \
+            -e CHUNKAH_CONFIG_STR \
+            quay.io/coreos/chunkah build \
+            --prune /sysroot/ \
+            --label containers.bootc=1 \
+            --compressed \
+            --max-layers 128 \
+            --tag ghcr.io/ferret-linux/${{ matrix.image_name }}:rechunked \
+            | podman load
+
+      - name: Save Rechunked Image
+        run: |
+          podman image save \
+            ghcr.io/ferret-linux/${{ matrix.image_name }}:rechunked \
+            -o /home/runner/work/${{ matrix.image_name }}-rechunked.tar
+
+      - name: Checksum
+        run: |
+          sha256sum /home/runner/work/${{ matrix.image_name }}-rechunked.tar \
+            > /home/runner/work/${{ matrix.image_name }}-rechunked.tar.sha256
+
+      - name: Upload Rechunked Artifact
+        uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7
+        with:
+          name: image-${{ matrix.image_name }}-rechunked
+          path: |
+            /home/runner/work/${{ matrix.image_name }}-rechunked.tar
+            /home/runner/work/${{ matrix.image_name }}-rechunked.tar.sha256
+          retention-days: 1

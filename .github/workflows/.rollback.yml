@@ -1,0 +1,85 @@
+# SPDX-License-Identifier: GPL-3.0-only
+#
+# This file is part of the mink-os project:
+#    https://github.com/ferret-linux/mink-os
+# Copyright (C) 2026 Ferret Linux contributors
+
+name: rollback (internal)
+
+on:
+  workflow_call:
+
+jobs:
+  rollback:
+    name: Rollback ${{ matrix.image_name }}
+    runs-on: ubuntu-26.04
+    permissions:
+      contents: read
+      packages: write
+
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - image_name: mink-os
+          - image_name: mink-os-nvidia
+
+    steps:
+      - name: Login to GHCR
+        run: echo "${{ secrets.GITHUB_TOKEN }}" | podman login ghcr.io -u ${{ github.actor }} --password-stdin
+
+      - name: Download Rollback Artifact
+        uses: actions/download-artifact@3e5f45b2cfb9172054b4087a40e8e0b5a5461e7c # v8
+        with:
+          name: rollback-${{ matrix.image_name }}
+          path: /home/runner/work/rollback
+
+      - name: Read Rollback Info
+        id: info
+        run: |
+          OLD_DIGEST=$(cat /home/runner/work/rollback/${{ matrix.image_name }}-old-digest)
+          NEW_VERSION_ID=$(cat /home/runner/work/rollback/${{ matrix.image_name }}-new-version-id)
+          echo "old_digest=${OLD_DIGEST}" >> $GITHUB_OUTPUT
+          echo "new_version_id=${NEW_VERSION_ID}" >> $GITHUB_OUTPUT
+          echo "Old digest: ${OLD_DIGEST:-none}"
+          echo "New version ID to delete: ${NEW_VERSION_ID}"
+
+      - name: Retag Old Digest as Latest
+        if: steps.info.outputs.old_digest != ''
+        run: |
+          for i in 1 2 3; do
+            podman pull ghcr.io/ferret-linux/${{ matrix.image_name }}@${{ steps.info.outputs.old_digest }} && break
+            echo "Attempt $i/3 failed, retrying in 15s..."
+            sleep 15
+          done
+
+          podman tag \
+            ghcr.io/ferret-linux/${{ matrix.image_name }}@${{ steps.info.outputs.old_digest }} \
+            ghcr.io/ferret-linux/${{ matrix.image_name }}:latest
+
+          for i in 1 2 3; do
+            podman push ghcr.io/ferret-linux/${{ matrix.image_name }}:latest && break
+            echo "Attempt $i/3 failed, retrying in 15s..."
+            sleep 15
+          done
+
+          echo "✓ Rolled back :latest to ${{ steps.info.outputs.old_digest }}"
+
+      - name: No Previous Image to Rollback To
+        if: steps.info.outputs.old_digest == ''
+        run: echo "No previous digest found — skipping retag, will still delete broken version."
+
+      - name: Delete Broken New Version
+        run: |
+          for i in 1 2 3; do
+            gh api \
+              --method DELETE \
+              -H "Accept: application/vnd.github+json" \
+              -H "X-GitHub-Api-Version: 2022-11-28" \
+              /orgs/ferret-linux/packages/container/${{ matrix.image_name }}/versions/${{ steps.info.outputs.new_version_id }} && break
+            echo "Attempt $i/3 failed, retrying in 15s..."
+            sleep 15
+          done
+          echo "✓ Deleted broken version ${{ steps.info.outputs.new_version_id }}"
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
