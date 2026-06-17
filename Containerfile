@@ -119,8 +119,8 @@ RUN rm -rf /opt && ln -s /var/opt /opt && \
     mkdir -p /var/nix
 
 # Edit OS-release
-RUN sed -i 's/^NAME=.*/NAME="RubinOS"/' /usr/lib/os-release && \
-    sed -i 's/^PRETTY_NAME=.*/PRETTY_NAME="RubinOS Linux"/' /usr/lib/os-release
+RUN sed -i 's/^NAME=.*/NAME="MinkOS"/' /usr/lib/os-release && \
+    sed -i 's/^PRETTY_NAME=.*/PRETTY_NAME="MinkOS Linux"/' /usr/lib/os-release
 
 # Final Package Count
 RUN rpm -qa | wc -l
