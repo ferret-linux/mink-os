@@ -34,14 +34,8 @@ jobs:
     permissions:
       contents: read
 
-  sbom-grype:
-    needs: [rechunk]
-    uses: ./.github/workflows/.sbom-grype.yml
-    permissions:
-      contents: read
-
   push:
-    needs: [sbom-grype]
+    needs: [rechunk]
     if: github.event_name == 'workflow_dispatch' || github.event_name == 'schedule'
     uses: ./.github/workflows/.push.yml
     permissions:
