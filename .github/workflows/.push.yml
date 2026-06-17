@@ -1,0 +1,112 @@
+# SPDX-License-Identifier: GPL-3.0-only
+#
+# This file is part of the mink-os project:
+#    https://github.com/ferret-linux/mink-os
+# Copyright (C) 2026 Ferret Linux contributors
+
+name: push (internal)
+
+on:
+  workflow_call:
+    secrets:
+      SIGNING_SECRET:
+        required: true
+
+jobs:
+  push:
+    name: Push ${{ matrix.image_name }}
+    runs-on: ubuntu-26.04
+    permissions:
+      contents: read
+      packages: write
+
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - image_name: mink-os
+          - image_name: mink-os-nvidia
+
+    steps:
+      - name: Login to GHCR
+        run: echo "${{ secrets.GITHUB_TOKEN }}" | podman login ghcr.io -u ${{ github.actor }} --password-stdin
+
+      - name: Save Old Digest
+        id: old-digest
+        run: |
+          OLD_DIGEST=$(podman manifest inspect ghcr.io/ferret-linux/${{ matrix.image_name }}:latest 2>/dev/null \
+            | jq -r '.manifests[0].digest // empty' || true)
+          echo "old_digest=${OLD_DIGEST}" >> $GITHUB_OUTPUT
+          echo "Old digest: ${OLD_DIGEST:-none}"
+
+      - name: Download Rechunked Artifact
+        uses: actions/download-artifact@3e5f45b2cfb9172054b4087a40e8e0b5a5461e7c # v8
+        with:
+          name: image-${{ matrix.image_name }}-rechunked
+          path: /home/runner/work
+
+      - name: Verify Checksum
+        run: sha256sum -c /home/runner/work/${{ matrix.image_name }}-rechunked.tar.sha256
+
+      - name: Load Image
+        run: |
+          podman image load -i /home/runner/work/${{ matrix.image_name }}-rechunked.tar
+          podman tag \
+            ghcr.io/ferret-linux/${{ matrix.image_name }}:rechunked \
+            ghcr.io/ferret-linux/${{ matrix.image_name }}:latest
+
+      - name: Push and Sign
+        env:
+          SIGNING_SECRET: ${{ secrets.SIGNING_SECRET }}
+        run: |
+          PRIVATE_KEY_FILE="$(mktemp)"
+          echo "${SIGNING_SECRET}" > "${PRIVATE_KEY_FILE}"
+          trap 'rm -f $PRIVATE_KEY_FILE' EXIT
+
+          sudo mkdir -p /etc/containers/registries.d/
+          echo -e "docker:\n  ghcr.io/ferret-linux:\n    use-sigstore-attachments: true" \
+            | sudo tee /etc/containers/registries.d/ferret-linux.yaml
+
+          DIGESTFILE="$(mktemp)"
+          rm -f "${DIGESTFILE}"
+
+          # HACK: push two times so layer annotations are present
+          # TODO: remove when https://github.com/containers/podman/issues/27796 is fixed
+          for _ in $(seq 2); do
+            podman push \
+              --retry 3 \
+              --compression-format=zstd \
+              --digestfile="${DIGESTFILE}" \
+              "--sign-passphrase-file=/dev/null" \
+              "--sign-by-sigstore-private-key=${PRIVATE_KEY_FILE}" \
+              ghcr.io/ferret-linux/${{ matrix.image_name }}:latest
+          done
+
+          echo "remote_digest=$(< "${DIGESTFILE}")" >> $GITHUB_OUTPUT
+        id: push
+
+      - name: Save New Version ID
+        id: new-version
+        run: |
+          NEW_VERSION_ID=$(gh api \
+            -H "Accept: application/vnd.github+json" \
+            -H "X-GitHub-Api-Version: 2022-11-28" \
+            /orgs/ferret-linux/packages/container/${{ matrix.image_name }}/versions \
+            | jq -r 'sort_by(.created_at) | last | .id')
+          echo "new_version_id=${NEW_VERSION_ID}" >> $GITHUB_OUTPUT
+          echo "New version ID: ${NEW_VERSION_ID}"
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Save Rollback Info
+        run: |
+          mkdir -p /home/runner/work/rollback
+          echo "${{ steps.old-digest.outputs.old_digest }}" > /home/runner/work/rollback/${{ matrix.image_name }}-old-digest
+          echo "${{ steps.new-version.outputs.new_version_id }}" > /home/runner/work/rollback/${{ matrix.image_name }}-new-version-id
+
+      - name: Upload Rollback Artifact
+        uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7
+        with:
+          name: rollback-${{ matrix.image_name }}
+          path: /home/runner/work/rollback/
+          retention-days: 1

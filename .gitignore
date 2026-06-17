@@ -1,5 +1,4 @@
 cosign.key
 cosign.private
-/Containerfile
 /.vscode
 zcore-bootc.code-workspace

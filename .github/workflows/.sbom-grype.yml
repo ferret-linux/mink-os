@@ -1,0 +1,75 @@
+# SPDX-License-Identifier: GPL-3.0-only
+#
+# This file is part of the mink-os project:
+#    https://github.com/ferret-linux/mink-os
+# Copyright (C) 2026 Ferret Linux contributors
+
+name: sbom-grype (internal)
+
+on:
+  workflow_call:
+
+jobs:
+  sbom-grype:
+    name: SBOM + Grype ${{ matrix.image_name }}
+    runs-on: ubuntu-26.04
+    permissions:
+      contents: read
+
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - image_name: mink-os
+          - image_name: mink-os-nvidia
+
+    steps:
+      - name: Download Rechunked Artifact
+        uses: actions/download-artifact@3e5f45b2cfb9172054b4087a40e8e0b5a5461e7c # v8
+        with:
+          name: image-${{ matrix.image_name }}-rechunked
+          path: /home/runner/work
+
+      - name: Verify Checksum
+        run: sha256sum -c /home/runner/work/${{ matrix.image_name }}-rechunked.tar.sha256
+
+      - name: Install Syft
+        uses: anchore/sbom-action/download-syft@e22c389904149dbc22b58101806040fa8d37a610 # v0
+
+      - name: Generate SBOM
+        env:
+          TMPDIR: /home/runner/work
+        run: |
+          syft \
+            docker-archive:/home/runner/work/${{ matrix.image_name }}-rechunked.tar \
+            --output spdx-json=/home/runner/work/${{ matrix.image_name }}.spdx.json
+
+      - name: Upload SBOM
+        uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7
+        with:
+          name: sbom-${{ matrix.image_name }}
+          path: /home/runner/work/${{ matrix.image_name }}.spdx.json
+          retention-days: 1
+
+      - name: Install Grype
+        id: grype
+        uses: anchore/scan-action/download-grype@e1165082ffb1fe366ebaf02d8526e7c4989ea9d2 # v7
+
+      - name: Add Grype to PATH
+        run: echo "$(dirname ${{ steps.grype.outputs.cmd }})" >> $GITHUB_PATH
+
+      - name: Scan SBOM
+        env:
+          TMPDIR: /home/runner/work
+        run: |
+          grype \
+            sbom:/home/runner/work/${{ matrix.image_name }}.spdx.json \
+            --output json=/home/runner/work/${{ matrix.image_name }}.grype.json
+
+      - name: Upload Grype Report
+        if: always()
+        uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7
+        with:
+          name: grype-${{ matrix.image_name }}
+          path: /home/runner/work/${{ matrix.image_name }}.grype.json
+          retention-days: 1

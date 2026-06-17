@@ -1,0 +1,109 @@
+# SPDX-License-Identifier: GPL-3.0-only
+#
+# This file is part of the mink-os project:
+#    https://github.com/ferret-linux/mink-os
+# Copyright (C) 2026 Ferret Linux contributors
+
+name: build (internal)
+
+on:
+  workflow_call:
+
+jobs:
+  build:
+    name: Build ${{ matrix.image_name }}
+    runs-on: ubuntu-26.04
+    permissions:
+      contents: read
+      packages: write
+
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - image_name: mink-os
+            base_image: quay.io/fedora/fedora-bootc:latest
+          - image_name: mink-os-nvidia
+            base_image: quay.io/fedora/fedora-bootc:latest
+
+    steps:
+      - name: Free Disk Space
+        uses: hastd/free-disk-space@68572aeaadb7f76bd408246328e95926323402b5 # v0.1.2
+        with:
+          exclude: |
+            /opt/hostedtoolcache/Python
+          skip-if-available: "64G"
+
+      - name: Prune
+        run: |
+          podman image prune -f
+          podman container prune -f
+
+      - name: Checkout
+        uses: actions/checkout@df4cb1c069e1874edd31b4311f1884172cec0e10 # v6
+
+      - name: Login to GHCR
+        run: echo "${{ secrets.GITHUB_TOKEN }}" | podman login ghcr.io -u ${{ github.actor }} --password-stdin
+
+      - name: Pull Base Image
+        run: |
+          for i in 1 2 3; do
+            podman pull ${{ matrix.base_image }} && break
+            echo "Attempt $i/3 failed, retrying in 15s..."
+            sleep 15
+          done
+
+      - name: Build Image
+        run: |
+          for i in 1 2 3; do
+            podman build \
+              --build-arg BASE_IMAGE=${{ matrix.base_image }} \
+              --build-arg IMAGE_NAME=${{ matrix.image_name }} \
+              --label "org.opencontainers.image.title=${{ matrix.image_name }}" \
+              --label "org.opencontainers.image.description=MinkOS - A Ferret Linux Desktop" \
+              --label "org.opencontainers.image.source=https://github.com/ferret-linux/mink-os" \
+              --label "org.opencontainers.image.vendor=ferret-linux" \
+              --label "org.opencontainers.image.version=latest.$(date -u +%Y%m%d)" \
+              --label "org.opencontainers.image.created=$(date -u +%Y-%m-%dT%H:%M:%SZ)" \
+              --label "io.artifacthub.package.keywords=bootc,gnome,ferret-linux,mink" \
+              --label "io.artifacthub.package.logo-url=https://avatars.githubusercontent.com/u/281760288" \
+              --label "containers.bootc=1" \
+              --file Containerfile \
+              --tag ghcr.io/ferret-linux/${{ matrix.image_name }}:latest \
+              . && break
+            echo "Attempt $i/3 failed, pruning and retrying in 30s..."
+            podman system prune -af
+            sleep 30
+          done
+
+      - name: Prune
+        run: |
+          podman image prune -f
+          podman container prune -f
+
+      - name: Free Disk Space
+        uses: hastd/free-disk-space@68572aeaadb7f76bd408246328e95926323402b5 # v0.1.2
+        with:
+          exclude: |
+            /opt/hostedtoolcache/Python
+          skip-if-available: "64G"
+
+      - name: Save Image
+        run: |
+          podman image save \
+            ghcr.io/ferret-linux/${{ matrix.image_name }}:latest \
+            -o /home/runner/work/${{ matrix.image_name }}.tar
+
+      - name: Checksum
+        run: |
+          sha256sum /home/runner/work/${{ matrix.image_name }}.tar \
+            > /home/runner/work/${{ matrix.image_name }}.tar.sha256
+
+      - name: Upload Artifact
+        uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7
+        with:
+          name: image-${{ matrix.image_name }}
+          path: |
+            /home/runner/work/${{ matrix.image_name }}.tar
+            /home/runner/work/${{ matrix.image_name }}.tar.sha256
+          retention-days: 1
