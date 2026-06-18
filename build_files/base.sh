@@ -38,7 +38,6 @@ dnf install -y --setopt=install_weak_deps=False \
   sqlite \
   busybox \
   nix-daemon \
-  falcond \
   mangohud \
   scx-tools \
   scx-scheds \
