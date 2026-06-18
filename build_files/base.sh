@@ -143,6 +143,7 @@ dnf install -y --setopt=install_weak_deps=False \
   git-annex \
   git-delta \
   crun \
+  otter \
   podman \
   buildah \
   lxc \
