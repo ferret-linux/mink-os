@@ -50,8 +50,11 @@ jobs:
             "--mount=type=image,src=ghcr.io/ferret-linux/${{ matrix.image_name }}:latest,target=/chunkah" \
             -e CHUNKAH_CONFIG_STR \
             quay.io/coreos/chunkah build \
+            --verbose \
             --prune /sysroot/ \
             --label containers.bootc=1 \
+            --label ostree.commit- \
+            --label ostree.final-diffid- \
             --compressed \
             --max-layers 128 \
             --tag ghcr.io/ferret-linux/${{ matrix.image_name }}:rechunked \
