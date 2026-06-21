@@ -125,9 +125,6 @@ RUN rm -rf /opt && ln -s /var/opt /opt && \
 RUN sed -i 's/^NAME=.*/NAME="MinkOS"/' /usr/lib/os-release && \
     sed -i 's/^PRETTY_NAME=.*/PRETTY_NAME="MinkOS Linux"/' /usr/lib/os-release
 
-# Final Package Count
-RUN rpm -qa | wc -l
-
 # Generate InitRamFs
 RUN --mount=type=bind,from=ctx,source=/,target=/ctx \
     --mount=type=cache,dst=/var/cache \
