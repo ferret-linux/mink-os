@@ -29,7 +29,6 @@ GROUPS_TO_ADD=(
     docker      # docker access
     plugdev     # openrazer needs it
     libvirt     # kvm/libvirt needs it
-    falcond     # Falcond gamemode needs it
     i2c         # Needed for low latency prepherals
 )
 # ── UID range that defines a "human" user ─────────────────────
