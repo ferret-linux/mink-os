@@ -10,7 +10,7 @@ Type=oneshot
 # Only run if static hostname is empty
 ExecCondition=/bin/sh -c '[ -z "$(hostnamectl --static 2>/dev/null)" ]'
 
-ExecStart=/usr/bin/hostnamectl set-hostname ferret-project
+ExecStart=/usr/bin/hostnamectl set-hostname ferretlinux
 
 [Install]
 WantedBy=multi-user.target
