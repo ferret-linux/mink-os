@@ -5,6 +5,5 @@ kargs = [
   "cgroup_no_v1=all",
   "split_lock_detect=off",
   "split_lock_mitigate=0",
-  "rd.driver.pre=vfio_pci",
   "transparent_hugepage=madvise",
 ]

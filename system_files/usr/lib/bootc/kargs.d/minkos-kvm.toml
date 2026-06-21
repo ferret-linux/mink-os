@@ -2,4 +2,5 @@ kargs = [
   "iommu=pt",
   "amd_iommu=on",
   "intel_iommu=on",
+  "rd.driver.pre=vfio_pci",
 ]
