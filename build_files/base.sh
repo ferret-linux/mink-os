@@ -131,6 +131,7 @@ dnf install -y --setopt=install_weak_deps=False \
   gcc \
   git \
   lxc \
+  gum \
   btop \
   crun \
   curl \
