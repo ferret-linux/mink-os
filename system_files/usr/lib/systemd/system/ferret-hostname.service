@@ -1,0 +1,16 @@
+# /usr/lib/system/ferret-hostname.service
+[Unit]
+Description=Set default hostname to Ferret Project Distros
+Wants=systemd-hostnamed.service
+After=systemd-hostnamed.service
+
+[Service]
+Type=oneshot
+
+# Only run if static hostname is empty
+ExecCondition=/bin/sh -c '[ -z "$(hostnamectl --static 2>/dev/null)" ]'
+
+ExecStart=/usr/bin/hostnamectl set-hostname ferret-project
+
+[Install]
+WantedBy=multi-user.target

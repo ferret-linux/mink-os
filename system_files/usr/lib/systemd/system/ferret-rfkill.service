@@ -1,0 +1,12 @@
+[Unit]
+Description=Unblock all rfkill-managed radios at boot
+After=systemd-rfkill.service
+Wants=systemd-rfkill.service
+
+[Service]
+Type=oneshot
+ExecStart=/usr/sbin/rfkill unblock all
+RemainAfterExit=yes
+
+[Install]
+WantedBy=multi-user.target
