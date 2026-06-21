@@ -11,9 +11,9 @@ dnf install -y --setopt=install_weak_deps=False \
   kmod-xone-"${KERNEL_VERSION}" \
   kmod-sc0710-"${KERNEL_VERSION}" \
   kmod-xpadneo-"${KERNEL_VERSION}" \
+  kmod-hid-tmff2-"${KERNEL_VERSION}" \
   kmod-new-lg4ff-"${KERNEL_VERSION}" \
   kmod-openrazer-"${KERNEL_VERSION}" \
-  kmod-hid-tmff2-"${KERNEL_VERSION}" \
   kmod-v4l2loopback-"${KERNEL_VERSION}" \
   kmod-hid-fanatecff-"${KERNEL_VERSION}" \
   kernel-devel-matched-"${KERNEL_VERSION}"
@@ -22,14 +22,14 @@ dnf install -y --setopt=install_weak_deps=False \
 dnf install -y --setopt=install_weak_deps=False \
   zfs \
   sc0710 \
-  libzfs7 \
   libevdi \
+  libzfs7 \
   hid-tmff2 \
-  new-lg4ff \
   libuutil3 \
   libzpool7 \
-  zfs-dracut \
+  new-lg4ff \
   libnvpair3 \
+  zfs-dracut \
   broadcom-wl \
   displaylink \
   v4l2loopback \
@@ -38,8 +38,8 @@ dnf install -y --setopt=install_weak_deps=False \
   xone-kmod-common \
   xpadneo-kmod-common \
   openrazer-kmod-common \
-  new-lg4ff-akmod-modules \
   hid-tmff2-akmod-modules \
+  new-lg4ff-akmod-modules \
   v4l2loopback-akmod-modules \
   hid-fanatecff-akmod-modules
 

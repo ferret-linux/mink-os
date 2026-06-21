@@ -7,6 +7,7 @@ DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 SCRIPTS=(
     "base.sh"
     "kmods.sh"
+    "kvm.sh"
     "locales.sh"
 )
 

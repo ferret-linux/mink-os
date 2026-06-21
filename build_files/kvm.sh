@@ -7,15 +7,15 @@ dnf install -y --setopt=install_weak_deps=False \
   tuna \
   passt \
   swtpm \
-  nbdkit \
   libnbd \
+  nbdkit \
   numactl \
-  virt-top \
   pciutils \
   usbredir \
+  virt-top \
   driverctl \
-  sg3_utils \
   edk2-ovmf \
+  sg3_utils \
   libguestfs \
   swtpm-tools \
   bridge-utils \
@@ -24,21 +24,21 @@ dnf install -y --setopt=install_weak_deps=False \
 
 # QEMU-KVM
 dnf install -y --setopt=install_weak_deps=False \
-  qemu-kvm \
   qemu-img \
+  qemu-kvm \
   qemu-tools \
-  qemu-ui-sdl \
   qemu-ui-gtk \
+  qemu-ui-sdl \
   spice-server \
   qemu-kvm-core \
-  qemu-ui-opengl \
-  qemu-pr-helper \
+  qemu-block-nfs \
   qemu-block-rbd \
   qemu-block-ssh \
-  qemu-block-nfs \
-  qemu-char-spice \
+  qemu-pr-helper \
+  qemu-ui-opengl \
   qemu-audio-alsa \
   qemu-block-curl \
+  qemu-char-spice \
   qemu-audio-spice \
   qemu-ui-spice-app \
   qemu-ui-spice-core \
@@ -71,6 +71,4 @@ dnf install -y --setopt=install_weak_deps=False \
 # Virt Extras
 dnf install -y --setopt=install_weak_deps=False \
   virtiofsd \
-  virt-viewer \
-  virt-install \
-  virt-manager
+  virt-install

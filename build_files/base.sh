@@ -1,72 +1,51 @@
 #!/bin/bash
 set -eoux pipefail
 
-# Base Linux packages
+# Firmware
 dnf install -y --setopt=install_weak_deps=False \
-  alsa-ucm \
   alsa-firmware \
+  linux-firmware \
   alsa-sof-firmware \
   alsa-tools-firmware \
-  iwlwifi-mvm-firmware \
   iwlwifi-mld-firmware \
+  iwlwifi-mvm-firmware
+
+# Audio (ALSA / PipeWire)
+dnf install -y --setopt=install_weak_deps=False \
+  alsa-ucm \
+  pipewire \
+  alsa-utils \
+  wireplumber \
+  pipewire-alsa \
+  pipewire-libs \
+  pipewire-v4l2 \
+  pipewire-utils \
+  pipewire-gstreamer \
+  pipewire-libs-extra \
+  pipewire-pulseaudio \
+  pipewire-config-raop \
+  pipewire-plugin-libcamera \
+  pipewire-jack-audio-connection-kit \
+  pipewire-jack-audio-connection-kit-libs
+
+# Camera / Video Capture
+dnf install -y --setopt=install_weak_deps=False \
+  gphoto2 \
   libcamera \
+  v4l-utils \
+  libgphoto2 \
   libcamera-ipa \
   libcamera-v4l2 \
-  libcamera-gstreamer \
-  pipewire-plugin-libcamera \
-  gphoto2 \
-  libgphoto2 \
-  pipewire-v4l2 \
-  linux-firmware \
-  kernel-tools-libs \
-  kernel-modules-extra \
-  i2c-tools \
-  uresourced \
-  dbus-daemon \
-  shadow-utils \
-  vulkan-tools \
-  inotify-tools \
-  unbound-anchor \
-  zram-generator \
-  usb_modeswitch \
-  systemd-oomd-defaults \
-  flatpak \
-  nix \
-  make \
-  patch \
-  glibc \
-  sqlite \
-  busybox \
-  nix-daemon \
-  mangohud \
-  scx-tools \
-  scx-scheds \
-  tpm2-tools \
-  fuse \
-  freerdp \
-  fuse-libs \
-  zsh \
-  zsh-autosuggestions \
-  zsh-syntax-highlighting \
-  plymouth \
-  plymouth-plugin-two-step \
-  pciutils \
-  usbutils \
-  v4l-utils \
-  vdpauinfo \
-  alsa-utils \
-  libva-utils \
-  pipewire-utils \
-  libinput-utils
+  libcamera-gstreamer
 
 # Image Codecs
 dnf install -y --setopt=install_weak_deps=False \
   libjxl \
+  libavif \
   libheif \
-  libwebp \
-  libavif
+  libwebp
 
-# FFmpeg
+# FFmpeg / Media Encoding
 dnf install -y --setopt=install_weak_deps=False \
   exiv2 \
   ffmpeg \
@@ -74,147 +53,170 @@ dnf install -y --setopt=install_weak_deps=False \
   libfdk-aac \
   ffmpeg-libs \
   libfreeaptx \
-  ffmpegthumbnailer \
-  glycin-loaders
+  glycin-loaders \
+  ffmpegthumbnailer
 
-# Mesa Drivers
+# Graphics / GPU Drivers
 dnf install -y --setopt=install_weak_deps=False \
+  vdpauinfo \
   mesa-libGL \
-  mesa-libgbm \
+  libva-utils \
   mesa-libEGL \
-  mesa-filesystem \
-  mesa-dri-drivers
-
-# Intel Media Drivers
-dnf install -y --setopt=install_weak_deps=False \
+  mesa-libgbm \
   intel-gmmlib \
+  vulkan-tools \
+  mesa-filesystem \
+  mesa-va-drivers \
   intel-vpl-gpu-rt \
+  mesa-dri-drivers \
+  mesa-vulkan-drivers \
   libva-intel-media-driver
 
-# AMD Media Drivers
-dnf install -y --setopt=install_weak_deps=False \
-  mesa-va-drivers \
-  mesa-vulkan-drivers
-
-# Gstreamer Plugins
+# GStreamer Plugins
 dnf install -y --setopt=install_weak_deps=False \
   gstreamer1-plugins-bad \
   gstreamer1-plugin-libav \
-  gstreamer1-plugins-ugly \
   gstreamer1-plugins-good \
+  gstreamer1-plugins-ugly \
   gstreamer1-plugins-good-extras
 
-# Pipewire Stack
+# Core System / Init
 dnf install -y --setopt=install_weak_deps=False \
-  pipewire \
-  wireplumber \
-  pipewire-alsa \
-  pipewire-libs \
-  pipewire-gstreamer \
-  pipewire-libs-extra \
-  pipewire-pulseaudio \
-  pipewire-config-raop \
-  pipewire-jack-audio-connection-kit \
-  pipewire-jack-audio-connection-kit-libs
+  nix \
+  fuse \
+  make \
+  glibc \
+  patch \
+  sqlite \
+  busybox \
+  flatpak \
+  freerdp \
+  fuse-libs \
+  i2c-tools \
+  nix-daemon \
+  uresourced \
+  dbus-daemon \
+  shadow-utils \
+  inotify-tools \
+  unbound-anchor \
+  usb_modeswitch \
+  zram-generator \
+  kernel-tools-libs \
+  kernel-modules-extra \
+  systemd-oomd-defaults
 
-# Devtools
+# Shell / Terminal
+dnf install -y --setopt=install_weak_deps=False \
+  zsh \
+  pciutils \
+  plymouth \
+  usbutils \
+  libinput-utils \
+  zsh-autosuggestions \
+  zsh-syntax-highlighting \
+  plymouth-plugin-two-step
+
+# Performance / Gaming
+dnf install -y --setopt=install_weak_deps=False \
+  mangohud \
+  scx-tools \
+  scx-scheds \
+  tpm2-tools
+
+# Dev Tools / CLI
 dnf install -y --setopt=install_weak_deps=False \
   bat \
   eza \
   fzf \
-  btop \
-  zoxide \
-  fd-find \
-  ripgrep \
-  starship \
-  trash-cli \
-  eza-zsh-completion \
   gcc \
-  curl \
-  zstd \
-  gcc-c++ \
-  neovim \
-  zrun \
-  zfetch \
-  topgrade \
   git \
+  lxc \
+  btop \
+  crun \
+  curl \
+  zrun \
+  zstd \
+  otter \
+  incus \
+  neovim \
+  podman \
+  zfetch \
+  zoxide \
+  buildah \
+  fd-find \
+  gcc-c++ \
   git-lfs \
+  ripgrep \
+  lxc-libs \
+  starship \
+  topgrade \
   git-annex \
   git-delta \
-  crun \
-  otter \
-  podman \
-  buildah \
-  lxc \
-  lxc-libs \
+  trash-cli \
   lxc-templates \
-  docker-ce \
-  docker-ce-cli \
-  containerd.io \
-  docker-buildx-plugin \
-  docker-compose-plugin
+  eza-zsh-completion
 
-# Hardware Stuff
+# Hardware / Peripherals
 dnf install -y --setopt=install_weak_deps=False \
   bolt \
   upower \
-  power-profiles-daemon \
   fprintd \
-  fprintd-pam \
-  liquidctl \
-  libratbag-ratbagd \
-  libinput \
   usbmuxd \
+  libinput \
+  liquidctl \
   lm_sensors \
+  fprintd-pam \
   solaar-udev \
   xr-hardware \
-  trezor-common \
-  oversteer-udev \
-  liquidctl-udev \
   udev-hid-bpf \
+  trezor-common \
+  liquidctl-udev \
+  oversteer-udev \
+  mooltipass-udev \
+  libratbag-ratbagd \
   openrgb-udev-rules \
-  3dprinter-udev-rules \
   ublue-os-udev-rules \
-  unifying-receiver-udev \
   udev-hid-bpf-stable \
-  mooltipass-udev
+  3dprinter-udev-rules \
+  power-profiles-daemon \
+  unifying-receiver-udev
 
-# Connectivity
+# Networking / Connectivity
 dnf install -y --setopt=install_weak_deps=False \
-  bluez \
-  bluez-libs \
-  firewalld \
-  openvpn \
-  openconnect \
-  wireguard-tools \
   iwd \
+  bluez \
+  openvpn \
+  firewalld \
+  bluez-libs \
   cifs-utils \
   fuse-sshfs \
   avahi-tools \
-  ModemManager \
+  openconnect \
   iptables-nft \
-  wpa_supplicant \
-  mobile-broadband-provider-info \
+  ModemManager \
   NetworkManager \
+  wpa_supplicant \
+  wireguard-tools \
   NetworkManager-wifi \
   NetworkManager-wwan \
   NetworkManager-openvpn \
   NetworkManager-bluetooth \
   NetworkManager-openconnect \
+  mobile-broadband-provider-info \
   NetworkManager-config-connectivity-fedora
 
-# Printing
+# Printing / Scanning
 dnf install -y --setopt=install_weak_deps=False \
-  hplip \
   cups \
-  cups-client \
-  cups-filters \
-  cups-browsed \
-  cups-pk-helper \
-  cups-filters-driverless \
+  hplip \
   ipp-usb \
   nss-mdns \
+  cups-client \
   foomatic-db \
-  gutenprint-cups \
+  cups-browsed \
+  cups-filters \
   samba-client \
-  sane-backends
+  sane-backends \
+  cups-pk-helper \
+  gutenprint-cups \
+  cups-filters-driverless
