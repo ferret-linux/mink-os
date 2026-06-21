@@ -1,4 +1,4 @@
 kargs = [
-  "rd.driver.blacklist=nouveau,nova_core",
-  "modprobe.blacklist=nouveau,nova_core"
+  "modprobe.blacklist=nouveau,nova_core",
+  "rd.driver.blacklist=nouveau,nova_core"
 ]

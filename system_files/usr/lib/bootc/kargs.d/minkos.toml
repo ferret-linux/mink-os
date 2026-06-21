@@ -1,13 +1,10 @@
 kargs = [
   "nowatchdog",
   "nmi_watchdog=0",
+  "mitigations=auto",
+  "cgroup_no_v1=all",
   "split_lock_detect=off",
   "split_lock_mitigate=0",
-  "mitigations=auto",
-  "transparent_hugepage=madvise",
-  "cgroup_no_v1=all",
-  "iommu=pt",
-  "intel_iommu=on",
-  "amd_iommu=on",
   "rd.driver.pre=vfio_pci",
+  "transparent_hugepage=madvise",
 ]

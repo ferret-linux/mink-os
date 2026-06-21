@@ -1,0 +1,5 @@
+kargs = [
+  "iommu=pt",
+  "amd_iommu=on",
+  "intel_iommu=on",
+]
