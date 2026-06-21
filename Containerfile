@@ -59,23 +59,6 @@ RUN sed -i 's|^SHELL=.*|SHELL=/usr/bin/zsh|' /etc/default/useradd && \
     rm -rf /usr/share/plymouth/themes/text && \
     rm -rf /usr/share/plymouth/themes/tribar
 
-# Disable Broken Services
-RUN systemctl mask systemd-remount-fs.service && \
-    systemctl disable bootc-fetch-apply-updates.timer && \
-    systemctl mask bootc-fetch-apply-updates.timer && \
-    systemctl disable flatpak-add-fedora-repos.service && \
-    systemctl mask flatpak-add-fedora-repos.service
-
-# Enable Our Services
-RUN systemctl enable ferret-libvirt-fix.service && \
-    systemctl enable systemd-timesyncd.service && \
-    systemctl enable ferret-hostname.service && \
-    systemctl enable ferret-flatpak.service && \
-    systemctl enable ferret-groups.service && \
-    systemctl enable ferret-rfkill.service && \
-    systemctl enable nix-daemon && \
-    systemctl enable nix.mount
-
 # Set Plymouth theme
 RUN plymouth-set-default-theme zomac
 
@@ -121,6 +104,23 @@ RUN sed -i 's/^NAME=.*/NAME="MinkOS"/' /usr/lib/os-release && \
 
 # Copy system files
 COPY system_files/ /
+
+# Disable Broken Services
+RUN systemctl mask systemd-remount-fs.service && \
+    systemctl disable bootc-fetch-apply-updates.timer && \
+    systemctl mask bootc-fetch-apply-updates.timer && \
+    systemctl disable flatpak-add-fedora-repos.service && \
+    systemctl mask flatpak-add-fedora-repos.service
+
+# Enable Our Services
+RUN systemctl enable ferret-libvirt-fix.service && \
+    systemctl enable systemd-timesyncd.service && \
+    systemctl enable ferret-hostname.service && \
+    systemctl enable ferret-flatpak.service && \
+    systemctl enable ferret-groups.service && \
+    systemctl enable ferret-rfkill.service && \
+    systemctl enable nix-daemon && \
+    systemctl enable nix.mount
 
 # Generate InitRamFs
 RUN --mount=type=bind,from=ctx,source=/,target=/ctx \
