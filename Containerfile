@@ -77,9 +77,7 @@ RUN systemctl enable nix.mount && \
     systemctl enable ferret-hostname.service && \
     systemctl enable ferret-flatpak.service && \
     systemctl enable ferret-groups.service && \
-    systemctl enable ferret-rfkill.service && \
-    systemctl enable docker.service && \
-    systemctl enable containerd.service
+    systemctl enable ferret-rfkill.service
 
 # Set Plymouth theme
 RUN plymouth-set-default-theme zomac
