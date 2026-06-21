@@ -10,9 +10,6 @@ FROM ${BASE_IMAGE}
 ARG IMAGE_NAME
 ENV IMAGE_NAME=${IMAGE_NAME}
 
-# Copy system files
-COPY system_files/ /
-
 # Make /opt real dir before package install
 RUN rm -rf /opt && mkdir -p /opt
 
@@ -100,8 +97,7 @@ RUN dnf remove -y \
     gstreamer1-plugins-bad-free-extras
 
 # Final Build steps/cleanup
-RUN dnf upgrade --refresh --setopt=install_weak_deps=False -y && \
-    dnf config-manager setopt fedora-multimedia.enabled=0 && \
+RUN dnf config-manager setopt fedora-multimedia.enabled=0 && \
     dnf config-manager setopt ferret-kmods.enabled=0 && \
     dnf config-manager setopt ferret-pkgs.enabled=0 && \
     rm -f /etc/yum.repos.d/fedora-multimedia.repo && \
@@ -123,12 +119,18 @@ RUN rm -rf /opt && ln -s /var/opt /opt && \
 RUN sed -i 's/^NAME=.*/NAME="MinkOS"/' /usr/lib/os-release && \
     sed -i 's/^PRETTY_NAME=.*/PRETTY_NAME="MinkOS Linux"/' /usr/lib/os-release
 
+# Copy system files
+COPY system_files/ /
+
 # Generate InitRamFs
 RUN --mount=type=bind,from=ctx,source=/,target=/ctx \
     --mount=type=cache,dst=/var/cache \
     --mount=type=cache,dst=/var/log \
     --mount=type=tmpfs,dst=/tmp \
     bash /ctx/initramfs.sh
+
+# Lock all packages (makes build easier)
+RUN dnf versionlock add $(rpm -qa --qf '%{NAME}\n')
 
 ### LINTING
 ## Verify final image and contents are correct.
