@@ -9,6 +9,7 @@ dnf install -y --setopt=install_weak_deps=False \
   kmod-zfs-"${KERNEL_VERSION}" \
   kmod-evdi-"${KERNEL_VERSION}" \
   kmod-xone-"${KERNEL_VERSION}" \
+  kmod-kvmfr-"${KERNEL_VERSION}" \
   kmod-sc0710-"${KERNEL_VERSION}" \
   kmod-xpadneo-"${KERNEL_VERSION}" \
   kmod-zenergy-"${KERNEL_VERSION}" \
@@ -38,6 +39,7 @@ dnf install -y --setopt=install_weak_deps=False \
   hid-fanatecff \
   python3-pyzfs \
   xone-kmod-common \
+  kvmfr-kmod-common \
   xpadneo-kmod-common \
   openrazer-kmod-common \
   zenergy-akmod-modules \
