@@ -11,6 +11,7 @@ dnf install -y --setopt=install_weak_deps=False \
   kmod-xone-"${KERNEL_VERSION}" \
   kmod-sc0710-"${KERNEL_VERSION}" \
   kmod-xpadneo-"${KERNEL_VERSION}" \
+  kmod-zenergy-"${KERNEL_VERSION}" \
   kmod-hid-tmff2-"${KERNEL_VERSION}" \
   kmod-new-lg4ff-"${KERNEL_VERSION}" \
   kmod-openrazer-"${KERNEL_VERSION}" \
@@ -24,6 +25,7 @@ dnf install -y --setopt=install_weak_deps=False \
   sc0710 \
   libevdi \
   libzfs7 \
+  zenergy \
   hid-tmff2 \
   libuutil3 \
   libzpool7 \
@@ -38,6 +40,7 @@ dnf install -y --setopt=install_weak_deps=False \
   xone-kmod-common \
   xpadneo-kmod-common \
   openrazer-kmod-common \
+  zenergy-akmod-modules \
   hid-tmff2-akmod-modules \
   new-lg4ff-akmod-modules \
   v4l2loopback-akmod-modules \
