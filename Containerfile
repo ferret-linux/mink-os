@@ -51,17 +51,6 @@ RUN mkdir -p /usr/lib/opt && \
         echo "L+?  \"/opt/${opt}\"  -  -  -  -  /usr/lib/opt/${opt}" > /usr/lib/tmpfiles.d/99-optfix-${opt}.conf; \
     done
 
-# Add Settings Package & settings
-RUN sed -i 's|^SHELL=.*|SHELL=/usr/bin/zsh|' /etc/default/useradd && \
-    rm -rf /usr/share/plymouth/themes/charge && \
-    rm -rf /usr/share/plymouth/themes/details && \
-    rm -rf /usr/share/plymouth/themes/spinner && \
-    rm -rf /usr/share/plymouth/themes/text && \
-    rm -rf /usr/share/plymouth/themes/tribar
-
-# Set Plymouth theme
-RUN plymouth-set-default-theme zomac
-
 # Remove Fedora specific bloat
 RUN dnf remove -y \
     nano \
@@ -121,6 +110,17 @@ RUN systemctl enable ferret-libvirt-fix.service && \
     systemctl enable ferret-rfkill.service && \
     systemctl enable nix-daemon && \
     systemctl enable nix.mount
+
+# Add Settings Package & settings
+RUN sed -i 's|^SHELL=.*|SHELL=/usr/bin/zsh|' /etc/default/useradd && \
+    rm -rf /usr/share/plymouth/themes/charge && \
+    rm -rf /usr/share/plymouth/themes/details && \
+    rm -rf /usr/share/plymouth/themes/spinner && \
+    rm -rf /usr/share/plymouth/themes/text && \
+    rm -rf /usr/share/plymouth/themes/tribar
+
+# Set Plymouth theme
+RUN plymouth-set-default-theme zomac
 
 # Generate InitRamFs
 RUN --mount=type=bind,from=ctx,source=/,target=/ctx \
