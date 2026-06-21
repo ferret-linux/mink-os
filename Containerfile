@@ -55,8 +55,7 @@ RUN mkdir -p /usr/lib/opt && \
     done
 
 # Add Settings Package & settings
-RUN dnf install ferret-settings -y && \
-    sed -i 's|^SHELL=.*|SHELL=/usr/bin/zsh|' /etc/default/useradd && \
+RUN sed -i 's|^SHELL=.*|SHELL=/usr/bin/zsh|' /etc/default/useradd && \
     rm -rf /usr/share/plymouth/themes/charge && \
     rm -rf /usr/share/plymouth/themes/details && \
     rm -rf /usr/share/plymouth/themes/spinner && \
