@@ -20,6 +20,7 @@ fc-cache -f /usr/share/fonts/
 
 # Fonts & Language Packs
 dnf install -y --setopt=install_weak_deps=False \
+  harfbuzz \
   stix-fonts \
   langpacks-en \
   unicode-emoji \
@@ -27,12 +28,14 @@ dnf install -y --setopt=install_weak_deps=False \
   langpacks-core-en \
   langpacks-fonts-en \
   glibc-all-langpacks \
+  glibc-locale-source \
   liberation-fonts-all \
   google-noto-emoji-fonts \
   google-noto-sans-vf-fonts \
   google-noto-serif-vf-fonts \
   google-noto-sans-cjk-vf-fonts \
   google-noto-color-emoji-fonts \
+  google-noto-sans-thai-vf-fonts \
   google-noto-sans-arabic-vf-fonts \
   google-noto-sans-hebrew-vf-fonts \
   google-noto-sans-devanagari-vf-fonts

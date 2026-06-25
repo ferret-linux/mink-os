@@ -10,6 +10,7 @@ dnf install -y --setopt=install_weak_deps=False \
   libnbd \
   nbdkit \
   numactl \
+  dnsmasq \
   pciutils \
   usbredir \
   virt-top \
@@ -71,4 +72,5 @@ dnf install -y --setopt=install_weak_deps=False \
 # Virt Extras
 dnf install -y --setopt=install_weak_deps=False \
   virtiofsd \
-  virt-install
+  virt-install \
+  virt-manager

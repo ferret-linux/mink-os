@@ -1,7 +1,27 @@
 #!/bin/bash
 set -eoux pipefail
 
-# Firmware
+# Build Tools
+dnf install -y --setopt=install_weak_deps=False \
+  gcc \
+  zstd \
+  make \
+  just \
+  glibc \
+  patch \
+  rsync \
+  sqlite \
+  gcc-c++ \
+  busybox
+
+# Fuse Tools
+dnf install -y --setopt=install_weak_deps=False \
+  fuse \
+  fuse-libs \
+  fuse-sshfs \
+  fuse-overlayfs 
+
+# Firmwares
 dnf install -y --setopt=install_weak_deps=False \
   alsa-firmware \
   linux-firmware \
@@ -9,6 +29,37 @@ dnf install -y --setopt=install_weak_deps=False \
   alsa-tools-firmware \
   iwlwifi-mld-firmware \
   iwlwifi-mvm-firmware
+
+# Udev Rules (Hardware / Peripherals)
+dnf install -y --setopt=install_weak_deps=False \
+  solaar-udev \
+  xr-hardware \
+  udev-hid-bpf \
+  trezor-common \
+  liquidctl-udev \
+  oversteer-udev \
+  mooltipass-udev \
+  openrgb-udev-rules \
+  ublue-os-udev-rules \
+  udev-hid-bpf-stable \
+  3dprinter-udev-rules \
+  power-profiles-daemon \
+  unifying-receiver-udev
+
+# System Tools (Hardware / Peripherals)
+dnf install -y --setopt=install_weak_deps=False \
+  bolt \
+  upower \
+  fprintd \
+  usbmuxd \
+  pciutils \
+  usbutils \
+  libinput \
+  liquidctl \
+  lm_sensors \
+  fprintd-pam \
+  libinput-utils \
+  libratbag-ratbagd
 
 # Audio (ALSA / PipeWire)
 dnf install -y --setopt=install_weak_deps=False \
@@ -60,9 +111,9 @@ dnf install -y --setopt=install_weak_deps=False \
 dnf install -y --setopt=install_weak_deps=False \
   vdpauinfo \
   mesa-libGL \
-  libva-utils \
   mesa-libEGL \
   mesa-libgbm \
+  libva-utils \
   intel-gmmlib \
   vulkan-tools \
   mesa-filesystem \
@@ -76,22 +127,17 @@ dnf install -y --setopt=install_weak_deps=False \
 dnf install -y --setopt=install_weak_deps=False \
   gstreamer1-plugins-bad \
   gstreamer1-plugin-libav \
-  gstreamer1-plugins-good \
   gstreamer1-plugins-ugly \
+  gstreamer1-plugins-good \
   gstreamer1-plugins-good-extras
 
 # Core System / Init
 dnf install -y --setopt=install_weak_deps=False \
   nix \
-  fuse \
-  make \
-  glibc \
-  patch \
-  sqlite \
-  busybox \
+  fwupd \
   flatpak \
   freerdp \
-  fuse-libs \
+  plymouth \
   i2c-tools \
   nix-daemon \
   uresourced \
@@ -103,84 +149,71 @@ dnf install -y --setopt=install_weak_deps=False \
   zram-generator \
   kernel-tools-libs \
   kernel-modules-extra \
-  systemd-oomd-defaults
+  systemd-oomd-defaults \
+  plymouth-plugin-two-step
 
 # Shell / Terminal
 dnf install -y --setopt=install_weak_deps=False \
   zsh \
-  pciutils \
-  plymouth \
-  usbutils \
-  libinput-utils \
+  bash \
+  bash-completion \
   zsh-autosuggestions \
-  zsh-syntax-highlighting \
-  plymouth-plugin-two-step
+  zsh-syntax-highlighting
 
 # Performance / Gaming
 dnf install -y --setopt=install_weak_deps=False \
   mangohud \
+  gamemode \
   scx-tools \
   scx-scheds \
   tpm2-tools
 
-# Dev Tools / CLI
+# SSH Tools
+dnf install -y --setopt=install_weak_deps=False \
+  openssh \
+  openssh-server \
+  openssh-clients \
+  openssh-askpass \
+  openssh-keysign \
+
+# CLI Tools
 dnf install -y --setopt=install_weak_deps=False \
   bat \
   eza \
   fzf \
-  gcc \
   git \
-  lxc \
   gum \
   btop \
-  crun \
   curl \
   zrun \
-  zstd \
-  otter \
-  incus \
   neovim \
-  podman \
   zfetch \
   zoxide \
-  buildah \
   fd-find \
-  gcc-c++ \
   git-lfs \
   ripgrep \
-  lxc-libs \
   starship \
   topgrade \
   git-annex \
   git-delta \
   trash-cli \
-  lxc-templates \
   eza-zsh-completion
 
-# Hardware / Peripherals
+# Container Tools
 dnf install -y --setopt=install_weak_deps=False \
-  bolt \
-  upower \
-  fprintd \
-  usbmuxd \
-  libinput \
-  liquidctl \
-  lm_sensors \
-  fprintd-pam \
-  solaar-udev \
-  xr-hardware \
-  udev-hid-bpf \
-  trezor-common \
-  liquidctl-udev \
-  oversteer-udev \
-  mooltipass-udev \
-  libratbag-ratbagd \
-  openrgb-udev-rules \
-  ublue-os-udev-rules \
-  udev-hid-bpf-stable \
-  3dprinter-udev-rules \
-  power-profiles-daemon \
-  unifying-receiver-udev
+  lxc \
+  crun \
+  lxcfs \
+  podman \
+  buildah \
+  lxc-libs \
+  lxc-templates \
+  otter \
+  incus \
+  waydroid \
+  incus-tools \
+  incus-client \
+  incus-selinux
 
 # Networking / Connectivity
 dnf install -y --setopt=install_weak_deps=False \
@@ -190,14 +223,16 @@ dnf install -y --setopt=install_weak_deps=False \
   firewalld \
   bluez-libs \
   cifs-utils \
-  fuse-sshfs \
   avahi-tools \
   openconnect \
   iptables-nft \
   ModemManager \
-  NetworkManager \
   wpa_supplicant \
-  wireguard-tools \
+  wireguard-tools
+
+# Network Manager
+dnf install -y --setopt=install_weak_deps=False \
+  NetworkManager \
   NetworkManager-wifi \
   NetworkManager-wwan \
   NetworkManager-openvpn \
