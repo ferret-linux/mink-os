@@ -18,9 +18,11 @@ dnf install -y --setopt=install_weak_deps=False \
   sg3_utils \
   libguestfs \
   swtpm-tools \
+  spice-server \
   bridge-utils \
   iptables-nft \
-  guestfs-tools
+  guestfs-tools \
+  python3-libvirt \
 
 # QEMU-KVM
 dnf install -y --setopt=install_weak_deps=False \
@@ -29,7 +31,6 @@ dnf install -y --setopt=install_weak_deps=False \
   qemu-tools \
   qemu-ui-gtk \
   qemu-ui-sdl \
-  spice-server \
   qemu-kvm-core \
   qemu-block-nfs \
   qemu-block-rbd \
@@ -60,7 +61,6 @@ dnf install -y --setopt=install_weak_deps=False \
   libvirt \
   libvirt-nss \
   libvirt-client \
-  python3-libvirt \
   libvirt-daemon-kvm \
   libvirt-daemon-driver-qemu \
   libvirt-daemon-config-network \
