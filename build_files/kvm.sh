@@ -13,7 +13,6 @@ dnf install -y --setopt=install_weak_deps=False \
   dnsmasq \
   pciutils \
   usbredir \
-  virt-top \
   driverctl \
   edk2-ovmf \
   sg3_utils \
@@ -71,6 +70,11 @@ dnf install -y --setopt=install_weak_deps=False \
 
 # Virt Extras
 dnf install -y --setopt=install_weak_deps=False \
+  virt-top \
   virtiofsd \
+  virt-backup \
   virt-install \
-  virt-manager
+  virt-manager \
+  virtnbdbackup \
+  virt-lightning \
+  virt-bootstrap
