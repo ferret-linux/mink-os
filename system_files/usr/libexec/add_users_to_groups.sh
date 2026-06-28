@@ -30,6 +30,8 @@ GROUPS_TO_ADD=(
     plugdev     # openrazer needs it
     libvirt     # kvm/libvirt needs it
     i2c         # Needed for low latency prepherals
+    incus       # Needed by Incus for basic options
+    incus-admin # Needed by Incis for all options
 )
 # ── UID range that defines a "human" user ─────────────────────
 UID_MIN=1000

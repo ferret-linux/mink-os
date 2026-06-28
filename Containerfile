@@ -108,6 +108,7 @@ RUN systemctl enable ferret-libvirt-fix.service && \
     systemctl enable ferret-flatpak.service && \
     systemctl enable ferret-groups.service && \
     systemctl enable ferret-rfkill.service && \
+    systemctl enable incus-startup.service && \
     systemctl enable nix-daemon && \
     systemctl enable nix.mount
 
