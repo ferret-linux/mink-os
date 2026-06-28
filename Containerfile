@@ -21,9 +21,9 @@ RUN dnf install -y --setopt=install_weak_deps=False dnf5-plugins && \
     dnf config-manager setopt fedora-multimedia.enabled=1 && \
     dnf config-manager setopt ferret-kmods.enabled=1 && \
     dnf config-manager setopt ferret-pkgs.enabled=1 && \
-    dnf config-manager setopt fedora-multimedia.priority=90 && \
-    dnf config-manager setopt ferret-kmods.priority=90 && \
-    dnf config-manager setopt ferret-pkgs.priority=90 && \
+    dnf config-manager setopt fedora-multimedia.priority=80 && \
+    dnf config-manager setopt ferret-kmods.priority=50 && \
+    dnf config-manager setopt ferret-pkgs.priority=60 && \
     dnf remove -y fedora-repos-archive && \
     rm -f /etc/yum.repos.d/fedora-updates-testing.repo && \
     rm -f /etc/yum.repos.d/fedora-updates-archive.repo && \

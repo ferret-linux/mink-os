@@ -3,10 +3,9 @@
 set -ouex pipefail
 
 # Add Nvidia Drivers Repos
-dnf config-manager setopt fedora-multimedia.enabled=0
 dnf config-manager addrepo --from-repofile=https://negativo17.org/repos/fedora-nvidia.repo
 dnf config-manager setopt fedora-nvidia.enabled=1
-dnf config-manager setopt fedora-nvidia.priority=90
+dnf config-manager setopt fedora-nvidia.priority=70
 dnf makecache --refresh
 
 # Install Nvidia Kmods Drivers
@@ -45,16 +44,10 @@ dnf install --setopt=install_weak_deps=False -y \
     nvidia-settings
 
 # Install Nvidia Cuda Toolkit
-dnf config-manager setopt fedora-multimedia.enabled=1
-dnf config-manager setopt fedora-multimedia.priority=90
-dnf config-manager setopt fedora-nvidia.priority=80
-dnf makecache --refresh
 dnf install --setopt=install_weak_deps=False -y \
     cuda \
     cuda-libs \
     cuda-devel
-
-dnf config-manager setopt fedora-multimedia.enabled=0
 
 # Nvidia Services
 systemctl enable nvidia-persistenced.service
@@ -67,5 +60,3 @@ sed -i 's/ nvidia / i915 amdgpu nvidia /g' /usr/lib/dracut/dracut.conf.d/99-nvid
 # Cleanup
 dnf config-manager setopt fedora-nvidia.enabled=0
 rm -f /etc/yum.repos.d/fedora-nvidia.repo
-dnf config-manager setopt fedora-multimedia.enabled=1
-dnf config-manager setopt fedora-multimedia.priority=90
