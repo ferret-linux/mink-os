@@ -17,10 +17,22 @@ dnf install --setopt=install_weak_deps=False -y nvidia-modprobe nvidia-driver-se
 dnf install --setopt=install_weak_deps=False -y \
     libnvidia-fbc \
     nvidia-driver \
-    nvidia-driver-cuda \
+    nvidia-libXNVCtrl \
     libva-nvidia-driver \
     nvidia-persistenced \
-    nvidia-driver-NvFBCOpenGL \
+    nvidia-driver-NvFBCOpenGL
+
+# Install Nvidia X11 settings
+dnf install --setopt=install_weak_deps=False -y \
+    nvidia-xconfig
+
+# Install Nvidia Cuda Toolkit
+dnf install --setopt=install_weak_deps=False -y \
+    cuda \
+    cuda-libs \
+    cuda-devel \
+    nvidia-driver-cuda \
+    nvidia-driver-cuda-libs
 
 # Install Nvidia Container Toolkit
 dnf install --setopt=install_weak_deps=False -y \
