@@ -46,7 +46,10 @@ dnf install --setopt=install_weak_deps=False -y \
 # Install Nvidia Cuda Toolkit
 dnf install --setopt=install_weak_deps=False -y \
     cuda \
+    cuda-gcc \
     cuda-libs \
+    cuda-devel \
+    cuda-cli-tools
 
 # Nvidia Services
 systemctl enable nvidia-persistenced.service
