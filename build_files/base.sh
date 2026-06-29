@@ -107,6 +107,13 @@ dnf install -y --setopt=install_weak_deps=False \
   glycin-loaders \
   ffmpegthumbnailer
 
+# CD/BlueRay Media Drivers
+dnf install -y --setopt=install_weak_deps=False \
+  mkisofs \
+  cdda2wav \
+  cdrecord \
+  schily-libs
+
 # Graphics / GPU Drivers
 dnf install -y --setopt=install_weak_deps=False \
   vdpauinfo \

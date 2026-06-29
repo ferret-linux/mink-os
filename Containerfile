@@ -16,12 +16,15 @@ RUN rm -rf /opt && mkdir -p /opt
 # Add Ferret repos & remove fedora repos
 RUN dnf install -y --setopt=install_weak_deps=False dnf5-plugins && \
     dnf config-manager addrepo --from-repofile=https://negativo17.org/repos/fedora-multimedia.repo && \
+    dnf config-manager addrepo --from-repofile=https://negativo17.org/repos/fedora-cdrtools.repo && \
     dnf config-manager addrepo --from-repofile=https://ferretlinux.org/repo/ferret-kmods.repo && \
     dnf config-manager addrepo --from-repofile=https://ferretlinux.org/repo/ferret-pkgs.repo && \
     dnf config-manager setopt fedora-multimedia.enabled=1 && \
+    dnf config-manager setopt fedora-cdrtools.enabled=1 && \
     dnf config-manager setopt ferret-kmods.enabled=1 && \
     dnf config-manager setopt ferret-pkgs.enabled=1 && \
     dnf config-manager setopt fedora-multimedia.priority=80 && \
+    dnf config-manager setopt fedora-multimedia.cdrtools=90 && \
     dnf config-manager setopt ferret-kmods.priority=50 && \
     dnf config-manager setopt ferret-pkgs.priority=60 && \
     dnf remove -y fedora-repos-archive && \
@@ -70,9 +73,11 @@ RUN dnf remove -y \
 
 # Final Build steps/cleanup
 RUN dnf config-manager setopt fedora-multimedia.enabled=0 && \
+    dnf config-manager setopt fedora-cdrtools.enabled=0 && \
     dnf config-manager setopt ferret-kmods.enabled=0 && \
     dnf config-manager setopt ferret-pkgs.enabled=0 && \
     rm -f /etc/yum.repos.d/fedora-multimedia.repo && \
+    rm -f /etc/yum.repos.d/fedora-cdrtools.repo && \
     rm -f /etc/yum.repos.d/ferret-kmods.repo && \
     rm -f /etc/yum.repos.d/ferret-pkgs.repo && \
     dnf5 autoremove -y && \
