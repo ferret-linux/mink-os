@@ -47,7 +47,6 @@ dnf install --setopt=install_weak_deps=False -y \
 dnf install --setopt=install_weak_deps=False -y \
     cuda \
     cuda-libs \
-    cuda-devel
 
 # Nvidia Services
 systemctl enable nvidia-persistenced.service
