@@ -69,7 +69,6 @@ fi
 if [[ -z "$DISABLE_FERRET_ALIASES" ]]; then
   alias top='btop'
   alias vim='nvim'
-  alias dbox='distrobox'
   alias upgrade='topgrade'
 fi
 
