@@ -114,6 +114,8 @@ RUN systemctl enable ferret-libvirt-fix.service && \
     systemctl enable ferret-groups.service && \
     systemctl enable ferret-rfkill.service && \
     systemctl enable incus-startup.service && \
+    systemctl enable containerd.service && \
+    systemctl enable docker.service && \
     systemctl enable nix-daemon && \
     systemctl enable nix.mount
 
