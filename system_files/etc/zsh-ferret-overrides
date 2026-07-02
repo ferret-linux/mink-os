@@ -1,0 +1,12 @@
+# And set values according to the feature you wanna disable.
+# All Possible Values :
+# export DISABLE_ZSH_SYNTAX_HIGHLIGHTING=1
+# export DISABLE_STARSHIP=1
+# export DISABLE_ZOXIDE=1
+# export DISABLE_EZA_ALIASES=1
+# export DISABLE_ZOXIDE_CD=1
+# export DISABLE_FD_ALIAS=1
+# export DISABLE_FERRET_ALIASES=1
+# export DISABLE_MODERN_CLI_SUGGESTIONS=1
+# export DISABLE_ZSH_AUTOSUGGESTIONS=1
+# export DISABLE_HOMEBREW=1

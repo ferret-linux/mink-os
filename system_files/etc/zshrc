@@ -16,7 +16,7 @@
 # export DISABLE_HOMEBREW=1
 
 # ---- Load user overrides ----
-[[ -f "/etc/zsh-preference" ]] && source "/etc/zsh-ferret-overrides"
+[[ -f "/etc/zsh-ferret-overrides" ]] && source "/etc/zsh-ferret-overrides"
 
 # ---- Zsh plugins ----
 
