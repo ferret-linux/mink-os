@@ -5,8 +5,8 @@
 
 # ── History ───────────────────────────────────────────────────
 HISTFILE=~/.zsh_history
-HISTSIZE=4000
-SAVEHIST=6000
+HISTSIZE=10000
+SAVEHIST=10000
 
 # ── Keybindings ───────────────────────────────────────────────
 bindkey -e
@@ -16,6 +16,12 @@ setopt AUTO_CD
 setopt AUTO_PUSHD
 setopt PUSHD_IGNORE_DUPS
 setopt PUSHD_SILENT
+
+# ── History Settings ──────────────────────────────────────────
+setopt HIST_IGNORE_DUPS
+setopt HIST_IGNORE_SPACE
+setopt APPEND_HISTORY
+setopt SHARE_HISTORY
 
 # ── Correction ────────────────────────────────────────────────
 setopt CORRECT
