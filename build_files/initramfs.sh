@@ -26,8 +26,12 @@ for kernel_path in /usr/lib/modules/*/; do
         --kver "${qual_kernel}" \
         --force \
         --add 'ostree' \
+        --filesystems 'overlay' \
         --no-hostonly \
+        --no-hostonly-cmdline \
         --reproducible \
+        --aggressive-strip \
+        --compress="zstd -19 -T0" \
         "${initramfs_image}"
     chmod 0600 "${initramfs_image}"
 done
