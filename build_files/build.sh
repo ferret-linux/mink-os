@@ -1,5 +1,5 @@
 #!/bin/bash
-set -eoux pipefail
+set -euxo pipefail
 
 # Env-Vars
 KERNEL_VERSION="$(rpm -q kernel --queryformat '%{VERSION}-%{RELEASE}.%{ARCH}' | tail -1)"
@@ -8,19 +8,19 @@ KERNEL_VERSION="$(rpm -q kernel --queryformat '%{VERSION}-%{RELEASE}.%{ARCH}' | 
 dnf install -y --setopt=install_weak_deps=False \
   gcc \
   file \
-  zstd \
-  make \
   just \
+  make \
+  zstd \
   glibc \
   patch \
   rsync \
   sqlite \
-  gcc-c++ \
-  doxygen \
   busybox \
+  doxygen \
+  gcc-c++ \
   diffstat \
-  systemtap \
   procps-ng \
+  systemtap \
   patchutils \
   subversion
 
@@ -29,7 +29,7 @@ dnf install -y --setopt=install_weak_deps=False \
   fuse \
   fuse-libs \
   fuse-sshfs \
-  fuse-overlayfs 
+  fuse-overlayfs
 
 # Firmwares
 dnf install -y --setopt=install_weak_deps=False \
@@ -62,14 +62,62 @@ dnf install -y --setopt=install_weak_deps=False \
   upower \
   fprintd \
   usbmuxd \
+  libinput \
   pciutils \
   usbutils \
-  libinput \
   liquidctl \
   lm_sensors \
   fprintd-pam \
   libinput-utils \
   libratbag-ratbagd
+
+# Install kernel modules (grouped near hardware sections — most of these are peripheral/device drivers)
+dnf install -y --setopt=install_weak_deps=False \
+  kmod-wl-"${KERNEL_VERSION}" \
+  kmod-zfs-"${KERNEL_VERSION}" \
+  kmod-evdi-"${KERNEL_VERSION}" \
+  kmod-xone-"${KERNEL_VERSION}" \
+  kmod-kvmfr-"${KERNEL_VERSION}" \
+  kmod-sc0710-"${KERNEL_VERSION}" \
+  kmod-xpadneo-"${KERNEL_VERSION}" \
+  kmod-zenergy-"${KERNEL_VERSION}" \
+  kmod-hid-tmff2-"${KERNEL_VERSION}" \
+  kmod-new-lg4ff-"${KERNEL_VERSION}" \
+  kmod-openrazer-"${KERNEL_VERSION}" \
+  kmod-v4l2loopback-"${KERNEL_VERSION}" \
+  kmod-hid-fanatecff-"${KERNEL_VERSION}" \
+  kernel-devel-matched-"${KERNEL_VERSION}"
+
+# Install kmod packages
+dnf install -y --setopt=install_weak_deps=False \
+  zfs \
+  sc0710 \
+  libevdi \
+  libzfs7 \
+  zenergy \
+  hid-tmff2 \
+  libuutil3 \
+  libzpool7 \
+  new-lg4ff \
+  libnvpair3 \
+  zfs-dracut \
+  broadcom-wl \
+  displaylink \
+  v4l2loopback \
+  hid-fanatecff \
+  python3-pyzfs \
+  xone-kmod-common \
+  kvmfr-kmod-common \
+  xpadneo-kmod-common \
+  openrazer-kmod-common \
+  zenergy-akmod-modules \
+  hid-tmff2-akmod-modules \
+  new-lg4ff-akmod-modules \
+  v4l2loopback-akmod-modules \
+  hid-fanatecff-akmod-modules
+
+# Rebuild module dependencies
+depmod -a "${KERNEL_VERSION}"
 
 # Audio (ALSA / PipeWire)
 dnf install -y --setopt=install_weak_deps=False \
@@ -117,7 +165,7 @@ dnf install -y --setopt=install_weak_deps=False \
   glycin-loaders \
   ffmpegthumbnailer
 
-# CD/BlueRay Media Drivers
+# CD/Blu-ray Media Drivers
 dnf install -y --setopt=install_weak_deps=False \
   mkisofs \
   cdda2wav \
@@ -128,9 +176,9 @@ dnf install -y --setopt=install_weak_deps=False \
 dnf install -y --setopt=install_weak_deps=False \
   vdpauinfo \
   mesa-libGL \
+  libva-utils \
   mesa-libEGL \
   mesa-libgbm \
-  libva-utils \
   intel-gmmlib \
   vulkan-tools \
   mesa-filesystem \
@@ -144,8 +192,8 @@ dnf install -y --setopt=install_weak_deps=False \
 dnf install -y --setopt=install_weak_deps=False \
   gstreamer1-plugins-bad \
   gstreamer1-plugin-libav \
-  gstreamer1-plugins-ugly \
   gstreamer1-plugins-good \
+  gstreamer1-plugins-ugly \
   gstreamer1-plugins-good-extras
 
 # Core System / Init
@@ -177,22 +225,6 @@ dnf install -y --setopt=install_weak_deps=False \
   zsh-autosuggestions \
   zsh-syntax-highlighting
 
-# Performance / Gaming
-dnf install -y --setopt=install_weak_deps=False \
-  mangohud \
-  gamemode \
-  scx-tools \
-  scx-scheds \
-  tpm2-tools
-
-# SSH Tools
-dnf install -y --setopt=install_weak_deps=False \
-  openssh \
-  openssh-server \
-  openssh-clients \
-  openssh-askpass \
-  openssh-keysign \
-
 # CLI Tools
 dnf install -y --setopt=install_weak_deps=False \
   bat \
@@ -216,11 +248,27 @@ dnf install -y --setopt=install_weak_deps=False \
   trash-cli \
   eza-zsh-completion
 
+# Performance / Gaming
+dnf install -y --setopt=install_weak_deps=False \
+  gamemode \
+  mangohud \
+  scx-tools \
+  scx-scheds \
+  tpm2-tools
+
+# SSH Tools
+dnf install -y --setopt=install_weak_deps=False \
+  openssh \
+  openssh-server \
+  openssh-askpass \
+  openssh-clients \
+  openssh-keysign
+
 # LXC/Incus
 dnf install -y --setopt=install_weak_deps=False \
   lxc \
-  lxcfs \
   incus \
+  lxcfs \
   lxc-libs \
   incus-tools \
   incus-client \
@@ -233,14 +281,14 @@ dnf install -y --setopt=install_weak_deps=False \
   bootc \
   podman \
   skopeo \
-  buildah \
+  buildah
 
 # Docker CE
 dnf install -y --setopt=install_weak_deps=False \
   docker-ce \
   lazydocker \
-  docker-ce-cli \
   containerd.io \
+  docker-ce-cli \
   docker-buildx-plugin \
   docker-compose-plugin
 
@@ -292,54 +340,6 @@ dnf install -y --setopt=install_weak_deps=False \
   gutenprint-cups \
   cups-filters-driverless
 
-# Install kernel modules
-dnf install -y --setopt=install_weak_deps=False \
-  kmod-wl-"${KERNEL_VERSION}" \
-  kmod-zfs-"${KERNEL_VERSION}" \
-  kmod-evdi-"${KERNEL_VERSION}" \
-  kmod-xone-"${KERNEL_VERSION}" \
-  kmod-kvmfr-"${KERNEL_VERSION}" \
-  kmod-sc0710-"${KERNEL_VERSION}" \
-  kmod-xpadneo-"${KERNEL_VERSION}" \
-  kmod-zenergy-"${KERNEL_VERSION}" \
-  kmod-hid-tmff2-"${KERNEL_VERSION}" \
-  kmod-new-lg4ff-"${KERNEL_VERSION}" \
-  kmod-openrazer-"${KERNEL_VERSION}" \
-  kmod-v4l2loopback-"${KERNEL_VERSION}" \
-  kmod-hid-fanatecff-"${KERNEL_VERSION}" \
-  kernel-devel-matched-"${KERNEL_VERSION}"
-
-# Install kmod packages
-dnf install -y --setopt=install_weak_deps=False \
-  zfs \
-  sc0710 \
-  libevdi \
-  libzfs7 \
-  zenergy \
-  hid-tmff2 \
-  libuutil3 \
-  libzpool7 \
-  new-lg4ff \
-  libnvpair3 \
-  zfs-dracut \
-  broadcom-wl \
-  displaylink \
-  v4l2loopback \
-  hid-fanatecff \
-  python3-pyzfs \
-  xone-kmod-common \
-  kvmfr-kmod-common \
-  xpadneo-kmod-common \
-  openrazer-kmod-common \
-  zenergy-akmod-modules \
-  hid-tmff2-akmod-modules \
-  new-lg4ff-akmod-modules \
-  v4l2loopback-akmod-modules \
-  hid-fanatecff-akmod-modules
-
-# Rebuild module dependencies
-depmod -a "${KERNEL_VERSION}"
-
 # KVM Requirements
 dnf install -y --setopt=install_weak_deps=False \
   lshw \
@@ -348,8 +348,8 @@ dnf install -y --setopt=install_weak_deps=False \
   swtpm \
   libnbd \
   nbdkit \
-  numactl \
   dnsmasq \
+  numactl \
   pciutils \
   usbredir \
   driverctl \
@@ -357,11 +357,11 @@ dnf install -y --setopt=install_weak_deps=False \
   sg3_utils \
   libguestfs \
   swtpm-tools \
-  spice-server \
   bridge-utils \
   iptables-nft \
+  spice-server \
   guestfs-tools \
-  python3-libvirt \
+  python3-libvirt
 
 # QEMU-KVM
 dnf install -y --setopt=install_weak_deps=False \
@@ -415,8 +415,8 @@ dnf install -y --setopt=install_weak_deps=False \
   virt-install \
   virt-manager \
   virtnbdbackup \
-  virt-lightning \
-  virt-bootstrap
+  virt-bootstrap \
+  virt-lightning
 
 # Nerd Fonts
 NERD_VERSION="$(curl -s https://api.github.com/repos/ryanoasis/nerd-fonts/releases/latest | jq -r '.tag_name')"
@@ -450,8 +450,8 @@ dnf install -y --setopt=install_weak_deps=False \
   google-noto-emoji-fonts \
   google-noto-sans-vf-fonts \
   google-noto-serif-vf-fonts \
-  google-noto-sans-cjk-vf-fonts \
   google-noto-color-emoji-fonts \
+  google-noto-sans-cjk-vf-fonts \
   google-noto-sans-thai-vf-fonts \
   google-noto-sans-arabic-vf-fonts \
   google-noto-sans-hebrew-vf-fonts \
