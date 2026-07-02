@@ -243,7 +243,6 @@ CLI_TOOLS=(
   fd-find
   git-lfs
   ripgrep
-  lazygit
   starship
   topgrade
   git-annex
