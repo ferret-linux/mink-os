@@ -1,3 +1,8 @@
+# Kernel args for GPU passthrough:
+# - iommu=pt: bypass IOMMU translation for non-passthrough devices (perf)
+# - amd_iommu=on / intel_iommu=on: enable IOMMU (only one applies per CPU vendor)
+# - rd.driver.pre=vfio_pci: force vfio_pci to load before GPU drivers claim the device
+# NOTE: requires vfio-pci.ids=xxxx:xxxx set elsewhere to pin the actual GPU to vfio_pci
 kargs = [
   "iommu=pt",
   "amd_iommu=on",
