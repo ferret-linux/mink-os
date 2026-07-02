@@ -98,11 +98,10 @@ if [[ -o interactive ]] &&
     [[ "$cmd" == "sudo" ]] && cmd="${words[2]}"
 
     case "$cmd" in
+      rm)   command -v trash >/dev/null 2>&1 && [[ -z ${_ferret_seen[rm]}   ]] && _ferret_suggest rm   trash      && _ferret_seen[rm]=1 ;;
       cat)  command -v bat   >/dev/null 2>&1 && [[ -z ${_ferret_seen[cat]}  ]] && _ferret_suggest cat  bat        && _ferret_seen[cat]=1 ;;
       grep) command -v rg    >/dev/null 2>&1 && [[ -z ${_ferret_seen[grep]} ]] && _ferret_suggest grep rg         && _ferret_seen[grep]=1 ;;
       find) command -v fd    >/dev/null 2>&1 && [[ -z ${_ferret_seen[find]} ]] && _ferret_suggest find fd         && _ferret_seen[find]=1 ;;
-      cd)   command -v z     >/dev/null 2>&1 && [[ -z ${_ferret_seen[cd]}   ]] && _ferret_suggest cd   "z (zoxide)" && _ferret_seen[cd]=1 ;;
-      rm)   command -v trash >/dev/null 2>&1 && [[ -z ${_ferret_seen[rm]}   ]] && _ferret_suggest rm   trash      && _ferret_seen[rm]=1 ;;
     esac
   }
 

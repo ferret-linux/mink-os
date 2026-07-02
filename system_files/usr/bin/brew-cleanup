@@ -1,0 +1,46 @@
+#!/usr/bin/env bash
+set -euo pipefail
+
+if ! command -v brew &>/dev/null; then
+    echo "brew not found in PATH" >&2
+    exit 1
+fi
+
+# ── gather summary ─────────────────────────────────────────────────────────────
+autoremove_preview=$(brew autoremove --dry-run 2>&1 | tail -1)
+cleanup_preview=$(brew cleanup --prune=all -s --dry-run 2>&1 | tail -1)
+
+gum style \
+    --border rounded \
+    --border-foreground 212 \
+    --padding "0 1" \
+    "$(gum style --foreground 212 --bold 'brew cleanup')" \
+    "" \
+    "Unused dependencies : $(gum style --foreground 196 "$autoremove_preview")" \
+    "Cache/old versions  : $(gum style --foreground 196 "$cleanup_preview")" \
+    "Doctor              : $(gum style --foreground 196 "will run after cleanup")"
+
+gum confirm "Proceed?" || { echo "Aborted."; exit 0; }
+echo
+
+# ── step 1: autoremove ─────────────────────────────────────────────────────────
+gum spin --spinner dot --title "Removing unused dependencies..." -- \
+    brew autoremove
+gum log --level info "Unused dependencies removed"
+
+# ── step 2: cleanup ─────────────────────────────────────────────────────────────
+_tmp=$(mktemp)
+gum spin --spinner dot --title "Scrubbing cache (all ages, all versions)..." -- \
+    bash -c "brew cleanup --prune=all -s > '$_tmp' 2>&1"
+gum log --level info "$(tail -1 "$_tmp")"
+rm -f "$_tmp"
+
+# ── step 3: doctor ──────────────────────────────────────────────────────────────
+_tmp=$(mktemp)
+gum spin --spinner dot --title "Running brew doctor..." -- \
+    bash -c "brew doctor > '$_tmp' 2>&1 || true"
+gum log --level info "$(tail -1 "$_tmp")"
+rm -f "$_tmp"
+
+echo
+gum style --foreground 212 --bold "  Done"
