@@ -7,7 +7,7 @@ ask_retry = false
 auto_retry = 0
 pre_sudo = true
 sudo_loop = true
-sudo_loop_interval = 180
+sudo_loop_interval = 90
 sudo_command = "sudo"
 cleanup = true
 
