@@ -3,12 +3,16 @@
 set -ouex pipefail
 
 ### Rebuild initramfs
+
+# rpm-ostree wraps dracut for use inside the build; fall back to the
+# regular binary if that wrapper isn't present.
 if [ -f "/usr/libexec/rpm-ostree/wrapped/dracut" ]; then
     DRACUT="/usr/libexec/rpm-ostree/wrapped/dracut"
 else
     DRACUT="/usr/bin/dracut"
 fi
 
+# Quiet dracut's logging for the duration of this build only.
 temp_conf_file="$(mktemp '/etc/dracut.conf.d/zzz-loglevels-XXXXXXXXXX.conf')"
 cat >"${temp_conf_file}" <<'EOF'
 stdloglvl=4
@@ -31,7 +35,7 @@ for kernel_path in /usr/lib/modules/*/; do
         --no-hostonly-cmdline \
         --reproducible \
         --aggressive-strip \
-        --compress="zstd -22 --ultra -T0"
+        --compress="zstd -22 --ultra -T0" \
         "${initramfs_image}"
     chmod 0600 "${initramfs_image}"
 done
