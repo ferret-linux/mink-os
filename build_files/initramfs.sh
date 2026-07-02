@@ -31,7 +31,7 @@ for kernel_path in /usr/lib/modules/*/; do
         --no-hostonly-cmdline \
         --reproducible \
         --aggressive-strip \
-        --compress="zstd -19 -T0" \
+        --compress="zstd -22 --ultra -T0"
         "${initramfs_image}"
     chmod 0600 "${initramfs_image}"
 done
