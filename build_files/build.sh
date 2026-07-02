@@ -243,6 +243,7 @@ CLI_TOOLS=(
   fd-find
   git-lfs
   ripgrep
+  lazygit
   starship
   topgrade
   git-annex
@@ -287,7 +288,6 @@ PODMAN_ENV=(
 
 DOCKER_CE=(
   docker-ce
-  lazydocker
   containerd.io
   docker-ce-cli
   docker-buildx-plugin
