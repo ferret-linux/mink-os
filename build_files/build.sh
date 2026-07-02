@@ -248,7 +248,6 @@ CLI_TOOLS=(
   git-annex
   git-delta
   trash-cli
-  eza-zsh-completion
 )
 
 PERF_GAMING=(
