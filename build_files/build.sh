@@ -31,9 +31,24 @@ BUILD_TOOLS=(
 
 FUSE_TOOLS=(
   fuse
+  ifuse
+  fuse3
+  bindfs
+  jmtpfs
+  nbdfuse
+  gphotofs
+  fuse-zip
   fuse-libs
+  fuse-encfs
+  erofs-fuse
+  fuse3-libs
   fuse-sshfs
+  squashfuse
+  fuse-common
+  archivemount
+  fuse-bcachefs
   fuse-overlayfs
+  fuse-dislocker
 )
 
 FIRMWARES=(
