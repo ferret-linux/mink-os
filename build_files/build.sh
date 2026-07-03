@@ -70,6 +70,7 @@ SYSTEM_TOOLS_HW=(
   pciutils
   usbutils
   liquidctl
+  tpm2-tools
   lm_sensors
   fprintd-pam
   libinput-utils
@@ -175,6 +176,16 @@ CD_BLURAY=(
   schily-libs
 )
 
+GUI_APPS=(
+  pods
+  code
+  resources
+  helium-drm
+  pika-backup
+  gnome-boxes
+  gnome-firmware
+)
+
 GRAPHICS_GPU=(
   vdpauinfo
   mesa-libGL
@@ -255,7 +266,6 @@ PERF_GAMING=(
   mangohud
   scx-tools
   scx-scheds
-  tpm2-tools
 )
 
 SSH_TOOLS=(
@@ -476,6 +486,7 @@ ALL_PACKAGES=(
   "${QEMU_KVM[@]}"
   "${LIBVIRT[@]}"
   "${VIRT_EXTRAS[@]}"
+  "${GUI_APPS[@]}"
   "${FONTS_LANGPACKS[@]}"
 )
 
