@@ -264,6 +264,8 @@ CLI_TOOLS=(
 PERF_GAMING=(
   gamemode
   mangohud
+  vkBasalt
+  gamescope
   scx-tools
   scx-scheds
 )
