@@ -75,7 +75,8 @@ jobs:
           for _ in $(seq 2); do
             podman push \
               --retry 3 \
-              --compression-format=zstd \
+              --compression-format=zstd:chunked \
+              --compression-level=20 \
               --digestfile="${DIGESTFILE}" \
               "--sign-passphrase-file=/dev/null" \
               "--sign-by-sigstore-private-key=${PRIVATE_KEY_FILE}" \
