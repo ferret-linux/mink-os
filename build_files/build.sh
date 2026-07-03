@@ -243,7 +243,6 @@ CLI_TOOLS=(
   bat
   eza
   fzf
-  git
   gum
   btop
   curl
@@ -252,13 +251,21 @@ CLI_TOOLS=(
   zfetch
   zoxide
   fd-find
-  git-lfs
   ripgrep
   starship
   topgrade
+  trash-cli
+)
+
+GIT_TOOLS=(
+  gh
+  git
+  git-lfs
   git-annex
   git-delta
-  trash-cli
+  git-crypt
+  git-cinnabar
+  git-credential-libsecret
 )
 
 PERF_GAMING=(
@@ -474,6 +481,7 @@ ALL_PACKAGES=(
   "${GSTREAMER_PLUGINS[@]}"
   "${CORE_SYSTEM[@]}"
   "${SHELL_TERMINAL[@]}"
+  "${GIT_TOOLS[@]}"
   "${CLI_TOOLS[@]}"
   "${PERF_GAMING[@]}"
   "${SSH_TOOLS[@]}"
