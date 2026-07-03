@@ -109,7 +109,6 @@ UDEV_RULES=(
 SYSTEM_TOOLS_HW=(
   inxi
   bolt
-  lact
   upower
   ddcutil
   fprintd
