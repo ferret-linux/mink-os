@@ -23,10 +23,14 @@ BUILD_TOOLS=(
   doxygen
   gcc-c++
   diffstat
+  binutils
   procps-ng
   systemtap
   patchutils
   subversion
+  glibc-devel
+  libxcrypt-compat
+  pkgconf-pkg-config
 )
 
 FUSE_TOOLS=(
@@ -36,8 +40,11 @@ FUSE_TOOLS=(
   bindfs
   jmtpfs
   nbdfuse
+  apfs-fuse
+  s3fs-fuse
   gphotofs
   fuse-zip
+  fuse-afp
   fuse-libs
   fuse-encfs
   erofs-fuse
@@ -54,10 +61,32 @@ FUSE_TOOLS=(
 FIRMWARES=(
   alsa-firmware
   linux-firmware
+  amd-gpu-firmware
+  amd-ucode-firmware
+  intel-gpu-firmware
+  intel-audio-firmware
+  intel-vsc-firmware
+  nvidia-gpu-firmware
+  atheros-firmware
+  atmel-firmware
+  brcmfmac-firmware
+  iwlegacy-firmware
+  libertas-firmware
+  mediatek-firmware
+  mt7xxx-firmware
+  nxpwireless-firmware
+  qcom-firmware
+  qcom-wwan-firmware
+  realtek-firmware
+  tiwilink-firmware
+  zd1211-firmware
+  cirrus-audio-firmware
+  dvb-firmware
   alsa-sof-firmware
   alsa-tools-firmware
   iwlwifi-mld-firmware
   iwlwifi-mvm-firmware
+  iwlwifi-dvm-firmware
 )
 
 UDEV_RULES=(
@@ -72,24 +101,33 @@ UDEV_RULES=(
   ublue-os-udev-rules
   udev-hid-bpf-stable
   3dprinter-udev-rules
-  power-profiles-daemon
   unifying-receiver-udev
+  python-btchip-common
+  system-config-printer-udev
 )
 
 SYSTEM_TOOLS_HW=(
+  inxi
   bolt
+  lact
   upower
+  ddcutil
   fprintd
   usbmuxd
   libinput
   pciutils
   usbutils
+  nvme-cli
+  dmidecode
   liquidctl
   tpm2-tools
   lm_sensors
   fprintd-pam
+  smartmontools
+  brightnessctl
   libinput-utils
   libratbag-ratbagd
+  power-profiles-daemon
 )
 
 # Kernel modules (need KERNEL_VERSION expansion, so built dynamically)
@@ -139,18 +177,23 @@ KMOD_PACKAGES=(
 )
 
 AUDIO=(
+  wiremix
   alsa-ucm
   pipewire
   alsa-utils
+  alsa-tools
   wireplumber
   pipewire-alsa
   pipewire-libs
   pipewire-v4l2
   pipewire-utils
+  alsa-ucm-utils
   pipewire-gstreamer
   pipewire-libs-extra
   pipewire-pulseaudio
+  alsa-topology-utils
   pipewire-config-raop
+  pipewire-config-rates
   pipewire-plugin-libcamera
   pipewire-jack-audio-connection-kit
   pipewire-jack-audio-connection-kit-libs
@@ -167,10 +210,17 @@ CAMERA_VIDEO=(
 )
 
 IMAGE_CODECS=(
+  LibRaw
+  giflib
   libjxl
+  libtiff
+  libspng
   libavif
   libheif
   libwebp
+  openexr
+  librsvg2
+  libjpeg-turbo
 )
 
 FFMPEG_MEDIA=(
@@ -188,7 +238,10 @@ CD_BLURAY=(
   mkisofs
   cdda2wav
   cdrecord
+  libbluray
   schily-libs
+  dvd+rw-tools
+  libbluray-utils
 )
 
 GUI_APPS=(
@@ -209,15 +262,19 @@ GRAPHICS_GPU=(
   mesa-libgbm
   intel-gmmlib
   vulkan-tools
+  intel-mediasdk
   mesa-filesystem
   mesa-va-drivers
   intel-vpl-gpu-rt
   mesa-dri-drivers
+  intel-vaapi-driver
   mesa-vulkan-drivers
   libva-intel-media-driver
 )
 
 GSTREAMER_PLUGINS=(
+  gstreamer1
+  gstreamer1-vaapi
   gstreamer1-plugins-bad
   gstreamer1-plugin-libav
   gstreamer1-plugins-good
@@ -248,6 +305,7 @@ CORE_SYSTEM=(
 
 SHELL_TERMINAL=(
   zsh
+  fish
   bash
   bash-completion
   zsh-autosuggestions
@@ -262,6 +320,7 @@ CLI_TOOLS=(
   btop
   curl
   zrun
+  tmux
   neovim
   zfetch
   zoxide
@@ -372,6 +431,7 @@ PRINTING_SCANNING=(
   sane-backends
   cups-pk-helper
   gutenprint-cups
+  system-config-printer
   cups-filters-driverless
 )
 

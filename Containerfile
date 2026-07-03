@@ -46,6 +46,16 @@ RUN --mount=type=bind,from=ctx,source=/,target=/ctx \
     --mount=type=tmpfs,dst=/tmp \
     bash /ctx/build.sh
 
+# Add Nvidia Drivers for nvidia images
+RUN --mount=type=bind,from=ctx,source=/,target=/ctx \
+    --mount=type=cache,dst=/var/cache \
+    --mount=type=cache,dst=/var/log \
+    --mount=type=tmpfs,dst=/tmp \
+    case "${IMAGE_NAME}" in \
+        *-nvidia) bash /ctx/nvidia.sh ;; \
+        *) : ;; \
+    esac
+
 # Move /opt contents to immutable tree, create tmpfiles.d entries, fix dirs
 RUN mkdir -p /usr/lib/opt && \
     mv /opt/* /usr/lib/opt/ 2>/dev/null || true && \
@@ -130,15 +140,15 @@ RUN sed -i 's|^SHELL=.*|SHELL=/usr/bin/zsh|' /etc/default/useradd && \
 # Set Plymouth theme
 RUN plymouth-set-default-theme zomac
 
+# Lock all packages (makes build easier)
+RUN dnf versionlock add $(rpm -qa --qf '%{NAME}\n')
+
 # Generate InitRamFs
 RUN --mount=type=bind,from=ctx,source=/,target=/ctx \
     --mount=type=cache,dst=/var/cache \
     --mount=type=cache,dst=/var/log \
     --mount=type=tmpfs,dst=/tmp \
     bash /ctx/initramfs.sh
-
-# Lock all packages (makes build easier)
-RUN dnf versionlock add $(rpm -qa --qf '%{NAME}\n')
 
 ### LINTING
 ## Verify final image and contents are correct.
