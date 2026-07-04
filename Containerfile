@@ -1,19 +1,27 @@
+# ==============================================================
+#  MinkOS container image build
+#  Base: ${BASE_IMAGE}
+# ==============================================================
+
 ARG BASE_IMAGE
 
-# Allow build scripts to be referenced without being copied into the final image
+# ── Build context ─────────────────────────────────────────────
+# Allow build scripts to be referenced without being copied into
+# the final image.
 FROM scratch AS ctx
 COPY build_files /
 
-# Base Image
+# ── Base image ───────────────────────────────────────────────
 FROM ${BASE_IMAGE}
 
 ARG IMAGE_NAME
 ENV IMAGE_NAME=${IMAGE_NAME}
 
-# Make /opt real dir before package install
+# Make /opt a real directory before package install (some packages
+# expect to write here directly).
 RUN rm -rf /opt && mkdir -p /opt
 
-# Add Ferret repos & remove fedora repos
+# ── Repositories: add Ferret/negativo17, strip Fedora repos ─────
 RUN dnf install -y --setopt=install_weak_deps=False dnf5-plugins && \
     dnf config-manager addrepo --from-repofile=https://negativo17.org/repos/fedora-multimedia.repo && \
     dnf config-manager addrepo --from-repofile=https://negativo17.org/repos/fedora-cdrtools.repo && \
@@ -36,17 +44,17 @@ RUN dnf install -y --setopt=install_weak_deps=False dnf5-plugins && \
     dnf clean all && \
     dnf upgrade --refresh --setopt=install_weak_deps=False -y
 
-### MODIFICATIONS
-## make modifications desired in your image and install packages by modifying the build.sh script
-## the following RUN directive does all the things required to run "build.sh" as recommended.
-
+# ── Package installation ─────────────────────────────────────
+# Make modifications desired in your image and install packages by
+# editing build_files/build.sh — the RUN directive below executes
+# it with the recommended cache/tmpfs mounts.
 RUN --mount=type=bind,from=ctx,source=/,target=/ctx \
     --mount=type=cache,dst=/var/cache \
     --mount=type=cache,dst=/var/log \
     --mount=type=tmpfs,dst=/tmp \
     bash /ctx/build.sh
 
-# Add Nvidia Drivers for nvidia images
+# ── NVIDIA drivers (nvidia image variants only) ───────────────
 RUN --mount=type=bind,from=ctx,source=/,target=/ctx \
     --mount=type=cache,dst=/var/cache \
     --mount=type=cache,dst=/var/log \
@@ -56,7 +64,9 @@ RUN --mount=type=bind,from=ctx,source=/,target=/ctx \
         *) : ;; \
     esac
 
-# Move /opt contents to immutable tree, create tmpfiles.d entries, fix dirs
+# ── /opt → immutable tree migration ───────────────────────────
+# Move /opt contents into the immutable /usr tree and create
+# tmpfiles.d entries to symlink them back at runtime.
 RUN mkdir -p /usr/lib/opt && \
     mv /opt/* /usr/lib/opt/ 2>/dev/null || true && \
     for dir in /usr/lib/opt/*/; do \
@@ -64,7 +74,7 @@ RUN mkdir -p /usr/lib/opt && \
         echo "L+?  \"/opt/${opt}\"  -  -  -  -  /usr/lib/opt/${opt}" > /usr/lib/tmpfiles.d/99-optfix-${opt}.conf; \
     done
 
-# Remove Fedora specific bloat
+# ── Remove Fedora-specific bloat ──────────────────────────────
 RUN dnf remove -y \
     nano \
     htop \
@@ -80,7 +90,8 @@ RUN dnf remove -y \
     gstreamer1-plugins-bad-free \
     gstreamer1-plugins-bad-free-extras
 
-# Final Build steps/cleanup
+# ── Repository cleanup ───────────────────────────────────────
+# Remove build-only repos so they don't ship in the final image.
 RUN dnf config-manager setopt fedora-multimedia.enabled=0 && \
     dnf config-manager setopt fedora-cdrtools.enabled=0 && \
     dnf config-manager setopt ferret-kmods.enabled=0 && \
@@ -93,7 +104,9 @@ RUN dnf config-manager setopt fedora-multimedia.enabled=0 && \
     dnf5 clean packages && \
     dnf5 clean all
 
-# Fix Directories
+# ── Directory fixes ──────────────────────────────────────────
+# Replace /opt with a symlink into /var so it stays writable, and
+# ensure other runtime-required directories exist with correct perms.
 RUN rm -rf /opt && ln -s /var/opt /opt && \
     mkdir -p /var/roothome && \
     mkdir -p /var/tmp && \
@@ -101,21 +114,21 @@ RUN rm -rf /opt && ln -s /var/opt /opt && \
     mkdir -p /nix && \
     mkdir -p /var/nix
 
-# Edit OS-release
+# ── OS release metadata ─────────────────────────────────────────
 RUN sed -i 's/^NAME=.*/NAME="MinkOS"/' /usr/lib/os-release && \
     sed -i 's/^PRETTY_NAME=.*/PRETTY_NAME="MinkOS Linux"/' /usr/lib/os-release
 
-# Copy system files
+# ── System files ─────────────────────────────────────────────
 COPY system_files/ /
 
-# Disable Broken Services
+# ── Disable broken/unwanted services ──────────────────────────
 RUN systemctl mask systemd-remount-fs.service && \
     systemctl disable bootc-fetch-apply-updates.timer && \
     systemctl mask bootc-fetch-apply-updates.timer && \
     systemctl disable flatpak-add-fedora-repos.service && \
     systemctl mask flatpak-add-fedora-repos.service
 
-# Enable Our Services
+# ── Enable Ferret/MinkOS services ─────────────────────────────
 RUN systemctl enable ferret-libvirt-fix.service && \
     systemctl enable ferret-hostname.service && \
     systemctl enable ferret-flatpak.service && \
@@ -127,7 +140,7 @@ RUN systemctl enable ferret-libvirt-fix.service && \
     systemctl enable nix-daemon && \
     systemctl enable nix.mount
 
-# Add Settings Package & settings
+# ── Shell defaults & Plymouth theme cleanup ───────────────────
 RUN sed -i 's|^SHELL=.*|SHELL=/usr/bin/zsh|' /etc/default/useradd && \
     rm -rf /usr/share/plymouth/themes/charge && \
     rm -rf /usr/share/plymouth/themes/details && \
@@ -138,16 +151,18 @@ RUN sed -i 's|^SHELL=.*|SHELL=/usr/bin/zsh|' /etc/default/useradd && \
 # Set Plymouth theme
 RUN plymouth-set-default-theme zomac
 
-# Lock all packages (makes build easier)
+# ── Package version lock ─────────────────────────────────────
+# Lock all installed packages to their current versions/releases,
+# making rebase/upgrade behavior deterministic for this image.
 RUN dnf versionlock add $(rpm -qa --qf '%{NAME}\n') && rpm -qa | wc -l
 
-# Generate InitRamFs
+# ── InitRAMFS build ──────────────────────────────────────────
 RUN --mount=type=bind,from=ctx,source=/,target=/ctx \
     --mount=type=cache,dst=/var/cache \
     --mount=type=cache,dst=/var/log \
     --mount=type=tmpfs,dst=/tmp \
     bash /ctx/initramfs.sh
 
-### LINTING
-## Verify final image and contents are correct.
+# ── Linting ──────────────────────────────────────────────────
+# Verify final image and contents are correct.
 RUN bootc container lint
