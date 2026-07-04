@@ -340,7 +340,6 @@ CLI_TOOLS=(
   topgrade
   trash-cli
   hyperfine
-  eza-zsh-completion
 )
 
 GIT_TOOLS=(
