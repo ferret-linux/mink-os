@@ -65,7 +65,7 @@ jobs:
               --label "org.opencontainers.image.vendor=ferret-linux" \
               --label "org.opencontainers.image.version=latest.$(date -u +%Y%m%d)" \
               --label "org.opencontainers.image.created=$(date -u +%Y-%m-%dT%H:%M:%SZ)" \
-              --label "io.artifacthub.package.keywords=bootc,gnome,ferret-linux,mink" \
+              --label "io.artifacthub.package.keywords=bootc,headless,ferret-linux,mink" \
               --label "io.artifacthub.package.logo-url=https://avatars.githubusercontent.com/u/281760288" \
               --label "containers.bootc=1" \
               --file Containerfile \
