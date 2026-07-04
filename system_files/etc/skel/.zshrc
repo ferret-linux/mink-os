@@ -28,4 +28,4 @@ setopt CORRECT
 
 # ── Completion ────────────────────────────────────────────────
 autoload -Uz compinit
-compinit -C
+compinit
