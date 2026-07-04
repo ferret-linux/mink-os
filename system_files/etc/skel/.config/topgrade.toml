@@ -1,7 +1,7 @@
 [misc]
 no_self_update = true
-only = ["system", "flatpak", "distrobox", "nix", "brew_cask", "brew_formula"]
-ignore_failures = ["flatpak", "distrobox", "nix", "brew_cask", "brew_formula"]
+only = ["system", "flatpak", "nix", "brew_cask", "brew_formula"]
+ignore_failures = ["flatpak", "nix", "brew_cask", "brew_formula"]
 assume_yes = true
 ask_retry = false
 auto_retry = 0
