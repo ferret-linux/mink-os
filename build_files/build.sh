@@ -573,7 +573,6 @@ LIBVIRT=(
 VIRT_EXTRAS=(
   virt-top
   virtiofsd
-  virt-backup
   virt-install
   virt-manager
   virtnbdbackup
