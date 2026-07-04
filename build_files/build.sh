@@ -11,10 +11,15 @@ KERNEL_VERSION="$(rpm -q kernel --queryformat '%{VERSION}-%{RELEASE}.%{ARCH}' | 
 
 BUILD_TOOLS=(
   gcc
+  rar
+  tar
+  zip
   file
   just
   make
   zstd
+  wget2
+  unzip
   glibc
   patch
   rsync
@@ -26,6 +31,8 @@ BUILD_TOOLS=(
   binutils
   procps-ng
   systemtap
+  wget2-libs
+  wget2-wget
   patchutils
   subversion
   glibc-devel
@@ -251,7 +258,9 @@ GRAPHICS_GPU=(
   mesa-libgbm
   intel-gmmlib
   vulkan-tools
+  mesa-libOpenCL
   intel-mediasdk
+  mesa-libTeflon
   mesa-filesystem
   mesa-va-drivers
   intel-vpl-gpu-rt
@@ -265,15 +274,21 @@ GSTREAMER_PLUGINS=(
   gstreamer1
   gstreamer1-vaapi
   gstreamer1-plugins-bad
+  gstreamer1-plugins-base
   gstreamer1-plugin-libav
   gstreamer1-plugins-good
   gstreamer1-plugins-ugly
+  gstreamer1-plugins-bad-opencv
+  gstreamer1-plugins-base-tools
   gstreamer1-plugins-good-extras
+  gstreamer1-plugins-bad-fluidsynth
 )
 
 CORE_SYSTEM=(
   nix
   fwupd
+  polkit
+  udisks2
   flatpak
   freerdp
   plymouth
@@ -302,14 +317,20 @@ SHELL_TERMINAL=(
 )
 
 CLI_TOOLS=(
+  jq
+  yq
   bat
   eza
   fzf
   gum
+  dust
   btop
   curl
   zrun
   tmux
+  ncdu
+  procs
+  direnv
   neovim
   zfetch
   zoxide
@@ -318,16 +339,22 @@ CLI_TOOLS=(
   starship
   topgrade
   trash-cli
+  hyperfine
+  eza-zsh-completion
 )
 
 GIT_TOOLS=(
   gh
   git
+  gitui
   git-lfs
+  gitleaks
   git-annex
   git-delta
   git-crypt
+  difftastic
   git-cinnabar
+  git-filter-repo
   git-credential-libsecret
 )
 
@@ -341,7 +368,9 @@ PERF_GAMING=(
 )
 
 SSH_TOOLS=(
+  mosh
   openssh
+  pcsc-lite
   openssh-server
   openssh-askpass
   openssh-clients
@@ -350,6 +379,7 @@ SSH_TOOLS=(
 
 LXC_INCUS=(
   lxc
+  criu
   incus
   lxcfs
   lxc-libs
@@ -378,13 +408,15 @@ DOCKER_CE=(
 CONTAINER_TOOLS=(
   otter
   waydroid
-  distrobox
 )
 
 NETWORKING=(
   iwd
   bluez
+  avahi
   openvpn
+  usbguard
+  tailscale
   firewalld
   bluez-libs
   cifs-utils
@@ -417,6 +449,7 @@ PRINTING_SCANNING=(
   cups-browsed
   cups-filters
   samba-client
+  sane-airscan
   sane-backends
   cups-pk-helper
   gutenprint-cups
@@ -454,16 +487,20 @@ QEMU_KVM=(
   qemu-ui-gtk
   qemu-ui-sdl
   qemu-kvm-core
+  qemu-ui-curses
   qemu-block-nfs
   qemu-block-rbd
   qemu-block-ssh
   qemu-pr-helper
   qemu-ui-opengl
+  qemu-audio-dbus
   qemu-audio-alsa
   qemu-block-curl
   qemu-char-spice
+  qemu-block-iscsi
   qemu-audio-spice
   qemu-ui-spice-app
+  qemu-block-gluster
   qemu-ui-spice-core
   qemu-audio-pipewire
   qemu-device-usb-host
@@ -484,11 +521,18 @@ LIBVIRT=(
   libvirt-nss
   libvirt-client
   libvirt-daemon-kvm
+  libvirt-daemon-lxc
+  libvirt-daemon-driver-lxc
   libvirt-daemon-driver-qemu
   libvirt-daemon-config-network
+  libvirt-daemon-driver-network
   libvirt-daemon-driver-nodedev
   libvirt-daemon-config-nwfilter
+  libvirt-daemon-driver-nwfilter
+  libvirt-daemon-driver-storage-zfs
   libvirt-daemon-driver-storage-core
+  libvirt-daemon-driver-storage-disk
+  libvirt-daemon-driver-storage-logical
 )
 
 VIRT_EXTRAS=(
@@ -519,8 +563,16 @@ FONTS_LANGPACKS=(
   google-noto-color-emoji-fonts
   google-noto-sans-cjk-vf-fonts
   google-noto-sans-thai-vf-fonts
+  google-noto-sans-khmer-vf-fonts
+  google-noto-sans-tamil-vf-fonts
   google-noto-sans-arabic-vf-fonts
   google-noto-sans-hebrew-vf-fonts
+  google-noto-sans-symbols-vf-fonts
+  google-noto-sans-myanmar-vf-fonts
+  google-noto-sans-bengali-vf-fonts
+  google-noto-sans-armenian-vf-fonts
+  google-noto-sans-georgian-vf-fonts
+  google-noto-sans-ethiopic-vf-fonts
   google-noto-sans-devanagari-vf-fonts
 )
 
