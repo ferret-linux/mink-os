@@ -17,6 +17,10 @@ FROM ${BASE_IMAGE}
 ARG IMAGE_NAME
 ENV IMAGE_NAME=${IMAGE_NAME}
 
+# Make /opt a real directory before package install (some packages
+# expect to write here directly).
+RUN rm -rf /opt && mkdir -p /opt
+
 # ── Repositories: add Ferret/negativo17, strip Fedora repos ─────
 RUN dnf install -y --setopt=install_weak_deps=False dnf5-plugins && \
     dnf config-manager addrepo --from-repofile=https://negativo17.org/repos/fedora-multimedia.repo && \
