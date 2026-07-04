@@ -139,7 +139,7 @@ RUN sed -i 's|^SHELL=.*|SHELL=/usr/bin/zsh|' /etc/default/useradd && \
 RUN plymouth-set-default-theme zomac
 
 # Lock all packages (makes build easier)
-RUN dnf versionlock add $(rpm -qa --qf '%{NAME}\n')
+RUN dnf versionlock add $(rpm -qa --qf '%{NAME}\n') && rpm -qa | wc -l
 
 # Generate InitRamFs
 RUN --mount=type=bind,from=ctx,source=/,target=/ctx \
