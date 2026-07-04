@@ -286,6 +286,7 @@ GSTREAMER_PLUGINS=(
 
 CORE_SYSTEM=(
   nix
+  audit
   fwupd
   polkit
   udisks2
