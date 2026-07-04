@@ -151,6 +151,18 @@ RUN sed -i 's|^SHELL=.*|SHELL=/usr/bin/zsh|' /etc/default/useradd && \
 # Set Plymouth theme
 RUN plymouth-set-default-theme zomac
 
+# ── Remove unwanted desktop entries ───────────────────────────
+RUN rm -rf /usr/share/applications/input-remapper-gtk.desktop && \
+    rm -rf /usr/share/applications/envy24control.desktop && \
+    rm -rf /usr/share/applications/hdajackretask.desktop && \
+    rm -rf /usr/share/applications/virt-manager.desktop && \
+    rm -rf /usr/share/applications/hwmixvolume.desktop && \
+    rm -rf /usr/share/applications/hdspmixer.desktop && \
+    rm -rf /usr/share/applications/echomixer.desktop && \
+    rm -rf /usr/share/applications/hdspconf.desktop && \
+    rm -rf /usr/share/applications/btop.desktop && \
+    rm -rf /usr/share/applications/nvim.desktop
+
 # ── Package version lock ─────────────────────────────────────
 # Lock all installed packages to their current versions/releases,
 # making rebase/upgrade behavior deterministic for this image.
