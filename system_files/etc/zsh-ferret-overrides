@@ -1,5 +1,6 @@
 # And set values according to the feature you wanna disable.
 # All Possible Values :
+# export FERRET_DISABLE_ALL=1
 # export DISABLE_ZSH_SYNTAX_HIGHLIGHTING=1
 # export DISABLE_STARSHIP=1
 # export DISABLE_ZOXIDE=1
