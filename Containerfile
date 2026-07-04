@@ -70,7 +70,6 @@ RUN dnf remove -y \
     htop \
     nvtop \
     micro \
-    chrony \
     toolbox \
     firefox \
     fdk-aac-free \
@@ -118,7 +117,6 @@ RUN systemctl mask systemd-remount-fs.service && \
 
 # Enable Our Services
 RUN systemctl enable ferret-libvirt-fix.service && \
-    systemctl enable systemd-timesyncd.service && \
     systemctl enable ferret-hostname.service && \
     systemctl enable ferret-flatpak.service && \
     systemctl enable ferret-groups.service && \
