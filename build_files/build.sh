@@ -483,9 +483,13 @@ KVM_REQUIREMENTS=(
 QEMU_KVM=(
   qemu-img
   qemu-kvm
+  qemu-rdp
+  qemu-docs
   qemu-tools
   qemu-ui-gtk
   qemu-ui-sdl
+  qemu-common
+  qemu-ui-dbus
   qemu-kvm-core
   qemu-ui-curses
   qemu-block-nfs
@@ -493,17 +497,22 @@ QEMU_KVM=(
   qemu-block-ssh
   qemu-pr-helper
   qemu-ui-opengl
+  qemu-block-dmg
   qemu-audio-dbus
   qemu-audio-alsa
   qemu-block-curl
   qemu-char-spice
   qemu-block-iscsi
   qemu-audio-spice
+  qemu-block-blkio
+  qemu-sanity-check
   qemu-ui-spice-app
   qemu-block-gluster
   qemu-ui-spice-core
   qemu-audio-pipewire
   qemu-device-usb-host
+  qemu-ui-egl-headless
+  qemu-device-uefi-vars
   qemu-device-display-qxl
   qemu-device-usb-redirect
   qemu-device-usb-smartcard
@@ -512,8 +521,11 @@ QEMU_KVM=(
   qemu-device-display-virtio-gpu-gl
   qemu-device-display-virtio-vga-gl
   qemu-device-display-virtio-gpu-pci
+  qemu-device-display-vhost-user-gpu
   qemu-device-display-virtio-gpu-pci-gl
   qemu-device-display-virtio-gpu-rutabaga
+  qemu-device-display-virtio-vga-rutabaga
+  qemu-device-display-virtio-gpu-pci-rutabaga
 )
 
 LIBVIRT=(
