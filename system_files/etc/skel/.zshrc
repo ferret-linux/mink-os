@@ -1,31 +1,18 @@
 # ==============================================================
 #  ~/.zshrc — User Zsh configuration
-#  Ferret Project : github.com/ferret-project
+#  Personal overrides / additions on top of /etc/zshrc (Ferret Project)
 # ==============================================================
 
-# ── History ───────────────────────────────────────────────────
-HISTFILE=~/.zsh_history
-HISTSIZE=10000
-SAVEHIST=10000
+# ── Personal aliases ────────────────────────────────────────────
+# alias gs='git status'
+# alias gc='git commit'
 
-# ── Keybindings ───────────────────────────────────────────────
-bindkey -e
+# ── Personal environment variables ──────────────────────────────
+# export EDITOR=nvim
+# export PATH="$HOME/.local/bin:$PATH"
 
-# ── Directory Navigation ──────────────────────────────────────
-setopt AUTO_CD
-setopt AUTO_PUSHD
-setopt PUSHD_IGNORE_DUPS
-setopt PUSHD_SILENT
+# ── Personal functions ───────────────────────────────────────────
+# mkcd() { mkdir -p "$1" && cd "$1"; }
 
-# ── History Settings ──────────────────────────────────────────
-setopt HIST_IGNORE_DUPS
-setopt HIST_IGNORE_SPACE
-setopt APPEND_HISTORY
-setopt SHARE_HISTORY
-
-# ── Correction ────────────────────────────────────────────────
-setopt NO_CORRECT
-
-# ── Completion ────────────────────────────────────────────────
-autoload -Uz compinit
-compinit
+# ── Machine-specific config ──────────────────────────────────────
+# (things specific to this one machine, not shared across systems)

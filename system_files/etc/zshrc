@@ -14,9 +14,55 @@
 # export DISABLE_MODERN_CLI_SUGGESTIONS=1
 # export DISABLE_ZSH_AUTOSUGGESTIONS=1
 # export DISABLE_HOMEBREW=1
+# export DISABLE_FERRET_ZSH_HISTORY=1
+# export DISABLE_FERRET_ZSH_KEYBINDINGS=1
+# export DISABLE_FERRET_ZSH_DIR_NAV=1
+# export DISABLE_FERRET_ZSH_CORRECTION=1
+# export DISABLE_FERRET_ZSH_COMPLETION=1
 
 # ---- Load user overrides ----
 [[ -f "/etc/zsh-ferret-overrides" ]] && source "/etc/zsh-ferret-overrides"
+
+# ---- History ----
+
+if [[ -z "$DISABLE_FERRET_ZSH_HISTORY" ]]; then
+  HISTFILE=~/.zsh_history
+  HISTSIZE=10000
+  SAVEHIST=10000
+
+  setopt HIST_IGNORE_DUPS
+  setopt HIST_IGNORE_SPACE
+  setopt APPEND_HISTORY
+  setopt SHARE_HISTORY
+fi
+
+# ---- Keybindings ----
+
+if [[ -z "$DISABLE_FERRET_ZSH_KEYBINDINGS" ]]; then
+  bindkey -e
+fi
+
+# ---- Directory Navigation ----
+
+if [[ -z "$DISABLE_FERRET_ZSH_DIR_NAV" ]]; then
+  setopt AUTO_CD
+  setopt AUTO_PUSHD
+  setopt PUSHD_IGNORE_DUPS
+  setopt PUSHD_SILENT
+fi
+
+# ---- Correction ----
+
+if [[ -z "$DISABLE_FERRET_ZSH_CORRECTION" ]]; then
+  unsetopt CORRECT
+fi
+
+# ---- Completion ----
+
+if [[ -z "$DISABLE_FERRET_ZSH_COMPLETION" ]]; then
+  autoload -Uz compinit
+  compinit
+fi
 
 # ---- Zsh plugins ----
 
