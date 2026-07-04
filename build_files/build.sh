@@ -582,25 +582,33 @@ VIRT_EXTRAS=(
 
 FONTS_LANGPACKS=(
   harfbuzz
+  fontconfig
   stix-fonts
   langpacks-en
   unicode-emoji
   cracklib-dicts
-  langpacks-core-en
+  dejavu-sans-fonts
+  dejavu-serif-fonts
   langpacks-fonts-en
   glibc-all-langpacks
   glibc-locale-source
   liberation-fonts-all
+  dejavu-sans-mono-fonts
   google-noto-emoji-fonts
   google-noto-sans-vf-fonts
   google-noto-serif-vf-fonts
+  google-noto-sans-lao-vf-fonts
   google-noto-color-emoji-fonts
   google-noto-sans-cjk-vf-fonts
   google-noto-sans-thai-vf-fonts
+  google-noto-sans-mono-vf-fonts
+  google-noto-serif-cjk-vf-fonts
   google-noto-sans-khmer-vf-fonts
   google-noto-sans-tamil-vf-fonts
   google-noto-sans-arabic-vf-fonts
   google-noto-sans-hebrew-vf-fonts
+  google-noto-sans-symbols-2-fonts
+  google-noto-sans-sinhala-vf-fonts
   google-noto-sans-symbols-vf-fonts
   google-noto-sans-myanmar-vf-fonts
   google-noto-sans-bengali-vf-fonts
