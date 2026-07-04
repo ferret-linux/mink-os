@@ -243,16 +243,6 @@ CD_BLURAY=(
   libbluray-utils
 )
 
-GUI_APPS=(
-  pods
-  code
-  resources
-  helium-drm
-  pika-backup
-  gnome-boxes
-  gnome-firmware
-)
-
 GRAPHICS_GPU=(
   vdpauinfo
   mesa-libGL
