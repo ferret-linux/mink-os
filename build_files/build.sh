@@ -522,13 +522,16 @@ LIBVIRT=(
   libvirt-client
   libvirt-daemon-kvm
   libvirt-daemon-lxc
+  libvirt-daemon-common
   libvirt-daemon-driver-lxc
   libvirt-daemon-driver-qemu
+  libvirt-daemon-driver-secret
   libvirt-daemon-config-network
   libvirt-daemon-driver-network
   libvirt-daemon-driver-nodedev
   libvirt-daemon-config-nwfilter
   libvirt-daemon-driver-nwfilter
+  libvirt-daemon-driver-interface
   libvirt-daemon-driver-storage-zfs
   libvirt-daemon-driver-storage-core
   libvirt-daemon-driver-storage-disk
