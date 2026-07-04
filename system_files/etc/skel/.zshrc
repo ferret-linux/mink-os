@@ -24,7 +24,7 @@ setopt APPEND_HISTORY
 setopt SHARE_HISTORY
 
 # ── Correction ────────────────────────────────────────────────
-setopt CORRECT
+setopt NO_CORRECT
 
 # ── Completion ────────────────────────────────────────────────
 autoload -Uz compinit
