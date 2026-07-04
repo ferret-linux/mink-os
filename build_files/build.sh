@@ -560,7 +560,6 @@ ALL_PACKAGES=(
   "${QEMU_KVM[@]}"
   "${LIBVIRT[@]}"
   "${VIRT_EXTRAS[@]}"
-  "${GUI_APPS[@]}"
   "${FONTS_LANGPACKS[@]}"
 )
 
