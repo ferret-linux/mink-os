@@ -490,7 +490,6 @@ QEMU_KVM=(
   qemu-ui-sdl
   qemu-common
   qemu-ui-dbus
-  qemu-kvm-core
   qemu-ui-curses
   qemu-block-nfs
   qemu-block-rbd
@@ -526,6 +525,27 @@ QEMU_KVM=(
   qemu-device-display-virtio-gpu-rutabaga
   qemu-device-display-virtio-vga-rutabaga
   qemu-device-display-virtio-gpu-pci-rutabaga
+)
+
+QEMU_CROSS_EMU=(
+  qemu-user
+  qemu-system-arm
+  qemu-system-ppc
+  qemu-system-x86
+  qemu-system-mips
+  qemu-user-static
+  qemu-user-binfmt
+  qemu-system-riscv
+  qemu-system-s390x
+  qemu-system-aarch64
+  qemu-user-static-arm
+  qemu-user-static-ppc
+  qemu-user-static-mips
+  qemu-user-static-riscv
+  qemu-user-static-s390x
+  qemu-system-loongarch64
+  qemu-user-static-aarch64
+  qemu-user-static-loongarch64
 )
 
 LIBVIRT=(
@@ -625,6 +645,7 @@ ALL_PACKAGES=(
   "${PRINTING_SCANNING[@]}"
   "${KVM_REQUIREMENTS[@]}"
   "${QEMU_KVM[@]}"
+  "${QEMU_CROSS_EMU[@]}"
   "${LIBVIRT[@]}"
   "${VIRT_EXTRAS[@]}"
   "${FONTS_LANGPACKS[@]}"
