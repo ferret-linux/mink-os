@@ -55,7 +55,6 @@ NVIDIA_CUDA_TOOLKIT=(
   cuda
   cuda-gcc
   cuda-libs
-  cuda-devel
 )
 
 # ---------------------------------------------------------------------------
