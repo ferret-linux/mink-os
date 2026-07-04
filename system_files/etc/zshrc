@@ -1,7 +1,10 @@
 # Lines configured by Ferret Project
 # Do not edit — use ~/.zshrc to override or disable via env vars
 
-# To disable features create a file "/etc/zsh-ferret-overrides"
+# To disable EVERYTHING and use plain/default zsh behavior:
+# export FERRET_DISABLE_ALL=1
+
+# To disable individual features create a file "/etc/zsh-ferret-overrides"
 # And set values according to the feature you wanna disable.
 # All Possible Values :
 # export DISABLE_ZSH_SYNTAX_HIGHLIGHTING=1
@@ -19,6 +22,11 @@
 # export DISABLE_FERRET_ZSH_DIR_NAV=1
 # export DISABLE_FERRET_ZSH_CORRECTION=1
 # export DISABLE_FERRET_ZSH_COMPLETION=1
+
+# ---- Master bypass: skip everything, use stock zsh ----
+if [[ -n "$FERRET_DISABLE_ALL" ]]; then
+  return
+fi
 
 # ---- Load user overrides ----
 [[ -f "/etc/zsh-ferret-overrides" ]] && source "/etc/zsh-ferret-overrides"
