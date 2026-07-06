@@ -41,13 +41,13 @@ RUN dnf install -y --setopt=install_weak_deps=False dnf5-plugins && \
     rm -f /etc/yum.repos.d/fedora-cisco-openh264.repo && \
     dnf autoremove -y && \
     dnf clean packages && \
-    dnf clean all && \
-    dnf upgrade --refresh --setopt=install_weak_deps=False -y
+    dnf clean all
 
 # ── Package installation ─────────────────────────────────────
 # Make modifications desired in your image and install packages by
 # editing build_files/build.sh — the RUN directive below executes
 # it with the recommended cache/tmpfs mounts.
+RUN dnf --refresh makecache && dnf upgrade --setopt=install_weak_deps=False -y
 RUN --mount=type=bind,from=ctx,source=/,target=/ctx \
     --mount=type=cache,dst=/var/cache \
     --mount=type=cache,dst=/var/log \
