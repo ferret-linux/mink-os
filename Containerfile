@@ -25,7 +25,7 @@ RUN rm -rf /opt && mkdir -p /opt
 RUN echo "install_weak_deps=False" >> /etc/dnf/dnf.conf
 
 # ── Repositories: add Ferret/negativo17, strip Fedora repos ─────
-RUN dnf install -y --setopt=install_weak_deps=False dnf5-plugins && \
+RUN dnf install -y --refresh --setopt=install_weak_deps=False dnf5-plugins && \
     dnf config-manager addrepo --from-repofile=https://negativo17.org/repos/fedora-multimedia.repo && \
     dnf config-manager addrepo --from-repofile=https://negativo17.org/repos/fedora-cdrtools.repo && \
     dnf config-manager addrepo --from-repofile=https://ferretlinux.org/repo/ferret-kmods.repo && \
