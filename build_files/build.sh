@@ -67,34 +67,34 @@ FUSE_TOOLS=(
 )
 
 FIRMWARES=(
+  dvb-firmware
   alsa-firmware
+  qcom-firmware
   linux-firmware
-  amd-gpu-firmware
-  amd-ucode-firmware
-  intel-gpu-firmware
-  intel-audio-firmware
-  intel-vsc-firmware
-  nvidia-gpu-firmware
-  atheros-firmware
   atmel-firmware
+  mt7xxx-firmware
+  zd1211-firmware
+  amd-gpu-firmware
+  atheros-firmware
+  realtek-firmware
   brcmfmac-firmware
   iwlegacy-firmware
   libertas-firmware
   mediatek-firmware
-  mt7xxx-firmware
-  nxpwireless-firmware
-  qcom-firmware
-  qcom-wwan-firmware
-  realtek-firmware
   tiwilink-firmware
-  zd1211-firmware
-  cirrus-audio-firmware
-  dvb-firmware
   alsa-sof-firmware
+  amd-ucode-firmware
+  intel-gpu-firmware
+  intel-vsc-firmware
+  qcom-wwan-firmware
+  nvidia-gpu-firmware
   alsa-tools-firmware
+  intel-audio-firmware
+  nxpwireless-firmware
   iwlwifi-mld-firmware
   iwlwifi-mvm-firmware
   iwlwifi-dvm-firmware
+  cirrus-audio-firmware
 )
 
 UDEV_RULES=(
@@ -109,8 +109,8 @@ UDEV_RULES=(
   ublue-os-udev-rules
   udev-hid-bpf-stable
   3dprinter-udev-rules
-  unifying-receiver-udev
   python-btchip-common
+  unifying-receiver-udev
   system-config-printer-udev
 )
 
@@ -311,7 +311,6 @@ CORE_SYSTEM=(
 
 SHELL_TERMINAL=(
   zsh
-  fish
   bash
   bash-completion
   zsh-autosuggestions
@@ -400,8 +399,8 @@ PODMAN_ENV=(
 
 DOCKER_CE=(
   docker-ce
-  containerd.io
   docker-ce-cli
+  containerd.io
   docker-buildx-plugin
   docker-compose-plugin
 )
