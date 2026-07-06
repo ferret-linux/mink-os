@@ -47,11 +47,12 @@ FUSE_TOOLS=(
   bindfs
   jmtpfs
   nbdfuse
-  apfs-fuse
-  s3fs-fuse
+  chunkfs
   gphotofs
   fuse-zip
   fuse-afp
+  apfs-fuse
+  s3fs-fuse
   fuse-libs
   fuse-encfs
   erofs-fuse
