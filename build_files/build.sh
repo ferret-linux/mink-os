@@ -302,7 +302,6 @@ CORE_SYSTEM=(
   unbound-anchor
   usb_modeswitch
   zram-generator
-  btrfs-assistant
   kernel-tools-libs
   kernel-modules-extra
   systemd-oomd-defaults
