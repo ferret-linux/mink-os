@@ -27,14 +27,18 @@ for kernel_path in /usr/lib/modules/*/; do
     qual_kernel="${kernel_path##*/}"
     echo "Rebuilding initramfs for kernel: ${qual_kernel}"
     "${DRACUT}" \
-        --kver "${qual_kernel}" \
         --force \
-        --add 'ostree' \
-        --filesystems 'overlay' \
+        --strip \
+        --nolvmconf \
+        --nomdadmconf \
         --no-hostonly \
-        --no-hostonly-cmdline \
+        --add 'ostree' \
         --reproducible \
         --aggressive-strip \
+        --no-hostonly-cmdline \
+        --kver "${qual_kernel}" \
+        --filesystems 'overlay' \
+        --no-hostonly-default-device \
         --compress="zstd -22 --ultra -T0" \
         "${initramfs_image}"
     chmod 0600 "${initramfs_image}"
