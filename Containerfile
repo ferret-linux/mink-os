@@ -21,6 +21,9 @@ ENV IMAGE_NAME=${IMAGE_NAME}
 # expect to write here directly).
 RUN rm -rf /opt && mkdir -p /opt
 
+# Make install_weak_deps=False default
+RUN echo "install_weak_deps=False" >> /etc/dnf/dnf.conf
+
 # ── Repositories: add Ferret/negativo17, strip Fedora repos ─────
 RUN dnf install -y --setopt=install_weak_deps=False dnf5-plugins && \
     dnf config-manager addrepo --from-repofile=https://negativo17.org/repos/fedora-multimedia.repo && \
