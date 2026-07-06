@@ -93,6 +93,13 @@ RUN dnf remove -y \
     gstreamer1-plugins-bad-free \
     gstreamer1-plugins-bad-free-extras
 
+# ── Package version lock ─────────────────────────────────────
+# Lock all installed packages to their current versions/releases,
+# making rebase/upgrade behavior deterministic for this image.
+# (dnf5 writes this to /etc/dnf/versionlock.toml — part of the
+# committed OS tree, not /var — so it persists correctly.)
+RUN dnf versionlock add $(rpm -qa --qf '%{NAME}\n')
+
 # ── Repository cleanup ───────────────────────────────────────
 # Remove build-only repos so they don't ship in the final image.
 RUN dnf config-manager setopt fedora-multimedia.enabled=0 && \
