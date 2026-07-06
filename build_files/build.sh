@@ -380,8 +380,9 @@ SSH_TOOLS=(
 LXC_INCUS=(
   lxc
   criu
-  incus
   lxcfs
+  incus
+  incus-ui
   lxc-libs
   incus-tools
   incus-client
