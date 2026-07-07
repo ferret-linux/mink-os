@@ -39,7 +39,7 @@ if [ -n "$SCREEN_W" ] && [ -n "$SCREEN_H" ]; then
     EXTRA_FLAGS=(--window-size="${WIN_W},${WIN_H}")
 fi
 
-helium --app="$URL" --name=Incus --class=Incus --user-data-dir="$PROFILE_DIR" "${EXTRA_FLAGS[@]}"
+helium --app="$URL" --name=Incus-webUI --class=Incus-webUI --user-data-dir="$PROFILE_DIR" "${EXTRA_FLAGS[@]}"
 
 kill "$INCUS_PID" 2>/dev/null
 rm -rf "$FAKEBIN"
