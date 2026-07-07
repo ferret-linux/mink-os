@@ -74,11 +74,17 @@ dnf install --setopt=install_weak_deps=False -y "${ALL_PACKAGES[@]}"
 
 # Nvidia Services
 systemctl enable nvidia-persistenced.service
+systemctl enabme nvidia-powerd.service
+systemctl enabme nvidia-cdi.service
 
 # Fix Kmods Tree & loading
 depmod -a "${KERNEL_VERSION}"
 sed -i 's/omit_drivers/force_drivers/g' /usr/lib/dracut/dracut.conf.d/99-nvidia.conf
 sed -i 's/ nvidia / i915 amdgpu nvidia /g' /usr/lib/dracut/dracut.conf.d/99-nvidia.conf
+
+# Remove useless nvidia files
+rm -rf /usr/bin/nvidia-boot-update
+rm -rf /usr/bin//usr/bin/nvidia-bug-report.sh
 
 # Cleanup
 dnf config-manager setopt fedora-nvidia.enabled=0
