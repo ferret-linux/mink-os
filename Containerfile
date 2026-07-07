@@ -188,6 +188,12 @@ RUN --mount=type=bind,from=ctx,source=/,target=/ctx \
     --mount=type=tmpfs,dst=/tmp \
     bash /ctx/initramfs.sh
 
+# ── Image Cleanup (for Bootc compatibility) ──────────────────
+RUN find /var/* -maxdepth 0 -type d ! -name cache ! -name log -exec rm -rf {} \; && \
+    find /var/cache/* -maxdepth 0 -type d ! -name libdnf5 -exec rm -rf {} \; && \
+    rm -rf /boot && mkdir -p /boot && \
+    rm -rf /usr/etc
+
 # ── Linting ──────────────────────────────────────────────────
 # Verify final image and contents are correct.
 RUN bootc container lint
