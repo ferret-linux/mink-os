@@ -1,31 +1,33 @@
 #!/usr/bin/env bash
-# Enroll a MOK key into the Secure Boot pending list
 # @tags: security
 # @info
 #   Enrolls a Machine Owner Key (MOK) into the Secure Boot pending list
 #   using mokutil. Designed for Fedora systems using akmods where a
 #   custom signing key is generated at /etc/pki/akmods/certs/.
 #
-#   MOK enrollment is required when Secure Boot is enabled and kernel
-#   modules are signed with a local key (e.g. nvidia, v4l2loopback).
-#   Without enrollment, signed modules are rejected at boot.
+#   Checks first whether the key is already enrolled (confirmed at a
+#   prior MOK Manager boot screen). If so, nothing is done unless you
+#   confirm you want to re-queue it. Otherwise it enrolls directly —
+#   if it's already pending, mokutil reports SKIP and exits cleanly.
 #
-#   The key is submitted to the MOK pending list with a preset password.
-#   On next reboot, the UEFI MOK Manager prompts for confirmation.
-#   If the key is already pending, mokutil reports SKIP and exits cleanly.
-#
-#   After enrollment is confirmed at the MOK menu, the key persists
-#   across reboots and all modules signed with it load without restriction.
 #   Secure Boot must be enabled for MOK enrollment to have any effect.
 set -euo pipefail
 
-command -v mokutil &>/dev/null || { echo "✗  mokutil required" >&2; exit 1; }
-
-MOK="/etc/pki/akmods/certs/ferret-sb.der"
+MOK="/etc/pki/akmods/certs/ferret-mok.der"
 PASSWORD="ferret"
 
 sudo test -f "$MOK" || { echo "✗  MOK file not found: $MOK" >&2; exit 1; }
 
+# ── Already enrolled? ────────────────────────────────────────
+TEST=$(sudo mokutil --test-key "$MOK" 2>&1)
+
+if [[ "$TEST" == *"is already enrolled"* ]]; then
+    printf '✔  Key already enrolled — Secure Boot trusts it, nothing to do\n'
+    gum confirm "Re-queue it in the pending list anyway?" || exit 0
+    echo
+fi
+
+# ── Enroll (or re-queue) ──────────────────────────────────────
 OUT=$(printf '%s\n%s\n' "$PASSWORD" "$PASSWORD" | sudo mokutil --import "$MOK" 2>&1) || true
 
 if [[ "$OUT" == *"SKIP:"* ]]; then

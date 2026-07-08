@@ -1,86 +1,84 @@
 #!/usr/bin/env bash
-# Manage Polychromatic (Flatpak) and OpenRazer daemon
 # @tags: hardware
 # @info
 #   Manages Polychromatic and the OpenRazer daemon for Razer peripheral
-#   RGB control and configuration on Linux.
+#   RGB control on Linux.
 #
 #   Polychromatic is a graphical frontend for OpenRazer, installed via
-#   Flathub. The OpenRazer daemon runs as a systemd user service and
-#   communicates with kernel drivers to control Razer hardware.
+#   Flatpak (Flathub is added automatically if missing). OpenRazer
+#   itself runs as a systemd user service talking to the kernel driver.
 #
-#   Flathub is added automatically if not already configured.
-#
-#   Note: openrazer-daemon must be installed on the host via your
-#   package manager (it's preinstalled on all our distros)
-set -euo pipefail
+#   Detects current install state and offers Setup / Repair / Reinstall
+#   / Remove accordingly. Note: openrazer-daemon must already be
+#   installed on the host via your package manager.
 
-command -v flatpak   &>/dev/null || { echo "✗  flatpak required"  >&2; exit 1; }
-command -v systemctl &>/dev/null || { echo "✗  systemctl required" >&2; exit 1; }
+set -euo pipefail
 
 POLY_ID="app.polychromatic.controller"
 POLY_NAME="Polychromatic"
 DAEMON="openrazer-daemon.service"
 
-ok()   { printf '✔  %s\n' "$*"; }
-warn() { printf '◇  %s\n' "$*"; }
-die()  { printf '✗  %s\n' "$*" >&2; exit 1; }
+ok()   { gum style --foreground 82  "✔  $*"; }
+warn() { gum style --foreground 214 "◇  $*"; }
 
-# ── State ─────────────────────────────────────────────────────
 poly_installed() { flatpak --user info "$POLY_ID" &>/dev/null || flatpak --system info "$POLY_ID" &>/dev/null; }
 has_flathub()    { flatpak --user remote-list 2>/dev/null | grep -q flathub || flatpak --system remote-list 2>/dev/null | grep -q flathub; }
 daemon_enabled() { systemctl --user is-enabled "$DAEMON" &>/dev/null; }
 daemon_active()  { systemctl --user is-active  "$DAEMON" &>/dev/null; }
 
-# ── Status ────────────────────────────────────────────────────
-echo ""
-has_flathub      && ok "Flathub"                    || warn "Flathub missing"
-poly_installed   && ok "$POLY_NAME installed"        || warn "$POLY_NAME not installed"
-daemon_enabled   && {
-    daemon_active && ok "$DAEMON (running)" || warn "$DAEMON (stopped)"
-} || warn "$DAEMON disabled"
-echo ""
-
-# ── Helpers ───────────────────────────────────────────────────
-confirm() { printf '%s [y/N]: ' "$1"; read -r a; [[ "$a" =~ ^[Yy] ]]; }
-
 ensure_flathub() {
     has_flathub && return
-    flatpak --user remote-add --if-not-exists flathub \
-        https://flathub.org/repo/flathub.flatpakrepo && ok "Flathub added" || die "Failed to add Flathub"
+    flatpak --user remote-add --if-not-exists flathub https://flathub.org/repo/flathub.flatpakrepo
+    ok "Flathub added"
 }
 
 install_poly() {
-    poly_installed && { ok "$POLY_NAME already installed"; return; }
+    if poly_installed; then ok "$POLY_NAME already installed"; return; fi
     ensure_flathub
     local scope="--user"
-    flatpak --system remote-list 2>/dev/null | grep -q flathub && scope="--system"
-    flatpak install -y "$scope" flathub "$POLY_ID" && ok "$POLY_NAME installed" || warn "Install failed"
+    has_flathub && flatpak --system remote-list 2>/dev/null | grep -q flathub && scope="--system"
+    flatpak install -y "$scope" flathub "$POLY_ID"
+    ok "$POLY_NAME installed"
 }
 
 remove_poly() {
-    poly_installed || { ok "$POLY_NAME not installed"; return; }
-    flatpak --user   info "$POLY_ID" &>/dev/null && flatpak uninstall -y --user   "$POLY_ID" >/dev/null || true
-    flatpak --system info "$POLY_ID" &>/dev/null && flatpak uninstall -y --system "$POLY_ID" >/dev/null || true
+    if ! poly_installed; then ok "$POLY_NAME not installed"; return; fi
+    flatpak --user   info "$POLY_ID" &>/dev/null && flatpak uninstall -y --user   "$POLY_ID" >/dev/null
+    flatpak --system info "$POLY_ID" &>/dev/null && flatpak uninstall -y --system "$POLY_ID" >/dev/null
     ok "$POLY_NAME removed"
 }
 
 enable_daemon() {
-    daemon_enabled || systemctl --user enable --now "$DAEMON" && ok "Daemon enabled" || warn "Failed — is openrazer installed?"
-    daemon_active  || systemctl --user start "$DAEMON" && ok "Daemon started" || warn "Failed to start daemon"
+    daemon_enabled || systemctl --user enable --now "$DAEMON"
+    daemon_active  || systemctl --user start "$DAEMON"
+    ok "Daemon enabled"
 }
 
 disable_daemon() {
-    daemon_enabled && systemctl --user disable --now "$DAEMON" && ok "Daemon disabled" || ok "Daemon already disabled"
+    if daemon_enabled; then
+        systemctl --user disable --now "$DAEMON"
+        ok "Daemon disabled"
+    else
+        ok "Daemon already disabled"
+    fi
 }
 
-# ── Menu ──────────────────────────────────────────────────────
-if ! poly_installed && ! daemon_enabled; then
-    STATE="none"
-elif poly_installed && daemon_enabled; then
-    STATE="full"
+# ── Status ────────────────────────────────────────────────────
+gum style --border rounded --margin "1 0" --padding "0 2" --border-foreground 212 "Razer / Polychromatic Manager"
+
+if has_flathub; then ok "Flathub"; else warn "Flathub missing"; fi
+if poly_installed; then ok "$POLY_NAME installed"; else warn "$POLY_NAME not installed"; fi
+if daemon_enabled; then
+    if daemon_active; then ok "$DAEMON (running)"; else warn "$DAEMON (stopped)"; fi
 else
-    STATE="partial"
+    warn "$DAEMON disabled"
+fi
+echo
+
+# ── Menu ──────────────────────────────────────────────────────
+if ! poly_installed && ! daemon_enabled; then STATE="none"
+elif poly_installed && daemon_enabled;    then STATE="full"
+else                                            STATE="partial"
 fi
 
 case "$STATE" in
@@ -89,10 +87,8 @@ case "$STATE" in
     partial) opts=("Repair" "Reinstall" "Remove" "Exit") ;;
 esac
 
-for i in "${!opts[@]}"; do printf '  %d)  %s\n' $(( i+1 )) "${opts[$i]}"; done
-printf '\n  choose: '; read -r PICK; echo ""
-
-ACTION="${opts[$((PICK-1))]}"
+ACTION=$(gum choose "${opts[@]}")
+echo
 
 case "$ACTION" in
     Setup)
@@ -100,13 +96,14 @@ case "$ACTION" in
     Repair)
         poly_installed || install_poly; enable_daemon ;;
     Reinstall)
-        confirm "Reinstall $POLY_NAME + restart daemon?" || { ok "Cancelled"; exit 0; }
+        gum confirm "Reinstall $POLY_NAME + restart daemon?" || { ok "Cancelled"; exit 0; }
         disable_daemon; remove_poly; install_poly; enable_daemon ;;
     Remove)
-        confirm "Remove $POLY_NAME + disable daemon?" || { ok "Cancelled"; exit 0; }
+        gum confirm "Remove $POLY_NAME + disable daemon?" || { ok "Cancelled"; exit 0; }
         disable_daemon; remove_poly ;;
     *)
         ok "Bye!"; exit 0 ;;
 esac
 
-printf '\n✔  Done\n\n'
+echo
+ok "Done"

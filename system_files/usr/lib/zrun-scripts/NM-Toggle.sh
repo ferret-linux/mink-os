@@ -1,68 +1,76 @@
 #!/usr/bin/env bash
-# Switch NetworkManager Wi-Fi backend between iwd and wpa_supplicant
 # @tags: system
 # @info
 #   Toggles NetworkManager's Wi-Fi backend between iwd and wpa_supplicant.
-#   Detects the current backend automatically and always switches to the
-#   other backend.
+#   Detects the configured backend via conf.d/iwd.conf and switches to
+#   the other one.
 #
-#   Switching to iwd:
-#   - Writes wifi.backend=iwd to /etc/NetworkManager/conf.d/iwd.conf
-#   - Disables wpa_supplicant.service (NM manages iwd automatically)
+#   Shows exactly which saved Wi-Fi networks will be deleted before
+#   asking for confirmation — profiles aren't compatible across
+#   backends, so all saved networks are wiped and must be reconnected
+#   manually afterward.
 #
-#   Switching to wpa_supplicant:
-#   - Removes iwd.conf so NM falls back to its default backend
-#   - Re-enables and starts wpa_supplicant.service
-#
-#   All saved Wi-Fi connections are removed since profiles are
-#   incompatible between backends. A NetworkManager restart
-#   is required to apply the change after switching.
-#   Restart with: sudo systemctl restart NetworkManager
-set -euo pipefail
+#   NetworkManager restart (required to apply the change) is offered
+#   as a separate confirm step, since it may drop the current session.
 
+set -euo pipefail
 [[ $EUID -ne 0 ]] && exec sudo "$0" "$@"
 
 NM_CONF="/etc/NetworkManager/conf.d/iwd.conf"
 
-die()  { printf '✗  %s\n' "$*" >&2; exit 1; }
-ok()   { printf '✔  %s\n' "$*"; }
-info() { printf '◈  %s\n' "$*"; }
+ok()   { gum style --foreground 82  "✔  $*"; }
+info() { gum style --foreground 111 "◈  $*"; }
+warn() { gum style --foreground 214 "⚠  $*"; }
 
-command -v nmcli     &>/dev/null || die "nmcli not found"
-command -v systemctl &>/dev/null || die "systemd not found"
-
-# ── Detect current backend ────────────────────────────────────
 if [[ -f "$NM_CONF" ]] && grep -q 'wifi.backend=iwd' "$NM_CONF"; then
-    CURRENT="iwd"; TARGET="wpa_supplicant"
+    CURRENT=iwd; TARGET=wpa_supplicant
 else
-    CURRENT="wpa_supplicant"; TARGET="iwd"
+    CURRENT=wpa_supplicant; TARGET=iwd
 fi
 
-info "Current backend : $CURRENT"
-info "Switch to       : $TARGET"
-printf '\n  Continue? [y/N]: '
-read -r ans; [[ "$ans" =~ ^[Yy] ]] || { info "Cancelled"; exit 0; }
+gum style --border rounded --margin "1 0" --padding "0 2" --border-foreground 212 "Wi-Fi Backend Switcher"
+info "Configured backend now : $(gum style --bold "$CURRENT")"
+info "Switching to           : $(gum style --bold "$TARGET")"
+
+mapfile -t WIFI < <(nmcli -t -f UUID,TYPE,NAME connection show | awk -F: '$2=="802-11-wireless"')
+
+if (( ${#WIFI[@]} > 0 )); then
+    warn "Saved Wi-Fi networks that will be deleted:"
+    for line in "${WIFI[@]}"; do
+        gum style --foreground 214 "    • ${line##*:}"
+    done
+    warn "You'll need to manually reconnect (and re-enter passwords) after."
+else
+    info "No saved Wi-Fi connections — nothing will be lost."
+fi
+
+echo
+gum confirm "Switch to $TARGET and delete these networks?" || { info "Cancelled"; exit 0; }
 echo
 
-# ── Switch ────────────────────────────────────────────────────
-if [[ "$TARGET" == "iwd" ]]; then
-    command -v iwctl &>/dev/null || die "iwd is not installed"
+gum spin --spinner dot --title "Applying $TARGET backend..." -- sleep 1
+
+if [[ "$TARGET" == iwd ]]; then
     mkdir -p "$(dirname "$NM_CONF")"
     printf '[device]\nwifi.backend=iwd\n' > "$NM_CONF"
     systemctl disable --now wpa_supplicant.service 2>/dev/null || true
     ok "Config written → $NM_CONF"
 else
     rm -f "$NM_CONF"
-    command -v wpa_supplicant &>/dev/null && systemctl enable --now wpa_supplicant.service
+    systemctl enable --now wpa_supplicant.service
     ok "iwd.conf removed — NM will use wpa_supplicant"
 fi
 
-# ── Purge saved Wi-Fi connections ─────────────────────────────
-n=0
-while IFS=: read -r uuid type; do
-    [[ "$type" == "802-11-wireless" ]] || continue
-    nmcli connection delete uuid "$uuid" &>/dev/null && (( n++ )) || true
-done < <(nmcli -t -f UUID,TYPE connection show)
-(( n > 0 )) && ok "Removed $n saved Wi-Fi connection(s)" || info "No saved Wi-Fi connections"
+for line in "${WIFI[@]}"; do
+    nmcli connection delete uuid "${line%%:*}" &>/dev/null || true
+done
+(( ${#WIFI[@]} > 0 )) && ok "Removed ${#WIFI[@]} saved Wi-Fi connection(s)"
 
-printf '\n◈  Restart NM to apply: sudo systemctl restart NetworkManager\n\n'
+echo
+warn "Restarting NetworkManager may briefly drop your current connection."
+if gum confirm "Restart NetworkManager now?"; then
+    gum spin --spinner dot --title "Restarting NetworkManager..." -- systemctl restart NetworkManager
+    ok "NetworkManager restarted — backend is now $TARGET"
+else
+    info "Apply later with: sudo systemctl restart NetworkManager"
+fi
