@@ -21,14 +21,11 @@ BUILD_TOOLS=(
   wget2
   unzip
   glibc
-  patch
   rsync
   sqlite
-  busybox
   doxygen
   gcc-c++
   diffstat
-  binutils
   procps-ng
   systemtap
   wget2-libs
@@ -286,7 +283,6 @@ GSTREAMER_PLUGINS=(
 )
 
 CORE_SYSTEM=(
-  nix
   audit
   fwupd
   polkit
@@ -295,7 +291,6 @@ CORE_SYSTEM=(
   freerdp
   plymouth
   i2c-tools
-  nix-daemon
   uresourced
   dbus-daemon
   shadow-utils
@@ -307,6 +302,19 @@ CORE_SYSTEM=(
   kernel-modules-extra
   systemd-oomd-defaults
   plymouth-plugin-two-step
+)
+
+NIX=(
+  nix
+  patch
+  nix-doc
+  busybox
+  binutils
+  nix-libs
+  nix-legacy
+  nix-system
+  nix-daemon
+  nix-filesystem
 )
 
 SHELL_TERMINAL=(
@@ -632,6 +640,7 @@ ALL_PACKAGES=(
   "${KERNEL_MODULES[@]}"
   "${KMOD_PACKAGES[@]}"
   "${AUDIO[@]}"
+  "${NIX[@]}"
   "${CAMERA_VIDEO[@]}"
   "${IMAGE_CODECS[@]}"
   "${FFMPEG_MEDIA[@]}"
