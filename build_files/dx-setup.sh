@@ -22,6 +22,14 @@ LXC_INCUS=(
   lxc-templates
 )
 
+MUSL_DEV=(
+  musl-gcc
+  musl-libc
+  musl-devel
+  musl-filesystem
+  musl-libc-static
+)
+
 GSTREAMER=(
   gstreamer1-plugins-bad-opencv
   gstreamer1-plugins-bad-fluidsynth
@@ -208,6 +216,7 @@ VIRT_EXTRAS=(
 ALL_PACKAGES=(
   "${LIBVIRT[@]}"
   "${QEMU_KVM[@]}"
+  "${MUSL_DEV[@]}"
   "${CLI_TOOLS[@]}"
   "${GIT_TOOLS[@]}"
   "${DOCKER_CE[@]}"
