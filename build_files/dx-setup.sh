@@ -39,6 +39,8 @@ COCKPIT_TOOLS=(
 )
 
 DEV_TOOLS=(
+  pods
+  code
   podman-tui
   podman-machine
   waydroid
