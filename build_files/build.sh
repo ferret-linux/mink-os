@@ -281,6 +281,7 @@ GSTREAMER_PLUGINS=(
 )
 
 CORE_SYSTEM=(
+  otter
   audit
   fwupd
   polkit
