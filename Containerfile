@@ -148,12 +148,6 @@ RUN systemctl enable ferret-libvirt-fix.service && \
     systemctl enable ferret-flatpak.service && \
     systemctl enable ferret-groups.service && \
     systemctl enable ferret-rfkill.service && \
-    systemctl enable containerd.service && \
-    systemctl enable incus-user.socket && \
-    systemctl enable docker.service && \
-    systemctl enable docker.socket && \
-    systemctl enable podman.socket && \
-    systemctl enable incus.socket && \
     systemctl enable nix-daemon && \
     systemctl enable nix.mount
 
