@@ -136,7 +136,6 @@ SYSTEM_TOOLS_HW=(
 
 # Kernel modules (need KERNEL_VERSION expansion, so built dynamically)
 KERNEL_MODULES=(
-  "kmod-wl-${KERNEL_VERSION}"
   "kmod-zfs-${KERNEL_VERSION}"
   "kmod-evdi-${KERNEL_VERSION}"
   "kmod-xone-${KERNEL_VERSION}"
@@ -164,7 +163,6 @@ KMOD_PACKAGES=(
   new-lg4ff
   libnvpair3
   zfs-dracut
-  broadcom-wl
   displaylink
   v4l2loopback
   hid-fanatecff
