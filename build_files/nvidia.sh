@@ -74,8 +74,8 @@ dnf install --setopt=install_weak_deps=False -y "${ALL_PACKAGES[@]}"
 
 # Nvidia Services
 systemctl enable nvidia-persistenced.service
-systemctl enabme nvidia-powerd.service
-systemctl enabme nvidia-cdi.service
+systemctl enable nvidia-powerd.service
+systemctl enable nvidia-cdi.service
 
 # Fix Kmods Tree & loading
 depmod -a "${KERNEL_VERSION}"
