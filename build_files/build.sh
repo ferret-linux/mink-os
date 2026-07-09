@@ -171,11 +171,6 @@ KMOD_PACKAGES=(
   kvmfr-kmod-common
   xpadneo-kmod-common
   openrazer-kmod-common
-  zenergy-akmod-modules
-  hid-tmff2-akmod-modules
-  new-lg4ff-akmod-modules
-  v4l2loopback-akmod-modules
-  hid-fanatecff-akmod-modules
 )
 
 AUDIO=(
