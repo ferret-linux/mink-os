@@ -205,9 +205,12 @@ VIRT_EXTRAS=(
 ALL_PACKAGES=(
   "${LIBVIRT[@]}"
   "${QEMU_KVM[@]}"
+  "${CLI_TOOLS[@]}"
+  "${GIT_TOOLS[@]}"
   "${DOCKER_CE[@]}"
   "${LXC_INCUS[@]}"
   "${DEV_TOOLS[@]}"
+  "${GSTREAMER[@]}"
   "${VIRT_EXTRAS[@]}"
   "${COCKPIT_TOOLS[@]}"
   "${QEMU_CROSS_EMU[@]}"
