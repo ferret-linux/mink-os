@@ -29,29 +29,29 @@ DOCKER_CE=(
 
 COCKPIT_TOOLS=(
   cockpit-bridge
-  cockpit-machines
-  cockpit-networkmanager
   cockpit-ostree
   cockpit-podman
+  cockpit-system
   cockpit-selinux
   cockpit-storaged
-  cockpit-system
+  cockpit-machines
+  cockpit-networkmanager
 )
 
 DEV_TOOLS=(
   pods
   code
-  podman-tui
-  podman-machine
   waydroid
+  podman-tui
   android-tools
+  podman-machine
 )
 
 ROCM_GPU=(
   rocm-hip
+  rocm-smi
   rocm-opencl
   rocm-clinfo
-  rocm-smi
 )
 
 KVM_REQUIREMENTS=(
