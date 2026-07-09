@@ -168,6 +168,7 @@ LIBVIRT=(
 VIRT_EXTRAS=(
   virt-top
   virtiofsd
+  gnome-boxes
   virt-install
   virt-manager
   virtnbdbackup
