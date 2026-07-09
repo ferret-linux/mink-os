@@ -22,7 +22,9 @@ jobs:
       matrix:
         include:
           - image_name: mink-os
+          - image_name: mink-os-dx
           - image_name: mink-os-nvidia
+          - image_name: mink-os-dx-nvidia
 
     steps:
       - name: Login to GHCR

@@ -23,7 +23,11 @@ jobs:
         include:
           - image_name: mink-os
             base_image: quay.io/fedora/fedora-bootc:latest
+          - image_name: mink-os-dx
+            base_image: quay.io/fedora/fedora-bootc:latest
           - image_name: mink-os-nvidia
+            base_image: quay.io/fedora/fedora-bootc:latest
+          - image_name: mink-os-dx-nvidia
             base_image: quay.io/fedora/fedora-bootc:latest
 
     steps:
