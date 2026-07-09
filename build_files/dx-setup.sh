@@ -42,6 +42,7 @@ DEV_TOOLS=(
   pods
   code
   waydroid
+  distrobox
   podman-tui
   android-tools
   podman-machine
@@ -183,16 +184,16 @@ VIRT_EXTRAS=(
 # dnf transaction. Order in the array doesn't matter to dnf's resolver.
 # ---------------------------------------------------------------------------
 ALL_PACKAGES=(
-  "${KVM_REQUIREMENTS[@]}"
-  "${QEMU_KVM[@]}"
-  "${QEMU_CROSS_EMU[@]}"
   "${LIBVIRT[@]}"
-  "${VIRT_EXTRAS[@]}"
+  "${QEMU_KVM[@]}"
+  "${ROCM_GPU[@]}"
   "${DOCKER_CE[@]}"
   "${LXC_INCUS[@]}"
-  "${ROCM_GPU[@]}"
-  "${COCKPIT_TOOLS[@]}"
   "${DEV_TOOLS[@]}"
+  "${VIRT_EXTRAS[@]}"
+  "${COCKPIT_TOOLS[@]}"
+  "${QEMU_CROSS_EMU[@]}"
+  "${KVM_REQUIREMENTS[@]}"
 )
 
 dnf install -y --setopt=install_weak_deps=False "${ALL_PACKAGES[@]}"
