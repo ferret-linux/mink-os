@@ -269,10 +269,8 @@ GSTREAMER_PLUGINS=(
   gstreamer1-plugin-libav
   gstreamer1-plugins-good
   gstreamer1-plugins-ugly
-  gstreamer1-plugins-bad-opencv
   gstreamer1-plugins-base-tools
   gstreamer1-plugins-good-extras
-  gstreamer1-plugins-bad-fluidsynth
 )
 
 CORE_SYSTEM=(
@@ -320,8 +318,6 @@ SHELL_TERMINAL=(
 )
 
 CLI_TOOLS=(
-  jq
-  yq
   bat
   eza
   fzf
@@ -330,10 +326,7 @@ CLI_TOOLS=(
   btop
   curl
   zrun
-  tmux
-  ncdu
   procs
-  direnv
   neovim
   zfetch
   zoxide
@@ -342,21 +335,11 @@ CLI_TOOLS=(
   starship
   topgrade
   trash-cli
-  hyperfine
 )
 
 GIT_TOOLS=(
-  gh
   git
-  gitui
   git-lfs
-  gitleaks
-  git-annex
-  git-delta
-  git-crypt
-  difftastic
-  git-cinnabar
-  git-filter-repo
   git-credential-libsecret
 )
 

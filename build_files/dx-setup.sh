@@ -19,12 +19,38 @@ LXC_INCUS=(
   lxc-templates
 )
 
+GSTREAMER=(
+  gstreamer1-plugins-bad-opencv
+  gstreamer1-plugins-bad-fluidsynth
+)
+
 DOCKER_CE=(
   docker-ce
   docker-ce-cli
   containerd.io
   docker-buildx-plugin
   docker-compose-plugin
+)
+
+CLI_TOOLS=(
+  jq
+  yq
+  tmux
+  ncdu
+  direnv
+  hyperfine
+)
+
+GIT_TOOLS=(
+  gh
+  gitui
+  gitleaks
+  git-annex
+  git-delta
+  git-crypt
+  difftastic
+  git-cinnabar
+  git-filter-repo
 )
 
 COCKPIT_TOOLS=(
