@@ -132,11 +132,15 @@ RUN sed -i 's/^NAME=.*/NAME="MinkOS"/' /usr/lib/os-release && \
 COPY system_files/ /
 
 # ── Disable broken/unwanted services ──────────────────────────
-RUN systemctl mask systemd-remount-fs.service && \
+RUN systemctl disable flatpak-add-fedora-repos.service && \
     systemctl disable bootc-fetch-apply-updates.timer && \
+    systemctl disable rpm-ostree-countme.service && \
+    systemctl disable rpm-ostree-countme.timer && \
+    systemctl mask flatpak-add-fedora-repos.service && \
     systemctl mask bootc-fetch-apply-updates.timer && \
-    systemctl disable flatpak-add-fedora-repos.service && \
-    systemctl mask flatpak-add-fedora-repos.service
+    systemctl mask systemd-remount-fs.service && \
+    systemctl mask rpm-ostree-countme.service && \
+    systemctl mask rpm-ostree-countme.timer
 
 # ── Enable Ferret/MinkOS services ─────────────────────────────
 RUN systemctl enable ferret-libvirt-fix.service && \
