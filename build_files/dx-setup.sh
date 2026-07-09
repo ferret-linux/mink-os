@@ -1,6 +1,9 @@
 #!/bin/bash
 set -euxo pipefail
 
+# Env-Vars
+KERNEL_VERSION="$(rpm -q kernel --queryformat '%{VERSION}-%{RELEASE}.%{ARCH}' | tail -1)"
+
 # ---------------------------------------------------------------------------
 # Package groups (arrays). Keep these separated/commented for readability;
 # they all get flattened into ONE dnf transaction below.
