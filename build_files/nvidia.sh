@@ -51,24 +51,16 @@ NVIDIA_TOOLS_APP=(
   nvidia-settings
 )
 
-NVIDIA_CUDA_TOOLKIT=(
-  cuda
-  cuda-gcc
-  cuda-libs
-  cuda-devel
-)
-
 # ---------------------------------------------------------------------------
 # Flatten everything into one package list and install in a single
 # dnf transaction.
 # ---------------------------------------------------------------------------
 ALL_PACKAGES=(
+  "${NVIDIA_X11[@]}"
   "${NVIDIA_KMODS[@]}"
   "${NVIDIA_USERSPACE[@]}"
-  "${NVIDIA_X11[@]}"
-  "${NVIDIA_CONTAINER_TOOLKIT[@]}"
   "${NVIDIA_TOOLS_APP[@]}"
-  "${NVIDIA_CUDA_TOOLKIT[@]}"
+  "${NVIDIA_CONTAINER_TOOLKIT[@]}"
 )
 
 dnf install --setopt=install_weak_deps=False -y "${ALL_PACKAGES[@]}"

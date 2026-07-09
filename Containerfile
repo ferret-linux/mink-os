@@ -67,6 +67,36 @@ RUN --mount=type=bind,from=ctx,source=/,target=/ctx \
         *) : ;; \
     esac
 
+# ── Developer Packages (-dx image variants only) ──────────────
+RUN --mount=type=bind,from=ctx,source=/,target=/ctx \
+    --mount=type=cache,dst=/var/cache \
+    --mount=type=cache,dst=/var/log \
+    --mount=type=tmpfs,dst=/tmp \
+    case "${IMAGE_NAME}" in \
+        *-dx-*) bash /ctx/dx-setup.sh ;; \
+        *) : ;; \
+    esac
+
+# ── Cuda Packages (-dx-nvidia image variants only) ────────────
+RUN --mount=type=bind,from=ctx,source=/,target=/ctx \
+    --mount=type=cache,dst=/var/cache \
+    --mount=type=cache,dst=/var/log \
+    --mount=type=tmpfs,dst=/tmp \
+    case "${IMAGE_NAME}" in \
+        *-dx-nvidia) bash /ctx/cuda.sh ;; \
+        *) : ;; \
+    esac
+
+# ── ROCM Packages (-dx image variants only) ───────────────────
+RUN --mount=type=bind,from=ctx,source=/,target=/ctx \
+    --mount=type=cache,dst=/var/cache \
+    --mount=type=cache,dst=/var/log \
+    --mount=type=tmpfs,dst=/tmp \
+    case "${IMAGE_NAME}" in \
+        *-dx) bash /ctx/rocm.sh ;; \
+        *) : ;; \
+    esac
+
 # ── /opt → immutable tree migration ───────────────────────────
 # Move /opt contents into the immutable /usr tree and create
 # tmpfiles.d entries to symlink them back at runtime.

@@ -48,13 +48,6 @@ DEV_TOOLS=(
   podman-machine
 )
 
-ROCM_GPU=(
-  rocm-hip
-  rocm-smi
-  rocm-opencl
-  rocm-clinfo
-)
-
 KVM_REQUIREMENTS=(
   lshw
   tuna
@@ -186,7 +179,6 @@ VIRT_EXTRAS=(
 ALL_PACKAGES=(
   "${LIBVIRT[@]}"
   "${QEMU_KVM[@]}"
-  "${ROCM_GPU[@]}"
   "${DOCKER_CE[@]}"
   "${LXC_INCUS[@]}"
   "${DEV_TOOLS[@]}"
