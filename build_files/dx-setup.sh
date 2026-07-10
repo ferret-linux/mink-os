@@ -133,6 +133,16 @@ VIRT_MANAGEMENT=(
   virt-lightning
 )
 
+# Kernel module for GPU-passthrough / single-GPU VM setups (Looking Glass)
+# (needs KERNEL_VERSION expansion, so built dynamically)
+VIRT_KERNEL_MODULES=(
+  "kmod-kvmfr-${KERNEL_VERSION}"
+)
+
+VIRT_KMOD_PACKAGES=(
+  kvmfr-kmod-common
+)
+
 DOCKER=(
   docker-ce
   docker-ce-cli
@@ -256,6 +266,8 @@ ALL_PACKAGES=(
   "${QEMU_EMULATION[@]}"
   "${VIRT_HOST_DEPS[@]}"
   "${VIRT_MANAGEMENT[@]}"
+  "${VIRT_KERNEL_MODULES[@]}"
+  "${VIRT_KMOD_PACKAGES[@]}"
   "${DOCKER[@]}"
   "${PODMAN[@]}"
   "${LXC_INCUS[@]}"

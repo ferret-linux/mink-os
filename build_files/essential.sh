@@ -41,7 +41,6 @@ BUILD_TOOLS=(
 KERNEL_MODULES=(
   "kmod-zfs-${KERNEL_VERSION}"
   "kmod-evdi-${KERNEL_VERSION}"
-  "kmod-kvmfr-${KERNEL_VERSION}"
   "kmod-sc0710-${KERNEL_VERSION}"
   "kmod-zenergy-${KERNEL_VERSION}"
   "kmod-v4l2loopback-${KERNEL_VERSION}"
@@ -61,7 +60,6 @@ KMOD_PACKAGES=(
   displaylink
   v4l2loopback
   python3-pyzfs
-  kvmfr-kmod-common
 )
 
 CD_BLURAY=(
