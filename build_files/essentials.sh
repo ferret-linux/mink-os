@@ -37,6 +37,18 @@ BUILD_TOOLS=(
   pkgconf-pkg-config
 )
 
+SYSTEM_TOOLS_HW=(
+  bolt
+  upower
+  ddcutil
+  fprintd
+  liquidctl
+  fprintd-pam
+  brightnessctl
+  libratbag-ratbagd
+  power-profiles-daemon
+)
+
 FIRMWARES=(
   dvb-firmware
   alsa-firmware
@@ -63,6 +75,18 @@ FIRMWARES=(
   intel-audio-firmware
   nxpwireless-firmware
   cirrus-audio-firmware
+)
+
+UDEV_RULES=(
+  solaar-udev
+  xr-hardware
+  oversteer-udev
+  openrgb-udev-rules
+  ublue-os-udev-rules
+  3dprinter-udev-rules
+  python-btchip-common
+  unifying-receiver-udev
+  system-config-printer-udev
 )
 
 # Kernel modules (need KERNEL_VERSION expansion, so built dynamically)
@@ -119,18 +143,39 @@ FONTS_LANGPACKS=(
   google-noto-sans-devanagari-vf-fonts
 )
 
+PRINTING_SCANNING=(
+  cups
+  hplip
+  ipp-usb
+  nss-mdns
+  cups-client
+  foomatic-db
+  cups-browsed
+  cups-filters
+  samba-client
+  sane-airscan
+  sane-backends
+  cups-pk-helper
+  gutenprint-cups
+  system-config-printer
+  cups-filters-driverless
+)
+
 # ---------------------------------------------------------------------------
 # Flatten everything into one package list and install in a single
 # dnf transaction. Order in the array doesn't matter to dnf's resolver.
 # ---------------------------------------------------------------------------
 ALL_PACKAGES=(
-  "${BUILD_TOOLS[@]}"
-  "${FIRMWARES[@]}"
-  "${KERNEL_MODULES[@]}"
-  "${KMOD_PACKAGES[@]}"
   "${CD_BLURAY[@]}"
+  "${FIRMWARES[@]}"
+  "${UDEV_RULES[@]}"
+  "${BUILD_TOOLS[@]}"
   "${PERF_GAMING[@]}"
+  "${KMOD_PACKAGES[@]}"
+  "${KERNEL_MODULES[@]}"
   "${FONTS_LANGPACKS[@]}"
+  "${SYSTEM_TOOLS_HW[@]}"
+  "${PRINTING_SCANNING[@]}"
 )
 
 dnf install -y --setopt=install_weak_deps=False "${ALL_PACKAGES[@]}"

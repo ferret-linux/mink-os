@@ -22,39 +22,21 @@ FIRMWARES=(
 )
 
 UDEV_RULES=(
-  solaar-udev
-  xr-hardware
   udev-hid-bpf
   trezor-common
   liquidctl-udev
-  oversteer-udev
   mooltipass-udev
-  openrgb-udev-rules
-  ublue-os-udev-rules
   udev-hid-bpf-stable
-  3dprinter-udev-rules
-  python-btchip-common
-  unifying-receiver-udev
-  system-config-printer-udev
 )
 
 SYSTEM_TOOLS_HW=(
-  bolt
-  upower
-  ddcutil
-  fprintd
   usbmuxd
   libinput
   pciutils
   usbutils
-  liquidctl
   tpm2-tools
   lm_sensors
-  fprintd-pam
-  brightnessctl
   libinput-utils
-  libratbag-ratbagd
-  power-profiles-daemon
 )
 
 AUDIO=(
@@ -259,24 +241,6 @@ NETWORK_MANAGER=(
   NetworkManager-config-connectivity-fedora
 )
 
-PRINTING_SCANNING=(
-  cups
-  hplip
-  ipp-usb
-  nss-mdns
-  cups-client
-  foomatic-db
-  cups-browsed
-  cups-filters
-  samba-client
-  sane-airscan
-  sane-backends
-  cups-pk-helper
-  gutenprint-cups
-  system-config-printer
-  cups-filters-driverless
-)
-
 FONTS_LANGPACKS=(
   harfbuzz
   fontconfig
@@ -329,7 +293,6 @@ ALL_PACKAGES=(
   "${SYSTEM_TOOLS_HW[@]}"
   "${FONTS_LANGPACKS[@]}"
   "${GSTREAMER_PLUGINS[@]}"
-  "${PRINTING_SCANNING[@]}"
 )
 
 dnf install -y --setopt=install_weak_deps=False "${ALL_PACKAGES[@]}"
