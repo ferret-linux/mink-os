@@ -46,18 +46,28 @@ RUN dnf install -y --refresh --setopt=install_weak_deps=False dnf5-plugins && \
     dnf clean packages && \
     dnf clean all
 
-# ── Package installation ─────────────────────────────────────
-# Make modifications desired in your image and install packages by
-# editing build_files/build.sh — the RUN directive below executes
-# it with the recommended cache/tmpfs mounts.
 RUN dnf --refresh makecache && dnf upgrade --setopt=install_weak_deps=False -y
+
+# ── Mini packages (ALL image variants) ─────────────────────────
+# The minimal/core package set. Every single image flavor gets this,
+# including the *-mini and *-mini-nvidia variants.
 RUN --mount=type=bind,from=ctx,source=/,target=/ctx \
     --mount=type=cache,dst=/var/cache \
     --mount=type=cache,dst=/var/log \
     --mount=type=tmpfs,dst=/tmp \
-    bash /ctx/build.sh
+    bash /ctx/mini.sh
 
-# ── NVIDIA drivers (nvidia image variants only) ───────────────
+# ── Essentials packages (all variants EXCEPT *-mini / *-mini-nvidia) ──
+RUN --mount=type=bind,from=ctx,source=/,target=/ctx \
+    --mount=type=cache,dst=/var/cache \
+    --mount=type=cache,dst=/var/log \
+    --mount=type=tmpfs,dst=/tmp \
+    case "${IMAGE_NAME}" in \
+        *-mini|*-mini-nvidia) : ;; \
+        *) bash /ctx/essentials.sh ;; \
+    esac
+
+# ── NVIDIA drivers (*-nvidia image variants only) ──────────────
 RUN --mount=type=bind,from=ctx,source=/,target=/ctx \
     --mount=type=cache,dst=/var/cache \
     --mount=type=cache,dst=/var/log \
@@ -67,17 +77,27 @@ RUN --mount=type=bind,from=ctx,source=/,target=/ctx \
         *) : ;; \
     esac
 
-# ── Developer Packages (-dx image variants only) ──────────────
+# ── Developer packages (*-dx / *-dx-nvidia image variants only) ─
 RUN --mount=type=bind,from=ctx,source=/,target=/ctx \
     --mount=type=cache,dst=/var/cache \
     --mount=type=cache,dst=/var/log \
     --mount=type=tmpfs,dst=/tmp \
     case "${IMAGE_NAME}" in \
-        *-dx-*) bash /ctx/dx-setup.sh ;; \
+        *-dx|*-dx-*) bash /ctx/dx-setup.sh ;; \
         *) : ;; \
     esac
 
-# ── Cuda Packages (-dx-nvidia image variants only) ────────────
+# ── Gaming packages (*-gx / *-gx-nvidia image variants only) ────
+RUN --mount=type=bind,from=ctx,source=/,target=/ctx \
+    --mount=type=cache,dst=/var/cache \
+    --mount=type=cache,dst=/var/log \
+    --mount=type=tmpfs,dst=/tmp \
+    case "${IMAGE_NAME}" in \
+        *-gx|*-gx-*) bash /ctx/gx-setup.sh ;; \
+        *) : ;; \
+    esac
+
+# ── CUDA packages (*-dx-nvidia image variant only) ──────────────
 RUN --mount=type=bind,from=ctx,source=/,target=/ctx \
     --mount=type=cache,dst=/var/cache \
     --mount=type=cache,dst=/var/log \
@@ -87,7 +107,7 @@ RUN --mount=type=bind,from=ctx,source=/,target=/ctx \
         *) : ;; \
     esac
 
-# ── ROCM Packages (-dx image variants only) ───────────────────
+# ── ROCm packages (*-dx image variant only, non-nvidia) ─────────
 RUN --mount=type=bind,from=ctx,source=/,target=/ctx \
     --mount=type=cache,dst=/var/cache \
     --mount=type=cache,dst=/var/log \
@@ -209,7 +229,7 @@ RUN rm -rf /usr/share/applications/input-remapper-gtk.desktop && \
 # in the image — no version locking applied.
 RUN echo "📦 Total installed packages: $(rpm -qa | wc -l)"
 
-# ── InitRAMFS build ──────────────────────────────────────────
+# ── InitRAMFS build (ALL image variants) ───────────────────────
 RUN --mount=type=bind,from=ctx,source=/,target=/ctx \
     --mount=type=cache,dst=/var/cache \
     --mount=type=cache,dst=/var/log \
