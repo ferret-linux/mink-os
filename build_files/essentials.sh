@@ -130,13 +130,19 @@ PERF_GAMING=(
 )
 
 FONTS_LANGPACKS=(
+  dejavu-sans-fonts
+  dejavu-serif-fonts
   google-noto-sans-lao-vf-fonts
   google-noto-sans-thai-vf-fonts
   google-noto-sans-khmer-vf-fonts
   google-noto-sans-tamil-vf-fonts
+  google-noto-sans-arabic-vf-fonts
+  google-noto-sans-hebrew-vf-fonts
+  google-noto-sans-symbols-2-fonts
   google-noto-sans-sinhala-vf-fonts
   google-noto-sans-myanmar-vf-fonts
   google-noto-sans-bengali-vf-fonts
+  google-noto-sans-symbols-vf-fonts
   google-noto-sans-armenian-vf-fonts
   google-noto-sans-georgian-vf-fonts
   google-noto-sans-ethiopic-vf-fonts

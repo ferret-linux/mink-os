@@ -248,8 +248,6 @@ FONTS_LANGPACKS=(
   langpacks-en
   unicode-emoji
   cracklib-dicts
-  dejavu-sans-fonts
-  dejavu-serif-fonts
   langpacks-fonts-en
   glibc-all-langpacks
   glibc-locale-source
@@ -262,10 +260,6 @@ FONTS_LANGPACKS=(
   google-noto-sans-cjk-vf-fonts
   google-noto-sans-mono-vf-fonts
   google-noto-serif-cjk-vf-fonts
-  google-noto-sans-arabic-vf-fonts
-  google-noto-sans-hebrew-vf-fonts
-  google-noto-sans-symbols-2-fonts
-  google-noto-sans-symbols-vf-fonts
 )
 
 # ---------------------------------------------------------------------------
