@@ -23,7 +23,7 @@ jobs:
           - image_name: mink-os
           - image_name: mink-os-dx
           - image_name: mink-os-gx
-          - image_name: monk-os-mini
+          - image_name: mink-os-mini
           - image_name: mink-os-nvidia
           - image_name: mink-os-dx-nvidia
           - image_name: mink-os-gx-nvidia
