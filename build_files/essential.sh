@@ -41,16 +41,10 @@ BUILD_TOOLS=(
 KERNEL_MODULES=(
   "kmod-zfs-${KERNEL_VERSION}"
   "kmod-evdi-${KERNEL_VERSION}"
-  "kmod-xone-${KERNEL_VERSION}"
   "kmod-kvmfr-${KERNEL_VERSION}"
   "kmod-sc0710-${KERNEL_VERSION}"
-  "kmod-xpadneo-${KERNEL_VERSION}"
   "kmod-zenergy-${KERNEL_VERSION}"
-  "kmod-hid-tmff2-${KERNEL_VERSION}"
-  "kmod-new-lg4ff-${KERNEL_VERSION}"
-  "kmod-openrazer-${KERNEL_VERSION}"
   "kmod-v4l2loopback-${KERNEL_VERSION}"
-  "kmod-hid-fanatecff-${KERNEL_VERSION}"
   "kernel-devel-matched-${KERNEL_VERSION}"
 )
 
@@ -60,20 +54,14 @@ KMOD_PACKAGES=(
   libevdi
   libzfs7
   zenergy
-  hid-tmff2
   libuutil3
   libzpool7
-  new-lg4ff
   libnvpair3
   zfs-dracut
   displaylink
   v4l2loopback
-  hid-fanatecff
   python3-pyzfs
-  xone-kmod-common
   kvmfr-kmod-common
-  xpadneo-kmod-common
-  openrazer-kmod-common
 )
 
 CD_BLURAY=(
@@ -87,10 +75,6 @@ CD_BLURAY=(
 )
 
 PERF_GAMING=(
-  gamemode
-  mangohud
-  vkBasalt
-  gamescope
   scx-tools
   scx-scheds
 )
