@@ -9,34 +9,6 @@ KERNEL_VERSION="$(rpm -q kernel --queryformat '%{VERSION}-%{RELEASE}.%{ARCH}' | 
 # they all get flattened into ONE dnf transaction below.
 # ---------------------------------------------------------------------------
 
-BUILD_TOOLS=(
-  gcc
-  rar
-  tar
-  zip
-  file
-  just
-  make
-  zstd
-  wget2
-  unzip
-  glibc
-  rsync
-  sqlite
-  doxygen
-  gcc-c++
-  diffstat
-  procps-ng
-  systemtap
-  wget2-libs
-  wget2-wget
-  patchutils
-  subversion
-  glibc-devel
-  libxcrypt-compat
-  pkgconf-pkg-config
-)
-
 FUSE_TOOLS=(
   fuse
   fuse3
@@ -113,45 +85,6 @@ SYSTEM_TOOLS_HW=(
   power-profiles-daemon
 )
 
-# Kernel modules (need KERNEL_VERSION expansion, so built dynamically)
-KERNEL_MODULES=(
-  "kmod-zfs-${KERNEL_VERSION}"
-  "kmod-evdi-${KERNEL_VERSION}"
-  "kmod-xone-${KERNEL_VERSION}"
-  "kmod-kvmfr-${KERNEL_VERSION}"
-  "kmod-sc0710-${KERNEL_VERSION}"
-  "kmod-xpadneo-${KERNEL_VERSION}"
-  "kmod-zenergy-${KERNEL_VERSION}"
-  "kmod-hid-tmff2-${KERNEL_VERSION}"
-  "kmod-new-lg4ff-${KERNEL_VERSION}"
-  "kmod-openrazer-${KERNEL_VERSION}"
-  "kmod-v4l2loopback-${KERNEL_VERSION}"
-  "kmod-hid-fanatecff-${KERNEL_VERSION}"
-  "kernel-devel-matched-${KERNEL_VERSION}"
-)
-
-KMOD_PACKAGES=(
-  zfs
-  sc0710
-  libevdi
-  libzfs7
-  zenergy
-  hid-tmff2
-  libuutil3
-  libzpool7
-  new-lg4ff
-  libnvpair3
-  zfs-dracut
-  displaylink
-  v4l2loopback
-  hid-fanatecff
-  python3-pyzfs
-  xone-kmod-common
-  kvmfr-kmod-common
-  xpadneo-kmod-common
-  openrazer-kmod-common
-)
-
 AUDIO=(
   alsa-ucm
   pipewire
@@ -205,16 +138,6 @@ FFMPEG_MEDIA=(
   libfreeaptx
   glycin-loaders
   ffmpegthumbnailer
-)
-
-CD_BLURAY=(
-  mkisofs
-  cdda2wav
-  cdrecord
-  libbluray
-  schily-libs
-  dvd+rw-tools
-  libbluray-utils
 )
 
 GRAPHICS_GPU=(
@@ -319,15 +242,6 @@ GIT_TOOLS=(
   git-credential-libsecret
 )
 
-PERF_GAMING=(
-  gamemode
-  mangohud
-  vkBasalt
-  gamescope
-  scx-tools
-  scx-scheds
-)
-
 SSH_TOOLS=(
   mosh
   openssh
@@ -408,25 +322,14 @@ FONTS_LANGPACKS=(
   google-noto-emoji-fonts
   google-noto-sans-vf-fonts
   google-noto-serif-vf-fonts
-  google-noto-sans-lao-vf-fonts
   google-noto-color-emoji-fonts
   google-noto-sans-cjk-vf-fonts
-  google-noto-sans-thai-vf-fonts
   google-noto-sans-mono-vf-fonts
   google-noto-serif-cjk-vf-fonts
-  google-noto-sans-khmer-vf-fonts
-  google-noto-sans-tamil-vf-fonts
   google-noto-sans-arabic-vf-fonts
   google-noto-sans-hebrew-vf-fonts
   google-noto-sans-symbols-2-fonts
-  google-noto-sans-sinhala-vf-fonts
   google-noto-sans-symbols-vf-fonts
-  google-noto-sans-myanmar-vf-fonts
-  google-noto-sans-bengali-vf-fonts
-  google-noto-sans-armenian-vf-fonts
-  google-noto-sans-georgian-vf-fonts
-  google-noto-sans-ethiopic-vf-fonts
-  google-noto-sans-devanagari-vf-fonts
 )
 
 # ---------------------------------------------------------------------------
