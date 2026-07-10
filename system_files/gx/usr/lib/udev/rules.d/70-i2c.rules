@@ -1,3 +1,0 @@
-# Grant the i2c group read/write access to /dev/i2c-* devices
-# (used by OpenRGB, ddcutil, etc. — see i2c group creation in tmpfiles.d)
-KERNEL=="i2c-[0-9]*", GROUP="i2c", MODE="0660"

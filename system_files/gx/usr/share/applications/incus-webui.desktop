@@ -1,9 +1,0 @@
-[Desktop Entry]
-Type=Application
-Name=Incus UI
-Comment=WebUI for Incus
-Exec=/usr/libexec/incus-webui.sh
-Icon=incus-ui
-Terminal=false
-Categories=System;Utility;
-StartupWMClass=Incus-webUI
