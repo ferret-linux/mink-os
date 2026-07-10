@@ -39,28 +39,11 @@ BUILD_TOOLS=(
 
 FUSE_TOOLS=(
   fuse
-  ifuse
   fuse3
-  bindfs
-  jmtpfs
-  nbdfuse
-  chunkfs
-  gphotofs
-  fuse-zip
-  fuse-afp
-  apfs-fuse
-  s3fs-fuse
   fuse-libs
-  fuse-encfs
-  erofs-fuse
   fuse3-libs
-  fuse-sshfs
-  squashfuse
   fuse-common
-  archivemount
-  fuse-bcachefs
   fuse-overlayfs
-  fuse-dislocker
 )
 
 FIRMWARES=(
@@ -112,7 +95,6 @@ UDEV_RULES=(
 )
 
 SYSTEM_TOOLS_HW=(
-  inxi
   bolt
   upower
   ddcutil
@@ -121,13 +103,10 @@ SYSTEM_TOOLS_HW=(
   libinput
   pciutils
   usbutils
-  nvme-cli
-  dmidecode
   liquidctl
   tpm2-tools
   lm_sensors
   fprintd-pam
-  smartmontools
   brightnessctl
   libinput-utils
   libratbag-ratbagd
@@ -174,16 +153,13 @@ KMOD_PACKAGES=(
 )
 
 AUDIO=(
-  wiremix
   alsa-ucm
   pipewire
   alsa-utils
-  alsa-tools
   wireplumber
   pipewire-alsa
   pipewire-libs
   pipewire-v4l2
-  pipewire-utils
   alsa-ucm-utils
   pipewire-gstreamer
   pipewire-libs-extra
@@ -366,8 +342,6 @@ PODMAN_ENV=(
   crun
   bootc
   podman
-  skopeo
-  buildah
 )
 
 NETWORKING=(

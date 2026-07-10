@@ -9,106 +9,29 @@ KERNEL_VERSION="$(rpm -q kernel --queryformat '%{VERSION}-%{RELEASE}.%{ARCH}' | 
 # they all get flattened into ONE dnf transaction below.
 # ---------------------------------------------------------------------------
 
-LXC_INCUS=(
-  lxc
-  criu
-  lxcfs
-  incus
-  incus-ui
-  lxc-libs
-  incus-tools
-  incus-client
-  incus-selinux
-  lxc-templates
+LIBVIRT=(
+  libvirt
+  libvirt-nss
+  libvirt-client
+  libvirt-daemon-kvm
+  libvirt-daemon-lxc
+  libvirt-daemon-common
+  libvirt-daemon-driver-lxc
+  libvirt-daemon-driver-qemu
+  libvirt-daemon-driver-secret
+  libvirt-daemon-config-network
+  libvirt-daemon-driver-network
+  libvirt-daemon-driver-nodedev
+  libvirt-daemon-config-nwfilter
+  libvirt-daemon-driver-nwfilter
+  libvirt-daemon-driver-interface
+  libvirt-daemon-driver-storage-zfs
+  libvirt-daemon-driver-storage-core
+  libvirt-daemon-driver-storage-disk
+  libvirt-daemon-driver-storage-logical
 )
 
-MUSL_DEV=(
-  musl-gcc
-  musl-libc
-  musl-devel
-  musl-filesystem
-  musl-libc-static
-)
-
-GSTREAMER=(
-  gstreamer1-plugins-bad-opencv
-  gstreamer1-plugins-bad-fluidsynth
-)
-
-DOCKER_CE=(
-  docker-ce
-  docker-ce-cli
-  containerd.io
-  docker-buildx-plugin
-  docker-compose-plugin
-)
-
-CLI_TOOLS=(
-  jq
-  yq
-  tmux
-  ncdu
-  direnv
-  hyperfine
-)
-
-GIT_TOOLS=(
-  gh
-  gitui
-  gitleaks
-  git-annex
-  git-delta
-  git-crypt
-  difftastic
-  git-cinnabar
-  git-filter-repo
-)
-
-COCKPIT_TOOLS=(
-  cockpit-bridge
-  cockpit-ostree
-  cockpit-podman
-  cockpit-system
-  cockpit-selinux
-  cockpit-storaged
-  cockpit-machines
-  cockpit-networkmanager
-)
-
-DEV_TOOLS=(
-  pods
-  code
-  waydroid
-  distrobox
-  podman-tui
-  android-tools
-  podman-machine
-)
-
-KVM_REQUIREMENTS=(
-  lshw
-  tuna
-  passt
-  swtpm
-  libnbd
-  nbdkit
-  dnsmasq
-  numactl
-  pciutils
-  usbredir
-  driverctl
-  edk2-ovmf
-  sg3_utils
-  libguestfs
-  swtpm-tools
-  bridge-utils
-  iptables-nft
-  spice-server
-  guestfs-tools
-  python3-libvirt
-)
-
-QEMU_KVM=(
+QEMU=(
   qemu-img
   qemu-kvm
   qemu-rdp
@@ -155,7 +78,7 @@ QEMU_KVM=(
   qemu-device-display-virtio-gpu-pci-rutabaga
 )
 
-QEMU_CROSS_EMU=(
+QEMU_EMULATION=(
   qemu-user
   qemu-system-arm
   qemu-system-ppc
@@ -176,29 +99,30 @@ QEMU_CROSS_EMU=(
   qemu-user-static-loongarch64
 )
 
-LIBVIRT=(
-  libvirt
-  libvirt-nss
-  libvirt-client
-  libvirt-daemon-kvm
-  libvirt-daemon-lxc
-  libvirt-daemon-common
-  libvirt-daemon-driver-lxc
-  libvirt-daemon-driver-qemu
-  libvirt-daemon-driver-secret
-  libvirt-daemon-config-network
-  libvirt-daemon-driver-network
-  libvirt-daemon-driver-nodedev
-  libvirt-daemon-config-nwfilter
-  libvirt-daemon-driver-nwfilter
-  libvirt-daemon-driver-interface
-  libvirt-daemon-driver-storage-zfs
-  libvirt-daemon-driver-storage-core
-  libvirt-daemon-driver-storage-disk
-  libvirt-daemon-driver-storage-logical
+VIRT_HOST_DEPS=(
+  lshw
+  tuna
+  passt
+  swtpm
+  libnbd
+  nbdkit
+  dnsmasq
+  numactl
+  pciutils
+  usbredir
+  driverctl
+  edk2-ovmf
+  sg3_utils
+  libguestfs
+  swtpm-tools
+  bridge-utils
+  iptables-nft
+  spice-server
+  guestfs-tools
+  python3-libvirt
 )
 
-VIRT_EXTRAS=(
+VIRT_MANAGEMENT=(
   virt-top
   virtiofsd
   gnome-boxes
@@ -209,24 +133,141 @@ VIRT_EXTRAS=(
   virt-lightning
 )
 
+DOCKER=(
+  docker-ce
+  docker-ce-cli
+  containerd.io
+  docker-buildx-plugin
+  docker-compose-plugin
+)
+
+PODMAN=(
+  skopeo
+  buildah
+  podman-tui
+  podman-machine
+)
+
+LXC_INCUS=(
+  lxc
+  criu
+  lxcfs
+  incus
+  incus-ui
+  lxc-libs
+  incus-tools
+  incus-client
+  incus-selinux
+  lxc-templates
+)
+
+COCKPIT=(
+  cockpit-bridge
+  cockpit-ostree
+  cockpit-podman
+  cockpit-system
+  cockpit-selinux
+  cockpit-storaged
+  cockpit-machines
+  cockpit-networkmanager
+)
+
+CLI_UTILS=(
+  jq
+  yq
+  tmux
+  ncdu
+  direnv
+  hyperfine
+)
+
+GIT_TOOLS=(
+  gh
+  gitui
+  gitleaks
+  git-annex
+  git-delta
+  git-crypt
+  difftastic
+  git-cinnabar
+  git-filter-repo
+)
+
+MUSL_TOOLCHAIN=(
+  musl-gcc
+  musl-libc
+  musl-devel
+  musl-filesystem
+  musl-libc-static
+)
+
+DEV_TOOLS=(
+  pods
+  code
+  waydroid
+  distrobox
+  android-tools
+)
+
+HW_DIAGNOSTICS=(
+  inxi
+  nvme-cli
+  dmidecode
+  smartmontools
+)
+
+FUSE_TOOLS=(
+  ifuse
+  bindfs
+  jmtpfs
+  nbdfuse
+  chunkfs
+  gphotofs
+  fuse-zip
+  fuse-afp
+  apfs-fuse
+  s3fs-fuse
+  fuse-encfs
+  erofs-fuse
+  fuse-sshfs
+  squashfuse
+  archivemount
+  fuse-bcachefs
+  fuse-dislocker
+)
+
+AUDIO=(
+  alsa-tools
+  pipewire-utils
+)
+
+GSTREAMER=(
+  gstreamer1-plugins-bad-opencv
+  gstreamer1-plugins-bad-fluidsynth
+)
+
 # ---------------------------------------------------------------------------
 # Flatten everything into one package list and install in a single
 # dnf transaction. Order in the array doesn't matter to dnf's resolver.
 # ---------------------------------------------------------------------------
 ALL_PACKAGES=(
   "${LIBVIRT[@]}"
-  "${QEMU_KVM[@]}"
-  "${MUSL_DEV[@]}"
-  "${CLI_TOOLS[@]}"
-  "${GIT_TOOLS[@]}"
-  "${DOCKER_CE[@]}"
+  "${QEMU[@]}"
+  "${QEMU_EMULATION[@]}"
+  "${VIRT_HOST_DEPS[@]}"
+  "${VIRT_MANAGEMENT[@]}"
+  "${DOCKER[@]}"
+  "${PODMAN[@]}"
   "${LXC_INCUS[@]}"
+  "${COCKPIT[@]}"
+  "${CLI_UTILS[@]}"
+  "${GIT_TOOLS[@]}"
+  "${MUSL_TOOLCHAIN[@]}"
   "${DEV_TOOLS[@]}"
+  "${HW_DIAGNOSTICS[@]}"
+  "${FUSE_TOOLS[@]}"
+  "${AUDIO[@]}"
   "${GSTREAMER[@]}"
-  "${VIRT_EXTRAS[@]}"
-  "${COCKPIT_TOOLS[@]}"
-  "${QEMU_CROSS_EMU[@]}"
-  "${KVM_REQUIREMENTS[@]}"
 )
 
 dnf install -y --setopt=install_weak_deps=False "${ALL_PACKAGES[@]}"
