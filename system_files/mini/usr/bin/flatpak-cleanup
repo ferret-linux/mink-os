@@ -1,0 +1,37 @@
+#!/usr/bin/env bash
+set -euo pipefail
+
+if ! command -v flatpak &>/dev/null; then
+    echo "flatpak not found in PATH" >&2
+    exit 1
+fi
+
+gum style \
+    --border rounded \
+    --border-foreground 212 \
+    --padding "0 1" \
+    "$(gum style --foreground 212 --bold 'flatpak cleanup')" \
+    "" \
+    "This will:" \
+    "  • uninstall unused runtimes/extensions (user + system)" \
+    "  • repair the installation (user + system)"
+
+gum confirm "Proceed?" || { echo "Aborted."; exit 0; }
+echo
+
+# ── step 1: unused runtimes/extensions ─────────────────────────────────────────
+for scope in user system; do
+    gum spin --spinner dot --title "Removing unused (${scope})..." -- \
+        flatpak uninstall --unused --"$scope" -y
+done
+gum log --level info "Unused runtimes/extensions removed"
+
+# ── step 2: repair ──────────────────────────────────────────────────────────────
+for scope in user system; do
+    gum spin --spinner dot --title "Repairing (${scope})..." -- \
+        flatpak repair --"$scope"
+done
+gum log --level info "Repair complete"
+
+echo
+gum style --foreground 212 --bold "  Done"

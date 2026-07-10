@@ -1,0 +1,7 @@
+# Prevent nouveau/nova_core (Nvidia open-source drivers) from claiming the
+# passthrough GPU — both at normal boot (modprobe.blacklist) and during
+# the initramfs stage (rd.driver.blacklist), so vfio_pci or nvidia-open can bind instead
+kargs = [
+  "modprobe.blacklist=nouveau,nova_core",
+  "rd.driver.blacklist=nouveau,nova_core"
+]

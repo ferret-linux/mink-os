@@ -1,0 +1,17 @@
+# Low-latency tuning for gaming/VM host:
+# - nowatchdog / nmi_watchdog=0: disable kernel soft-lockup & NMI watchdogs (reduce jitter)
+# - mitigations=auto: explicit default, documented for clarity
+# - cgroup_no_v1=all: force pure cgroup v2 (avoids v1/v2 hybrid issues with libvirt/systemd)
+# - split_lock_detect=off / split_lock_mitigate=0: avoid stutter from split-lock traps
+#   triggered by some games/guest workloads
+# - transparent_hugepage=madvise: let QEMU request hugepages explicitly (KVM perf)
+#   without forcing THP everywhere and risking compaction-induced latency spikes
+kargs = [
+  "nowatchdog",
+  "nmi_watchdog=0",
+  "mitigations=auto",
+  "cgroup_no_v1=all",
+  "split_lock_detect=off",
+  "split_lock_mitigate=0",
+  "transparent_hugepage=madvise",
+]

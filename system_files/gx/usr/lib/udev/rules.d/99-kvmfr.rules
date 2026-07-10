@@ -1,0 +1,3 @@
+# Grant the kvm group read/write access to the kvmfr device
+# (shared-memory framebuffer for Looking Glass VM passthrough)
+SUBSYSTEM=="kvmfr", GROUP="kvm", MODE="0660"

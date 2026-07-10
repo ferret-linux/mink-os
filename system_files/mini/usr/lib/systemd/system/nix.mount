@@ -1,0 +1,15 @@
+[Unit]
+Description=Bind mount /var/nix to /nix
+# /var/nix is the persistent backing store (survives ostree updates).
+# /nix must be a real mountpoint, not a symlink, for nix-daemon compatibility.
+Before=nix-daemon.service
+
+[Mount]
+What=/var/nix
+Where=/nix
+Type=none
+Options=bind
+
+[Install]
+# Run as part of local filesystem setup, ensures /var is ready before mounting.
+WantedBy=local-fs.target
