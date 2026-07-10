@@ -288,6 +288,7 @@ dnf install -y --setopt=install_weak_deps=False "${ALL_PACKAGES[@]}"
 depmod -a "${KERNEL_VERSION}"
 
 # Settings
+systemctl enable ferret-libvirt-fix.service
 systemctl enable containerd.service
 systemctl enable incus-user.socket
 systemctl enable docker.service
