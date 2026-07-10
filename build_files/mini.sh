@@ -1,9 +1,6 @@
 #!/bin/bash
 set -euxo pipefail
 
-# Env-Vars
-KERNEL_VERSION="$(rpm -q kernel --queryformat '%{VERSION}-%{RELEASE}.%{ARCH}' | tail -1)"
-
 # ---------------------------------------------------------------------------
 # Package groups (arrays). Keep these separated/commented for readability;
 # they all get flattened into ONE dnf transaction below.
@@ -341,7 +338,6 @@ ALL_PACKAGES=(
   "${AUDIO[@]}"
   "${GIT_TOOLS[@]}"
   "${CLI_TOOLS[@]}"
-  "${CD_BLURAY[@]}"
   "${FIRMWARES[@]}"
   "${SSH_TOOLS[@]}"
   "${FUSE_TOOLS[@]}"
@@ -349,15 +345,11 @@ ALL_PACKAGES=(
   "${NETWORKING[@]}"
   "${UDEV_RULES[@]}"
   "${CORE_SYSTEM[@]}"
-  "${BUILD_TOOLS[@]}"
-  "${PERF_GAMING[@]}"
   "${GRAPHICS_GPU[@]}"
   "${CAMERA_VIDEO[@]}"
   "${IMAGE_CODECS[@]}"
   "${FFMPEG_MEDIA[@]}"
-  "${KMOD_PACKAGES[@]}"
   "${SHELL_TERMINAL[@]}"
-  "${KERNEL_MODULES[@]}"
   "${NETWORK_MANAGER[@]}"
   "${SYSTEM_TOOLS_HW[@]}"
   "${FONTS_LANGPACKS[@]}"
@@ -366,9 +358,6 @@ ALL_PACKAGES=(
 )
 
 dnf install -y --setopt=install_weak_deps=False "${ALL_PACKAGES[@]}"
-
-# Rebuild module dependencies (kernel modules are now installed above)
-depmod -a "${KERNEL_VERSION}"
 
 # ---------------------------------------------------------------------------
 # Nerd Fonts (not dnf packages — downloaded directly)

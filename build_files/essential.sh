@@ -114,54 +114,15 @@ FONTS_LANGPACKS=(
 # dnf transaction. Order in the array doesn't matter to dnf's resolver.
 # ---------------------------------------------------------------------------
 ALL_PACKAGES=(
-  "${NIX[@]}"
-  "${AUDIO[@]}"
-  "${GIT_TOOLS[@]}"
-  "${CLI_TOOLS[@]}"
-  "${CD_BLURAY[@]}"
-  "${FIRMWARES[@]}"
-  "${SSH_TOOLS[@]}"
-  "${FUSE_TOOLS[@]}"
-  "${PODMAN_ENV[@]}"
-  "${NETWORKING[@]}"
-  "${UDEV_RULES[@]}"
-  "${CORE_SYSTEM[@]}"
   "${BUILD_TOOLS[@]}"
-  "${PERF_GAMING[@]}"
-  "${GRAPHICS_GPU[@]}"
-  "${CAMERA_VIDEO[@]}"
-  "${IMAGE_CODECS[@]}"
-  "${FFMPEG_MEDIA[@]}"
-  "${KMOD_PACKAGES[@]}"
-  "${SHELL_TERMINAL[@]}"
   "${KERNEL_MODULES[@]}"
-  "${NETWORK_MANAGER[@]}"
-  "${SYSTEM_TOOLS_HW[@]}"
+  "${KMOD_PACKAGES[@]}"
+  "${CD_BLURAY[@]}"
+  "${PERF_GAMING[@]}"
   "${FONTS_LANGPACKS[@]}"
-  "${GSTREAMER_PLUGINS[@]}"
-  "${PRINTING_SCANNING[@]}"
 )
 
 dnf install -y --setopt=install_weak_deps=False "${ALL_PACKAGES[@]}"
 
 # Rebuild module dependencies (kernel modules are now installed above)
 depmod -a "${KERNEL_VERSION}"
-
-# ---------------------------------------------------------------------------
-# Nerd Fonts (not dnf packages — downloaded directly)
-# ---------------------------------------------------------------------------
-NERD_VERSION="$(curl -s https://api.github.com/repos/ryanoasis/nerd-fonts/releases/latest | jq -r '.tag_name')"
-
-curl -fsSL "https://github.com/ryanoasis/nerd-fonts/releases/download/${NERD_VERSION}/Hack.tar.xz" \
-  -o /tmp/Hack.tar.xz
-curl -fsSL "https://github.com/ryanoasis/nerd-fonts/releases/download/${NERD_VERSION}/NerdFontsSymbolsOnly.tar.xz" \
-  -o /tmp/NerdFontsSymbolsOnly.tar.xz
-
-mkdir -p /usr/share/fonts/hack-nerd-font
-mkdir -p /usr/share/fonts/nerd-fonts-symbols-only
-
-tar -xf /tmp/Hack.tar.xz -C /usr/share/fonts/hack-nerd-font
-tar -xf /tmp/NerdFontsSymbolsOnly.tar.xz -C /usr/share/fonts/nerd-fonts-symbols-only
-
-rm -f /tmp/Hack.tar.xz /tmp/NerdFontsSymbolsOnly.tar.xz
-fc-cache -f /usr/share/fonts/
