@@ -37,6 +37,34 @@ BUILD_TOOLS=(
   pkgconf-pkg-config
 )
 
+FIRMWARES=(
+  dvb-firmware
+  alsa-firmware
+  qcom-firmware
+  linux-firmware
+  atmel-firmware
+  mt7xxx-firmware
+  zd1211-firmware
+  amd-gpu-firmware
+  atheros-firmware
+  realtek-firmware
+  brcmfmac-firmware
+  iwlegacy-firmware
+  libertas-firmware
+  mediatek-firmware
+  tiwilink-firmware
+  alsa-sof-firmware
+  amd-ucode-firmware
+  intel-gpu-firmware
+  intel-vsc-firmware
+  qcom-wwan-firmware
+  nvidia-gpu-firmware
+  alsa-tools-firmware
+  intel-audio-firmware
+  nxpwireless-firmware
+  cirrus-audio-firmware
+)
+
 # Kernel modules (need KERNEL_VERSION expansion, so built dynamically)
 KERNEL_MODULES=(
   "kmod-zfs-${KERNEL_VERSION}"
@@ -97,6 +125,7 @@ FONTS_LANGPACKS=(
 # ---------------------------------------------------------------------------
 ALL_PACKAGES=(
   "${BUILD_TOOLS[@]}"
+  "${FIRMWARES[@]}"
   "${KERNEL_MODULES[@]}"
   "${KMOD_PACKAGES[@]}"
   "${CD_BLURAY[@]}"
