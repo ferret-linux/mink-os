@@ -180,9 +180,5 @@ dnf install -y --setopt=install_weak_deps=False "${ALL_PACKAGES[@]}"
 depmod -a "${KERNEL_VERSION}"
 
 # Settings
-systemctl enable containerd.service
 systemctl enable incus-user.socket
-systemctl enable docker.service
-systemctl enable docker.socket
-systemctl enable podman.socket
 systemctl enable incus.socket
