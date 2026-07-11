@@ -51,20 +51,20 @@ RUN dnf --refresh makecache && dnf upgrade --setopt=install_weak_deps=False -y
 
 # ── Mini packages (ALL image variants) ─────────────────────────
 # The minimal/core package set. Every single image flavor gets this,
-# including the *-mini and *-mini-nvidia variants.
+# including the *-mx and *-mx-nvidia variants.
 RUN --mount=type=bind,from=ctx,source=/,target=/ctx \
     --mount=type=cache,dst=/var/cache \
     --mount=type=cache,dst=/var/log \
     --mount=type=tmpfs,dst=/tmp \
     bash /ctx/mini.sh
 
-# ── Essentials packages (all variants EXCEPT *-mini / *-mini-nvidia) ──
+# ── Essentials packages (all variants EXCEPT *-mx / *-mx-nvidia) ──
 RUN --mount=type=bind,from=ctx,source=/,target=/ctx \
     --mount=type=cache,dst=/var/cache \
     --mount=type=cache,dst=/var/log \
     --mount=type=tmpfs,dst=/tmp \
     case "${IMAGE_NAME}" in \
-        *-mini|*-mini-nvidia) : ;; \
+        *-mx|*-mx-nvidia) : ;; \
         *) bash /ctx/essentials.sh ;; \
     esac
 
@@ -184,7 +184,7 @@ RUN sed -i 's/^NAME=.*/NAME="MinkOS"/' /usr/lib/os-release && \
 # matching subfolders onto the rootfs using the SAME selection logic as
 # the package-install steps above:
 #   mini        -> ALL variants
-#   essentials  -> all variants EXCEPT *-mini / *-mini-nvidia
+#   essentials  -> all variants EXCEPT *-mx / *-mx-nvidia
 #   dx          -> *-dx / *-dx-nvidia variants only
 #   gx          -> *-gx / *-gx-nvidia variants only
 # `cp -a src/. /` merges directory contents onto root without clobbering
@@ -192,7 +192,7 @@ RUN sed -i 's/^NAME=.*/NAME="MinkOS"/' /usr/lib/os-release && \
 RUN --mount=type=bind,from=ctx,source=/,target=/ctx \
     cp -a /ctx/system_files/mini/. / && \
     case "${IMAGE_NAME}" in \
-        *-mini|*-mini-nvidia) : ;; \
+        *-mx|*-mx-nvidia) : ;; \
         *) cp -a /ctx/system_files/essentials/. / ;; \
     esac && \
     case "${IMAGE_NAME}" in \
