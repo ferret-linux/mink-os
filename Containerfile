@@ -216,7 +216,8 @@ RUN systemctl disable flatpak-add-fedora-repos.service && \
     systemctl mask rpm-ostree-countme.timer
 
 # ── Enable Ferret/MinkOS services ─────────────────────────────
-RUN systemctl enable ferret-hostname.service && \
+RUN systemctl enable ferret-libvirt-fix.service || true && \
+    systemctl enable ferret-hostname.service && \
     systemctl enable ferret-flatpak.service && \
     systemctl enable ferret-groups.service && \
     systemctl enable ferret-rfkill.service && \
