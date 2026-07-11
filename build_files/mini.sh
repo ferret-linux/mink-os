@@ -23,14 +23,10 @@ FIRMWARES=(
 
 UDEV_RULES=(
   udev-hid-bpf
-  trezor-common
-  liquidctl-udev
-  mooltipass-udev
   udev-hid-bpf-stable
 )
 
 SYSTEM_TOOLS_HW=(
-  usbmuxd
   libinput
   pciutils
   usbutils
@@ -95,13 +91,10 @@ FFMPEG_MEDIA=(
 )
 
 GRAPHICS_GPU=(
-  vdpauinfo
   mesa-libGL
-  libva-utils
   mesa-libEGL
   mesa-libgbm
   intel-gmmlib
-  vulkan-tools
   mesa-libOpenCL
   intel-mediasdk
   mesa-libTeflon
@@ -197,7 +190,6 @@ GIT_TOOLS=(
 )
 
 SSH_TOOLS=(
-  mosh
   openssh
   pcsc-lite
   openssh-server
@@ -216,27 +208,20 @@ NETWORKING=(
   iwd
   bluez
   avahi
-  openvpn
-  usbguard
-  tailscale
   firewalld
   bluez-libs
   cifs-utils
   avahi-tools
-  openconnect
   iptables-nft
   ModemManager
   wpa_supplicant
-  wireguard-tools
 )
 
 NETWORK_MANAGER=(
   NetworkManager
   NetworkManager-wifi
   NetworkManager-wwan
-  NetworkManager-openvpn
   NetworkManager-bluetooth
-  NetworkManager-openconnect
   mobile-broadband-provider-info
   NetworkManager-config-connectivity-fedora
 )

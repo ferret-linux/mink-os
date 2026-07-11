@@ -42,11 +42,19 @@ SYSTEM_TOOLS_HW=(
   upower
   ddcutil
   fprintd
+  usbmuxd
   liquidctl
   fprintd-pam
   brightnessctl
   libratbag-ratbagd
   power-profiles-daemon
+)
+
+# Diagnostic/inspection GPU CLIs (not required for HW acceleration itself)
+GRAPHICS_GPU_TOOLS=(
+  vdpauinfo
+  libva-utils
+  vulkan-tools
 )
 
 FIRMWARES=(
@@ -80,13 +88,32 @@ FIRMWARES=(
 UDEV_RULES=(
   solaar-udev
   xr-hardware
+  trezor-common
   oversteer-udev
+  liquidctl-udev
+  mooltipass-udev
   openrgb-udev-rules
   ublue-os-udev-rules
   3dprinter-udev-rules
   python-btchip-common
   unifying-receiver-udev
   system-config-printer-udev
+)
+
+# VPN/tunnel clients — protocol/vendor choices, not baseline networking
+NETWORKING_VPN=(
+  openvpn
+  usbguard
+  tailscale
+  openconnect
+  wireguard-tools
+  NetworkManager-openvpn
+  NetworkManager-openconnect
+)
+
+# Extra remote-shell protocol on top of standard SSH
+SSH_TOOLS=(
+  mosh
 )
 
 # Kernel modules (need KERNEL_VERSION expansion, so built dynamically)
@@ -176,12 +203,15 @@ ALL_PACKAGES=(
   "${FIRMWARES[@]}"
   "${UDEV_RULES[@]}"
   "${BUILD_TOOLS[@]}"
+  "${SSH_TOOLS[@]}"
   "${PERF_GAMING[@]}"
   "${KMOD_PACKAGES[@]}"
   "${KERNEL_MODULES[@]}"
   "${FONTS_LANGPACKS[@]}"
+  "${NETWORKING_VPN[@]}"
   "${SYSTEM_TOOLS_HW[@]}"
   "${PRINTING_SCANNING[@]}"
+  "${GRAPHICS_GPU_TOOLS[@]}"
 )
 
 dnf install -y --setopt=install_weak_deps=False "${ALL_PACKAGES[@]}"
