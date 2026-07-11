@@ -56,7 +56,7 @@ RUN --mount=type=bind,from=ctx,source=/,target=/ctx \
     --mount=type=cache,dst=/var/cache \
     --mount=type=cache,dst=/var/log \
     --mount=type=tmpfs,dst=/tmp \
-    bash /ctx/mini.sh
+    bash /ctx/mx-setup.sh
 
 # ── Essentials packages (all variants EXCEPT *-mx / *-mx-nvidia) ──
 RUN --mount=type=bind,from=ctx,source=/,target=/ctx \
@@ -79,7 +79,7 @@ RUN --mount=type=bind,from=ctx,source=/,target=/ctx \
     esac
 
 # ── Developer packages (*-dx / *-dx-nvidia / *-vx / *-vx-nvidia image variants only) ─
-# *-vx is the same as *-dx (it gets the identical dx-setup.sh package set)
+# -vx is the same as -dx (it gets the identical dx-setup.sh package set)
 # plus an additional vx-setup.sh step below.
 RUN --mount=type=bind,from=ctx,source=/,target=/ctx \
     --mount=type=cache,dst=/var/cache \
@@ -204,7 +204,7 @@ RUN sed -i 's/^NAME=.*/NAME="MinkOS"/' /usr/lib/os-release && \
 # `cp -a src/. /` merges directory contents onto root without clobbering
 # the whole tree.
 RUN --mount=type=bind,from=ctx,source=/,target=/ctx \
-    cp -a /ctx/system_files/mini/. / && \
+    cp -a /ctx/system_files/mx/. / && \
     case "${IMAGE_NAME}" in \
         *-mx|*-mx-nvidia) : ;; \
         *) cp -a /ctx/system_files/essentials/. / ;; \
