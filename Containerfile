@@ -6,10 +6,11 @@
 ARG BASE_IMAGE
 
 # ── Build context ─────────────────────────────────────────────
-# Allow build scripts to be referenced without being copied into
-# the final image.
+# Allow build scripts and system_files overlays to be referenced
+# without being copied into the final image directly.
 FROM scratch AS ctx
 COPY build_files /
+COPY system_files /system_files
 
 # ── Base image ───────────────────────────────────────────────
 FROM ${BASE_IMAGE}
@@ -179,7 +180,29 @@ RUN sed -i 's/^NAME=.*/NAME="MinkOS"/' /usr/lib/os-release && \
     sed -i 's/^PRETTY_NAME=.*/PRETTY_NAME="MinkOS Linux"/' /usr/lib/os-release
 
 # ── System files ─────────────────────────────────────────────
-COPY system_files/ /
+# system_files/ is split per flavor (mini, essentials, dx, gx). Layer the
+# matching subfolders onto the rootfs using the SAME selection logic as
+# the package-install steps above:
+#   mini        -> ALL variants
+#   essentials  -> all variants EXCEPT *-mini / *-mini-nvidia
+#   dx          -> *-dx / *-dx-nvidia variants only
+#   gx          -> *-gx / *-gx-nvidia variants only
+# `cp -a src/. /` merges directory contents onto root without clobbering
+# the whole tree.
+RUN --mount=type=bind,from=ctx,source=/,target=/ctx \
+    cp -a /ctx/system_files/mini/. / && \
+    case "${IMAGE_NAME}" in \
+        *-mini|*-mini-nvidia) : ;; \
+        *) cp -a /ctx/system_files/essentials/. / ;; \
+    esac && \
+    case "${IMAGE_NAME}" in \
+        *-dx|*-dx-*) cp -a /ctx/system_files/dx/. / ;; \
+        *) : ;; \
+    esac && \
+    case "${IMAGE_NAME}" in \
+        *-gx|*-gx-*) cp -a /ctx/system_files/gx/. / ;; \
+        *) : ;; \
+    esac
 
 # ── Disable broken/unwanted services ──────────────────────────
 RUN systemctl disable flatpak-add-fedora-repos.service && \
