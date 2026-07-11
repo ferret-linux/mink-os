@@ -15,6 +15,7 @@ ROCM_GPU=(
   rocm-smi
   rocm-opencl
   rocm-clinfo
+  criu-amdgpu-plugin
 )
 
 ONEAPI_GPU=(

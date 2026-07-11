@@ -143,80 +143,12 @@ VIRT_KMOD_PACKAGES=(
   kvmfr-kmod-common
 )
 
-DOCKER=(
-  docker-ce
-  docker-ce-cli
-  containerd.io
-  docker-buildx-plugin
-  docker-compose-plugin
-)
-
-PODMAN=(
-  skopeo
-  buildah
-  podman-tui
-  podman-machine
-)
-
-LXC_INCUS=(
-  lxc
-  criu
-  lxcfs
+INCUS=(
   incus
   incus-ui
-  lxc-libs
   incus-tools
   incus-client
   incus-selinux
-  lxc-templates
-)
-
-COCKPIT=(
-  cockpit-bridge
-  cockpit-ostree
-  cockpit-podman
-  cockpit-system
-  cockpit-selinux
-  cockpit-storaged
-  cockpit-machines
-  cockpit-networkmanager
-)
-
-CLI_UTILS=(
-  jq
-  yq
-  tmux
-  ncdu
-  direnv
-  hyperfine
-)
-
-GIT_TOOLS=(
-  gh
-  gitui
-  gitleaks
-  git-annex
-  git-delta
-  git-crypt
-  difftastic
-  git-cinnabar
-  git-filter-repo
-)
-
-MUSL_TOOLCHAIN=(
-  musl-gcc
-  musl-libc
-  musl-devel
-  musl-filesystem
-  musl-libc-static
-)
-
-DEV_TOOLS=(
-  pods
-  code
-  waydroid
-  distrobox
-  android-tools
 )
 
 HW_DIAGNOSTICS=(
@@ -224,36 +156,6 @@ HW_DIAGNOSTICS=(
   nvme-cli
   dmidecode
   smartmontools
-)
-
-FUSE_TOOLS=(
-  ifuse
-  bindfs
-  jmtpfs
-  nbdfuse
-  chunkfs
-  gphotofs
-  fuse-zip
-  fuse-afp
-  apfs-fuse
-  s3fs-fuse
-  fuse-encfs
-  erofs-fuse
-  fuse-sshfs
-  squashfuse
-  archivemount
-  fuse-bcachefs
-  fuse-dislocker
-)
-
-AUDIO=(
-  alsa-tools
-  pipewire-utils
-)
-
-GSTREAMER=(
-  gstreamer1-plugins-bad-opencv
-  gstreamer1-plugins-bad-fluidsynth
 )
 
 # ---------------------------------------------------------------------------
@@ -268,18 +170,8 @@ ALL_PACKAGES=(
   "${VIRT_MANAGEMENT[@]}"
   "${VIRT_KERNEL_MODULES[@]}"
   "${VIRT_KMOD_PACKAGES[@]}"
-  "${DOCKER[@]}"
-  "${PODMAN[@]}"
-  "${LXC_INCUS[@]}"
-  "${COCKPIT[@]}"
-  "${CLI_UTILS[@]}"
-  "${GIT_TOOLS[@]}"
-  "${MUSL_TOOLCHAIN[@]}"
-  "${DEV_TOOLS[@]}"
+  "${INCUS[@]}"
   "${HW_DIAGNOSTICS[@]}"
-  "${FUSE_TOOLS[@]}"
-  "${AUDIO[@]}"
-  "${GSTREAMER[@]}"
 )
 
 dnf install -y --setopt=install_weak_deps=False "${ALL_PACKAGES[@]}"
