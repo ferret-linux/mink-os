@@ -23,10 +23,12 @@ jobs:
         include:
           - image_name: mink-os
           - image_name: mink-os-dx
+          - image_name: mink-os-vx
           - image_name: mink-os-gx
           - image_name: mink-os-mx
           - image_name: mink-os-nvidia
           - image_name: mink-os-dx-nvidia
+          - image_name: mink-os-vx-nvidia
           - image_name: mink-os-gx-nvidia
           - image_name: mink-os-mx-nvidia
 

@@ -25,6 +25,8 @@ jobs:
             base_image: quay.io/fedora/fedora-bootc:latest
           - image_name: mink-os-dx
             base_image: quay.io/fedora/fedora-bootc:latest
+          - image_name: mink-os-vx
+            base_image: quay.io/fedora/fedora-bootc:latest
           - image_name: mink-os-gx
             base_image: quay.io/fedora/fedora-bootc:latest
           - image_name: mink-os-mx
@@ -34,6 +36,8 @@ jobs:
           - image_name: mink-os-gx-nvidia
             base_image: quay.io/fedora/fedora-bootc:latest
           - image_name: mink-os-dx-nvidia
+            base_image: quay.io/fedora/fedora-bootc:latest
+          - image_name: mink-os-vx-nvidia
             base_image: quay.io/fedora/fedora-bootc:latest
           - image_name: mink-os-mx-nvidia
             base_image: quay.io/fedora/fedora-bootc:latest

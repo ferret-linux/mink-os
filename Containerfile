@@ -78,13 +78,26 @@ RUN --mount=type=bind,from=ctx,source=/,target=/ctx \
         *) : ;; \
     esac
 
-# ── Developer packages (*-dx / *-dx-nvidia image variants only) ─
+# ── Developer packages (*-dx / *-dx-nvidia / *-vx / *-vx-nvidia image variants only) ─
+# *-vx is the same as *-dx (it gets the identical dx-setup.sh package set)
+# plus an additional vx-setup.sh step below.
 RUN --mount=type=bind,from=ctx,source=/,target=/ctx \
     --mount=type=cache,dst=/var/cache \
     --mount=type=cache,dst=/var/log \
     --mount=type=tmpfs,dst=/tmp \
     case "${IMAGE_NAME}" in \
-        *-dx|*-dx-*) bash /ctx/dx-setup.sh ;; \
+        *-dx|*-dx-*|*-vx|*-vx-*) bash /ctx/dx-setup.sh ;; \
+        *) : ;; \
+    esac
+
+# ── Virtualization packages (*-vx / *-vx-nvidia image variants only) ──
+# vx = dx + vx-setup.sh (libvirt/qemu/incus virtualization stack).
+RUN --mount=type=bind,from=ctx,source=/,target=/ctx \
+    --mount=type=cache,dst=/var/cache \
+    --mount=type=cache,dst=/var/log \
+    --mount=type=tmpfs,dst=/tmp \
+    case "${IMAGE_NAME}" in \
+        *-vx|*-vx-*) bash /ctx/vx-setup.sh ;; \
         *) : ;; \
     esac
 
@@ -98,23 +111,23 @@ RUN --mount=type=bind,from=ctx,source=/,target=/ctx \
         *) : ;; \
     esac
 
-# ── CUDA packages (*-dx-nvidia image variant only) ──────────────
+# ── CUDA packages (*-dx-nvidia / *-vx-nvidia image variants only) ──
 RUN --mount=type=bind,from=ctx,source=/,target=/ctx \
     --mount=type=cache,dst=/var/cache \
     --mount=type=cache,dst=/var/log \
     --mount=type=tmpfs,dst=/tmp \
     case "${IMAGE_NAME}" in \
-        *-dx-nvidia) bash /ctx/cuda.sh ;; \
+        *-dx-nvidia|*-vx-nvidia) bash /ctx/cuda.sh ;; \
         *) : ;; \
     esac
 
-# ── ROCm packages (*-dx image variant only, non-nvidia) ─────────
+# ── ROCm packages (*-dx / *-vx image variants only, non-nvidia) ──
 RUN --mount=type=bind,from=ctx,source=/,target=/ctx \
     --mount=type=cache,dst=/var/cache \
     --mount=type=cache,dst=/var/log \
     --mount=type=tmpfs,dst=/tmp \
     case "${IMAGE_NAME}" in \
-        *-dx) bash /ctx/rocm.sh ;; \
+        *-dx|*-vx) bash /ctx/rocm.sh ;; \
         *) : ;; \
     esac
 
@@ -180,13 +193,14 @@ RUN sed -i 's/^NAME=.*/NAME="MinkOS"/' /usr/lib/os-release && \
     sed -i 's/^PRETTY_NAME=.*/PRETTY_NAME="MinkOS Linux"/' /usr/lib/os-release
 
 # ── System files ─────────────────────────────────────────────
-# system_files/ is split per flavor (mini, essentials, dx, gx). Layer the
+# system_files/ is split per flavor (mini, essentials, dx, gx, vx). Layer the
 # matching subfolders onto the rootfs using the SAME selection logic as
 # the package-install steps above:
 #   mini        -> ALL variants
 #   essentials  -> all variants EXCEPT *-mx / *-mx-nvidia
-#   dx          -> *-dx / *-dx-nvidia variants only
+#   dx          -> *-dx / *-dx-nvidia / *-vx / *-vx-nvidia variants (vx = dx + vx)
 #   gx          -> *-gx / *-gx-nvidia variants only
+#   vx          -> *-vx / *-vx-nvidia variants only (layered on top of dx)
 # `cp -a src/. /` merges directory contents onto root without clobbering
 # the whole tree.
 RUN --mount=type=bind,from=ctx,source=/,target=/ctx \
@@ -196,11 +210,15 @@ RUN --mount=type=bind,from=ctx,source=/,target=/ctx \
         *) cp -a /ctx/system_files/essentials/. / ;; \
     esac && \
     case "${IMAGE_NAME}" in \
-        *-dx|*-dx-*) cp -a /ctx/system_files/dx/. / ;; \
+        *-dx|*-dx-*|*-vx|*-vx-*) cp -a /ctx/system_files/dx/. / ;; \
         *) : ;; \
     esac && \
     case "${IMAGE_NAME}" in \
         *-gx|*-gx-*) cp -a /ctx/system_files/gx/. / ;; \
+        *) : ;; \
+    esac && \
+    case "${IMAGE_NAME}" in \
+        *-vx|*-vx-*) cp -a /ctx/system_files/vx/. / ;; \
         *) : ;; \
     esac
 
