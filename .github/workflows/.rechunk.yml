@@ -63,7 +63,7 @@ jobs:
             --label ostree.final-diffid- \
             --compressed \
             --compression-level 9 \
-            --max-layers 128 \
+            --max-layers 127 \
             --tag ghcr.io/ferret-linux/${{ matrix.image_name }}:rechunked \
             | podman load
 
