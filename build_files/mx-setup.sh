@@ -233,6 +233,7 @@ FONTS_LANGPACKS=(
   langpacks-en
   unicode-emoji
   cracklib-dicts
+  hack-nerd-fonts
   langpacks-fonts-en
   glibc-all-langpacks
   glibc-locale-source
@@ -245,6 +246,7 @@ FONTS_LANGPACKS=(
   google-noto-sans-cjk-vf-fonts
   google-noto-sans-mono-vf-fonts
   google-noto-serif-cjk-vf-fonts
+  nerdfontssymbolsonly-nerd-fonts
 )
 
 # ---------------------------------------------------------------------------
@@ -275,22 +277,3 @@ ALL_PACKAGES=(
 )
 
 dnf install -y --setopt=install_weak_deps=False "${ALL_PACKAGES[@]}"
-
-# ---------------------------------------------------------------------------
-# Nerd Fonts (not dnf packages — downloaded directly)
-# ---------------------------------------------------------------------------
-NERD_VERSION="$(curl -s https://api.github.com/repos/ryanoasis/nerd-fonts/releases/latest | jq -r '.tag_name')"
-
-curl -fsSL "https://github.com/ryanoasis/nerd-fonts/releases/download/${NERD_VERSION}/Hack.tar.xz" \
-  -o /tmp/Hack.tar.xz
-curl -fsSL "https://github.com/ryanoasis/nerd-fonts/releases/download/${NERD_VERSION}/NerdFontsSymbolsOnly.tar.xz" \
-  -o /tmp/NerdFontsSymbolsOnly.tar.xz
-
-mkdir -p /usr/share/fonts/hack-nerd-font
-mkdir -p /usr/share/fonts/nerd-fonts-symbols-only
-
-tar -xf /tmp/Hack.tar.xz -C /usr/share/fonts/hack-nerd-font
-tar -xf /tmp/NerdFontsSymbolsOnly.tar.xz -C /usr/share/fonts/nerd-fonts-symbols-only
-
-rm -f /tmp/Hack.tar.xz /tmp/NerdFontsSymbolsOnly.tar.xz
-fc-cache -f /usr/share/fonts/
