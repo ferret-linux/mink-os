@@ -17,14 +17,11 @@ GAMING_PERFORMANCE=(
   gamescope
 )
 
-# Storefronts / launchers / compatibility layers
+# compatibility layers
 GAMING_PLATFORMS=(
-  steam
-  lutris
   wine
   winetricks
   protontricks
-  bottles
 )
 
 # Kernel modules for gaming peripherals/capture (need KERNEL_VERSION expansion)
