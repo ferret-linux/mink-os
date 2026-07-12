@@ -10,7 +10,6 @@ KERNEL_VERSION="$(rpm -q kernel --queryformat '%{VERSION}-%{RELEASE}.%{ARCH}' | 
 # ---------------------------------------------------------------------------
 
 ROCM_GPU=(
-  rocm
   rocm-hip
   rocm-smi
   rocm-opencl
