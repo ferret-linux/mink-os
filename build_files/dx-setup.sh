@@ -70,8 +70,6 @@ MUSL_TOOLCHAIN=(
 )
 
 DEV_TOOLS=(
-  pods
-  code
   waydroid
   android-tools
 )
