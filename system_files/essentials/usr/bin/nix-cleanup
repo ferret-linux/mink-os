@@ -12,7 +12,6 @@ gum style \
     --padding "0 1" \
     "$(gum style --foreground 212 --bold 'nix cleanup')" \
     "" \
-    "Running:" \
     "New CLI:" \
     "  • nix store gc" \
     "  • nix store verify" \
