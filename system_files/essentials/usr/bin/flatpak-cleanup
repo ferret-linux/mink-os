@@ -12,9 +12,11 @@ gum style \
     --padding "0 1" \
     "$(gum style --foreground 212 --bold 'flatpak cleanup')" \
     "" \
-    "This will:" \
-    "  • uninstall unused runtimes/extensions (user + system)" \
-    "  • repair the installation (user + system)"
+    "Running:" \
+    "  • flatpak repair --user" \
+    "  • flatpak repair --system" \
+    "  • flatpak uninstall --unused --user -y" \
+    "  • flatpak uninstall --unused --system -y"
 
 echo
 
