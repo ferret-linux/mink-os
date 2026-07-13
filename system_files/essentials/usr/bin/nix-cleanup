@@ -13,15 +13,17 @@ gum style \
     "$(gum style --foreground 212 --bold 'nix cleanup')" \
     "" \
     "Running:" \
-    "  • nix profile wipe-history" \
-    "  • nix-env --delete-generations old" \
+    "New CLI:" \
     "  • nix store gc" \
-    "  • nix-store --gc" \
-    "  • nix-collect-garbage -d" \
-    "  • nix store optimise" \
-    "  • nix-store --optimise" \
     "  • nix store verify" \
-    "  • nix-store --verify"
+    "  • nix store optimise" \
+    "  • nix profile wipe-history" \
+    "Legacy CLI:" \
+    "  • nix-store --gc" \
+    "  • nix-store --verify" \
+    "  • nix-store --optimise" \
+    "  • nix-collect-garbage -d" \
+    "  • nix-env --delete-generations old"
 
 echo
 
