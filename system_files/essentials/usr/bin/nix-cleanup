@@ -6,76 +6,46 @@ if ! command -v nix &>/dev/null; then
     exit 1
 fi
 
-# ── gather summary ─────────────────────────────────────────────────────────────
-profile_count=$(nix profile wipe-history --dry-run 2>&1 | grep -c "removing profile version" || true)
-nix_env_gens=$(nix-env --delete-generations old --dry-run 2>&1 | grep -c "removing generation" || true)
-gc_preview=$(nix store gc --dry-run 2>&1 | tail -1)
-cache_dir="${XDG_CACHE_HOME:-$HOME/.cache}/nix"
-cache_size=$(du -sh "$cache_dir" 2>/dev/null | cut -f1 || echo "0K")
-cache_empty=true
-[[ -d "$cache_dir" ]] && [[ -n "$(ls -A "$cache_dir" 2>/dev/null)" ]] && cache_empty=false
-
-# ── early exit if nothing to do ───────────────────────────────────────────────
-if [[ "$profile_count" -eq 0 ]] && [[ "$nix_env_gens" -eq 0 ]] && \
-   [[ "$gc_preview" == "0 store paths would be deleted" ]] && [[ "$cache_empty" == "true" ]]; then
-    gum log --level info "Nothing to clean up — running store optimise"
-    _tmp=$(mktemp)
-    gum spin --spinner dot --title "Optimising store (deduplicating)..." -- \
-        bash -c "nix store optimise > '$_tmp' 2>&1"
-    gum log --level info "$(grep -i 'hard link' "$_tmp" | tail -1 || echo 'optimisation complete')"
-    rm -f "$_tmp"
-    exit 0
-fi
-
-# ── show what will happen ──────────────────────────────────────────────────────
 gum style \
     --border rounded \
     --border-foreground 212 \
     --padding "0 1" \
     "$(gum style --foreground 212 --bold 'nix cleanup')" \
     "" \
-    "Profile generations to remove : $(gum style --foreground 196 "$profile_count")" \
-    "Legacy nix-env generations    : $(gum style --foreground 196 "$nix_env_gens")" \
-    "Flake cache to clear          : $(gum style --foreground 196 "$cache_size")" \
-    "Store GC                      : $(gum style --foreground 196 "$gc_preview")" \
-    "Collect garbage (all profiles): $(gum style --foreground 196 "safety-net sweep")" \
-    "Store optimise                : $(gum style --foreground 196 "will run after GC")"
+    "Running:" \
+    "  • nix profile wipe-history" \
+    "  • nix-env --delete-generations old" \
+    "  • nix store gc" \
+    "  • nix-collect-garbage -d" \
+    "  • nix store optimise"
 
 echo
 
 # ── step 1: profile history ────────────────────────────────────────────────────
 gum spin --spinner dot --title "Wiping old profile generations..." -- \
     nix profile wipe-history
-gum log --level info "Removed ${profile_count} old profile generation(s)"
+gum log --level info "Profile history wiped"
 
 # ── step 2: legacy nix-env generations ─────────────────────────────────────────
 gum spin --spinner dot --title "Removing old nix-env generations..." -- \
     nix-env --delete-generations old
-gum log --level info "Removed ${nix_env_gens} old nix-env generation(s)"
+gum log --level info "Old nix-env generations removed"
 
-# ── step 3: flake cache ────────────────────────────────────────────────────────
-gum spin --spinner dot --title "Clearing flake cache (${cache_size})..." -- \
-    bash -c "rm -rf '${cache_dir:?}/'*"
-gum log --level info "Flake cache cleared"
-
-# ── step 4: store gc ───────────────────────────────────────────────────────────
+# ── step 3: store gc ───────────────────────────────────────────────────────────
 _tmp=$(mktemp)
 gum spin --spinner dot --title "Collecting garbage from store..." -- \
     bash -c "nix store gc > '$_tmp' 2>&1"
 gum log --level info "$(tail -1 "$_tmp")"
 rm -f "$_tmp"
 
-# ── step 5: nix-collect-garbage safety net ─────────────────────────────────────
-# Catches generations from any other/custom profiles (e.g. `nix-env --profile`,
-# `nix develop --profile`) that steps 1-2 don't touch, then GCs again.
-# Fast no-op if there's nothing left to find.
+# ── step 4: nix-collect-garbage safety net ─────────────────────────────────────
 _tmp=$(mktemp)
 gum spin --spinner dot --title "Sweeping remaining profiles (nix-collect-garbage)..." -- \
     bash -c "nix-collect-garbage -d > '$_tmp' 2>&1"
 gum log --level info "$(tail -1 "$_tmp")"
 rm -f "$_tmp"
 
-# ── step 6: store optimise ─────────────────────────────────────────────────────
+# ── step 5: store optimise ─────────────────────────────────────────────────────
 _tmp=$(mktemp)
 gum spin --spinner dot --title "Optimising store (deduplicating)..." -- \
     bash -c "nix store optimise > '$_tmp' 2>&1"
