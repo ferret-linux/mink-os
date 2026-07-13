@@ -12,6 +12,7 @@
 # export DISABLE_ZOXIDE=1
 # export DISABLE_EZA_ALIASES=1
 # export DISABLE_ZOXIDE_CD=1
+# export DISABLE_SUDO_PATH_FIX=1
 # export DISABLE_FD_ALIAS=1
 # export DISABLE_FERRET_ALIASES=1
 # export DISABLE_MODERN_CLI_SUGGESTIONS=1
@@ -131,6 +132,17 @@ fi
 if [[ -x /home/linuxbrew/.linuxbrew/bin/brew ]] &&
    [[ -z "$DISABLE_HOMEBREW" ]]; then
   eval "$(/home/linuxbrew/.linuxbrew/bin/brew shellenv)"
+fi
+
+# ---- Sudo PATH fix ----
+# Lets `sudo` see binaries from Nix/Homebrew (and any other non-standard
+# PATH entries) instead of failing with "command not found" unless you
+# spell out the full path. sudo normally ignores your PATH for security
+# (secure_path in /etc/sudoers); this re-injects your current PATH into
+# the child process instead of editing sudoers directly.
+
+if [[ -z "$DISABLE_SUDO_PATH_FIX" ]]; then
+  alias sudo='sudo env PATH=$PATH'
 fi
 
 # ---- Modern CLI suggestions ----
