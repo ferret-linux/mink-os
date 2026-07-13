@@ -20,7 +20,6 @@ gum style \
     "Cache/old versions  : $(gum style --foreground 196 "$cleanup_preview")" \
     "Doctor              : $(gum style --foreground 196 "will run after cleanup")"
 
-gum confirm "Proceed?" || { echo "Aborted."; exit 0; }
 echo
 
 # ── step 1: autoremove ─────────────────────────────────────────────────────────

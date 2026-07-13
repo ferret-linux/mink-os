@@ -16,7 +16,6 @@ gum style \
     "  • uninstall unused runtimes/extensions (user + system)" \
     "  • repair the installation (user + system)"
 
-gum confirm "Proceed?" || { echo "Aborted."; exit 0; }
 echo
 
 # ── step 1: unused runtimes/extensions ─────────────────────────────────────────
