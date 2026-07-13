@@ -17,6 +17,7 @@ gum style \
     "  • nix store verify" \
     "  • nix store optimise" \
     "  • nix profile wipe-history" \
+    "" \
     "Legacy CLI:" \
     "  • nix-store --gc" \
     "  • nix-store --verify" \
