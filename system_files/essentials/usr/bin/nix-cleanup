@@ -16,8 +16,12 @@ gum style \
     "  • nix profile wipe-history" \
     "  • nix-env --delete-generations old" \
     "  • nix store gc" \
+    "  • nix-store --gc" \
     "  • nix-collect-garbage -d" \
-    "  • nix store optimise"
+    "  • nix store optimise" \
+    "  • nix-store --optimise" \
+    "  • nix store verify" \
+    "  • nix-store --verify"
 
 echo
 
@@ -38,6 +42,13 @@ gum spin --spinner dot --title "Collecting garbage from store..." -- \
 gum log --level info "$(tail -1 "$_tmp")"
 rm -f "$_tmp"
 
+# ── step 3b: store gc (legacy CLI) ─────────────────────────────────────────────
+_tmp=$(mktemp)
+gum spin --spinner dot --title "Collecting garbage (legacy nix-store)..." -- \
+    bash -c "nix-store --gc > '$_tmp' 2>&1"
+gum log --level info "$(tail -1 "$_tmp")"
+rm -f "$_tmp"
+
 # ── step 4: nix-collect-garbage safety net ─────────────────────────────────────
 _tmp=$(mktemp)
 gum spin --spinner dot --title "Sweeping remaining profiles (nix-collect-garbage)..." -- \
@@ -50,6 +61,27 @@ _tmp=$(mktemp)
 gum spin --spinner dot --title "Optimising store (deduplicating)..." -- \
     bash -c "nix store optimise > '$_tmp' 2>&1"
 gum log --level info "$(grep -i 'hard link' "$_tmp" | tail -1 || echo 'optimisation complete')"
+rm -f "$_tmp"
+
+# ── step 5b: store optimise (legacy CLI) ───────────────────────────────────────
+_tmp=$(mktemp)
+gum spin --spinner dot --title "Optimising store (legacy nix-store)..." -- \
+    bash -c "nix-store --optimise > '$_tmp' 2>&1"
+gum log --level info "$(grep -i 'hard link' "$_tmp" | tail -1 || echo 'optimisation complete')"
+rm -f "$_tmp"
+
+# ── step 6: store verify (health check) ────────────────────────────────────────
+_tmp=$(mktemp)
+gum spin --spinner dot --title "Verifying store integrity..." -- \
+    bash -c "nix store verify --all > '$_tmp' 2>&1 || true"
+gum log --level info "$(tail -1 "$_tmp" || echo 'verification complete')"
+rm -f "$_tmp"
+
+# ── step 6b: store verify (legacy CLI health check) ────────────────────────────
+_tmp=$(mktemp)
+gum spin --spinner dot --title "Verifying store integrity (legacy nix-store)..." -- \
+    bash -c "nix-store --verify --check-contents > '$_tmp' 2>&1 || true"
+gum log --level info "$(tail -1 "$_tmp" || echo 'verification complete')"
 rm -f "$_tmp"
 
 echo
