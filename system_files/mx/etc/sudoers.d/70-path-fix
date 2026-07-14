@@ -1,0 +1,2 @@
+Defaults:%wheel !secure_path
+Defaults:%wheel env_keep += "PATH"
