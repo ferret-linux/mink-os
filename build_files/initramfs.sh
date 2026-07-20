@@ -35,6 +35,8 @@ for kernel_path in /usr/lib/modules/*/; do
         --add 'ostree' \
         --reproducible \
         --aggressive-strip \
+        --no-hostonly-i18n \
+        --no-hostonly-nics \
         --no-hostonly-cmdline \
         --kver "${qual_kernel}" \
         --filesystems 'overlay' \
