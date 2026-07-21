@@ -30,6 +30,9 @@ LXC=(
 )
 
 COCKPIT=(
+  cockpit
+  cockpit-ws
+  cockpit-files
   cockpit-bridge
   cockpit-ostree
   cockpit-podman
@@ -37,6 +40,7 @@ COCKPIT=(
   cockpit-selinux
   cockpit-storaged
   cockpit-machines
+  cockpit-ws-selinux
   cockpit-networkmanager
 )
 
