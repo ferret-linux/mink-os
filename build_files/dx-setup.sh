@@ -131,5 +131,6 @@ dnf install -y --setopt=install_weak_deps=False "${ALL_PACKAGES[@]}"
 # Settings
 systemctl enable containerd.service
 systemctl enable docker.service
+systemctl enable cockpit.socket
 systemctl enable docker.socket
 systemctl enable podman.socket
