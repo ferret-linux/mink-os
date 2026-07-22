@@ -28,6 +28,11 @@ LIBVIRT=(
   libvirt-daemon-driver-storage-zfs
   libvirt-daemon-driver-storage-core
   libvirt-daemon-driver-storage-disk
+  libvirt-daemon-driver-storage-mpath
+  libvirt-daemon-driver-storage-rbd
+  libvirt-daemon-driver-storage-gluster
+  libvirt-daemon-driver-storage-iscsi
+  libvirt-daemon-driver-storage-iscsi-direct
   libvirt-daemon-driver-storage-logical
 )
 
@@ -121,6 +126,7 @@ VIRT_HOST_DEPS=(
   spice-server
   guestfs-tools
   python3-libvirt
+  iscsi-initiator-utils
 )
 
 VIRT_MANAGEMENT=(
