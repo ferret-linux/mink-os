@@ -113,6 +113,7 @@ VIRT_HOST_DEPS=(
   driverctl
   edk2-ovmf
   sg3_utils
+  nfs-utils
   libguestfs
   swtpm-tools
   bridge-utils
