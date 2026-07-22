@@ -16,6 +16,7 @@ LIBVIRT=(
   libvirt-daemon-kvm
   libvirt-daemon-lxc
   libvirt-client-qemu
+  libvirt-daemon-qemu
   libvirt-daemon-common
   libvirt-daemon-driver-lxc
   libvirt-daemon-driver-qemu
