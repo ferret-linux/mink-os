@@ -126,6 +126,7 @@ VIRT_HOST_DEPS=(
 VIRT_MANAGEMENT=(
   virt-top
   virtiofsd
+  virt-viewer
   virt-install
   virt-manager
   virtnbdbackup
