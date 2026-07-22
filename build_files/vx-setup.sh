@@ -109,9 +109,11 @@ VIRT_HOST_DEPS=(
   lshw
   tuna
   passt
+  usbip
   swtpm
   libnbd
   nbdkit
+  mdevctl
   sanlock
   dnsmasq
   numactl
