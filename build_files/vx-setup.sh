@@ -12,14 +12,21 @@ KERNEL_VERSION="$(rpm -q kernel --queryformat '%{VERSION}-%{RELEASE}.%{ARCH}' | 
 LIBVIRT=(
   libvirt
   libvirt-nss
+  libvirt-dbus
   libvirt-client
+  libvirt-ssh-proxy
   libvirt-daemon-kvm
   libvirt-daemon-lxc
+  libvirt-daemon-log
+  libvirt-login-shell
   libvirt-client-qemu
   libvirt-daemon-qemu
+  libvirt-daemon-lock
+  libvirt-daemon-proxy
   libvirt-daemon-common
   libvirt-daemon-driver-lxc
   libvirt-daemon-driver-qemu
+  libvirt-daemon-plugin-lockd
   libvirt-daemon-driver-secret
   libvirt-daemon-plugin-sanlock
   libvirt-daemon-config-network
@@ -32,6 +39,7 @@ LIBVIRT=(
   libvirt-daemon-driver-storage-zfs
   libvirt-daemon-driver-storage-core
   libvirt-daemon-driver-storage-disk
+  libvirt-daemon-driver-storage-scsi
   libvirt-daemon-driver-storage-mpath
   libvirt-daemon-driver-storage-iscsi
   libvirt-daemon-driver-storage-gluster
