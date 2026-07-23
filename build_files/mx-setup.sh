@@ -205,7 +205,6 @@ PODMAN_ENV=(
 )
 
 NETWORKING=(
-  iwd
   bluez
   avahi
   firewalld
