@@ -120,7 +120,6 @@ SSH_TOOLS=(
 KERNEL_MODULES=(
   "kmod-zfs-${KERNEL_VERSION}"
   "kmod-evdi-${KERNEL_VERSION}"
-  "kmod-sc0710-${KERNEL_VERSION}"
   "kmod-zenergy-${KERNEL_VERSION}"
   "kmod-v4l2loopback-${KERNEL_VERSION}"
   "kernel-devel-matched-${KERNEL_VERSION}"
@@ -128,7 +127,6 @@ KERNEL_MODULES=(
 
 KMOD_PACKAGES=(
   zfs
-  sc0710
   libevdi
   libzfs7
   zenergy
