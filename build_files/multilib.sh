@@ -26,11 +26,23 @@ MULTILIB_CORE=(
 
 # Graphics/GL/Vulkan multilib stack
 MULTILIB_GRAPHICS=(
+  mesa-filesystem.i686
   mesa-dri-drivers.i686
   mesa-vulkan-drivers.i686
   mesa-libGL.i686
   mesa-libEGL.i686
+  mesa-libgbm.i686
   vulkan-loader.i686
+)
+
+# 32-bit builds of gaming overlay/injection tools. gamemode, mangohud, and
+# vkBasalt inject into the game's own process, so a 32-bit game needs a
+# matching 32-bit copy of these libs to load them — the 64-bit package
+# installed in gx-setup.sh isn't enough on its own for 32-bit titles.
+MULTILIB_INJECTION=(
+  gamemode.i686
+  mangohud.i686
+  vkBasalt.i686
 )
 
 # Audio multilib stack (PipeWire/PulseAudio/ALSA compatibility)
@@ -70,6 +82,7 @@ MULTILIB_MISC=(
 ALL_PACKAGES=(
   "${MULTILIB_CORE[@]}"
   "${MULTILIB_GRAPHICS[@]}"
+  "${MULTILIB_INJECTION[@]}"
   "${MULTILIB_AUDIO[@]}"
   "${MULTILIB_X11[@]}"
   "${MULTILIB_MISC[@]}"
