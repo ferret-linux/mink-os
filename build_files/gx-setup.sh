@@ -20,6 +20,7 @@ GAMING_PERFORMANCE=(
 # compatibility layers
 GAMING_PLATFORMS=(
   wine
+  openxr
   winetricks
   protontricks
 )
