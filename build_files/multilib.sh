@@ -21,7 +21,6 @@ MULTILIB_CORE=(
   glibc.i686
   libgcc.i686
   libstdc++.i686
-  zlib.i686
 )
 
 # Graphics/GL/Vulkan multilib stack
@@ -50,7 +49,6 @@ MULTILIB_AUDIO=(
   alsa-lib.i686
   pipewire.i686
   pipewire-alsa.i686
-  pipewire-pulseaudio.i686
 )
 
 # X11 multilib libs commonly required by older/proprietary games
@@ -71,7 +69,6 @@ MULTILIB_MISC=(
   freetype.i686
   fontconfig.i686
   openssl-libs.i686
-  libpulse.i686
   gnutls.i686
 )
 
