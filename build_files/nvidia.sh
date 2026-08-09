@@ -52,12 +52,14 @@ NVIDIA_TOOLS_APP=(
 )
 
 # 32-bit (i686) NVIDIA userspace libs — only needed on *-gx / *-gx-nvidia
-# images for Wine/Proton/Steam. The rest of the 32-bit gaming stack is
-# installed separately by multilib.sh.
+# images for Wine/Proton/Steam. The rest of the 32-bit gaming stack
+# (mesa, audio, X11, injection libs) is installed separately by
+# multilib.sh, so it isn't duplicated here.
 NVIDIA_MULTILIB=(
   nvidia-driver.i686
   nvidia-driver-libs.i686
   nvidia-driver-cuda-libs.i686
+  nvidia-driver-common.i686
   libnvidia-fbc.i686
   libva-nvidia-driver.i686
 )
