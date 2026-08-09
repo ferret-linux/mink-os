@@ -111,6 +111,19 @@ RUN --mount=type=bind,from=ctx,source=/,target=/ctx \
         *) : ;; \
     esac
 
+# ── Multilib packages (*-gx / *-gx-nvidia image variants only) ──
+# 32-bit (i686) compatibility libs needed by Wine/Proton/Steam titles.
+# No NVIDIA handling here — 32-bit NVIDIA libs are installed from
+# nvidia.sh when the image is also an *-nvidia variant.
+RUN --mount=type=bind,from=ctx,source=/,target=/ctx \
+    --mount=type=cache,dst=/var/cache \
+    --mount=type=cache,dst=/var/log \
+    --mount=type=tmpfs,dst=/tmp \
+    case "${IMAGE_NAME}" in \
+        *-gx|*-gx-*) bash /ctx/multilib.sh ;; \
+        *) : ;; \
+    esac
+
 # ── CUDA packages (*-dx-nvidia / *-vx-nvidia image variants only) ──
 RUN --mount=type=bind,from=ctx,source=/,target=/ctx \
     --mount=type=cache,dst=/var/cache \

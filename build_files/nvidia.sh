@@ -51,6 +51,17 @@ NVIDIA_TOOLS_APP=(
   nvidia-settings
 )
 
+# 32-bit (i686) NVIDIA userspace libs — only needed on *-gx / *-gx-nvidia
+# images for Wine/Proton/Steam. The rest of the 32-bit gaming stack is
+# installed separately by multilib.sh.
+NVIDIA_MULTILIB=(
+  nvidia-driver.i686
+  nvidia-driver-libs.i686
+  nvidia-driver-cuda-libs.i686
+  libnvidia-fbc.i686
+  libva-nvidia-driver.i686
+)
+
 # ---------------------------------------------------------------------------
 # Flatten everything into one package list and install in a single
 # dnf transaction.
@@ -62,6 +73,12 @@ ALL_PACKAGES=(
   "${NVIDIA_TOOLS_APP[@]}"
   "${NVIDIA_CONTAINER_TOOLKIT[@]}"
 )
+
+# Add 32-bit NVIDIA libs when building a -gx / -gx- (gaming) variant
+case "${IMAGE_NAME:-}" in
+  *-gx|*-gx-*) ALL_PACKAGES+=("${NVIDIA_MULTILIB[@]}") ;;
+  *) : ;;
+esac
 
 dnf install --setopt=install_weak_deps=False -y "${ALL_PACKAGES[@]}"
 
