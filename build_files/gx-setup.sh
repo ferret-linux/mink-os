@@ -20,7 +20,6 @@ GAMING_PERFORMANCE=(
 # compatibility layers
 GAMING_PLATFORMS=(
   wine
-  openxr
   winetricks
   protontricks
 )
@@ -34,6 +33,14 @@ GAMING_GRAPHICS_EXTRA=(
   libvkd3d
   vulkan-tools
   libva-utils
+)
+
+# Low-latency audio routing. pipewire-jack-audio-connection-kit is the
+# actual package name (verified via dnf search — "pipewire-jack" alone
+# doesn't resolve). Some VR/pro-audio-adjacent titles talk to JACK
+# directly instead of PipeWire's native API.
+GAMING_AUDIO_EXTRA=(
+  pipewire-jack-audio-connection-kit
 )
 
 # Steam Runtime host dependencies. steam-devices installs the udev rules
@@ -67,6 +74,23 @@ GAMING_KMOD_PACKAGES=(
   openrazer-kmod-common
 )
 
+# VR/AR runtime + HMD drivers. monado is the open-source OpenXR runtime
+# (headless service, no GUI); openhmd is the driver library for various
+# headsets. Both confirmed resolvable via repoquery.
+GAMING_VR=(
+  monado
+  openxr
+  openhmd
+  monado-vulkan-layers
+)
+
+# Lighthouse/SteamVR-base-station tracking (Valve Index, HTC Vive, older
+# Vive Pro). Niche vs. GAMING_VR above — only pulls in if you actually
+# want lighthouse-tracked headset support. Confirmed resolvable.
+GAMING_VR_LIGHTHOUSE=(
+  libsurvive
+)
+
 # ---------------------------------------------------------------------------
 # Flatten everything into one package list and install in a single
 # dnf transaction. Order in the array doesn't matter to dnf's resolver.
@@ -75,6 +99,9 @@ ALL_PACKAGES=(
   "${GAMING_PERFORMANCE[@]}"
   "${GAMING_PLATFORMS[@]}"
   "${GAMING_GRAPHICS_EXTRA[@]}"
+  "${GAMING_AUDIO_EXTRA[@]}"
+  "${GAMING_VR[@]}"
+  "${GAMING_VR_LIGHTHOUSE[@]}"
   "${STEAM_RUNTIME_DEPS[@]}"
   "${GAMING_KERNEL_MODULES[@]}"
   "${GAMING_KMOD_PACKAGES[@]}"

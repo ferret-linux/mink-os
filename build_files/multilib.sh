@@ -54,12 +54,15 @@ MULTILIB_AUDIO=(
   pipewire-alsa.i686
   pulseaudio-libs.i686
   libFAudio.i686
+  pipewire-jack-audio-connection-kit.i686
 )
 
 # Input handling. sdl2-compat is Fedora's SDL2-API-over-SDL3 runtime — the
 # actual installable provider of "SDL2" on current Fedora. Backs controller/
 # joystick support in both Wine and a large share of native/Proton titles.
 MULTILIB_INPUT=(
+  openhmd.i686
+  openxr-libs.i686
   sdl2-compat.i686
 )
 
