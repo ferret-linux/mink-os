@@ -72,6 +72,14 @@ MULTILIB_MISC=(
   gnutls.i686
 )
 
+# 32-bit DX12-over-Vulkan translation + VA-API decode. Many older/32-bit
+# Proton titles still need the i686 build of vkd3d specifically; libva-utils
+# is small and matches the 64-bit copy added in gx-setup.sh for consistency.
+MULTILIB_GRAPHICS_EXTRA=(
+  vkd3d.i686
+  libva-utils.i686
+)
+
 # ---------------------------------------------------------------------------
 # Flatten everything into one package list and install in a single
 # dnf transaction. Order in the array doesn't matter to dnf's resolver.
@@ -79,6 +87,7 @@ MULTILIB_MISC=(
 ALL_PACKAGES=(
   "${MULTILIB_CORE[@]}"
   "${MULTILIB_GRAPHICS[@]}"
+  "${MULTILIB_GRAPHICS_EXTRA[@]}"
   "${MULTILIB_INJECTION[@]}"
   "${MULTILIB_AUDIO[@]}"
   "${MULTILIB_X11[@]}"
