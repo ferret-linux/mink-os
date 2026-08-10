@@ -56,12 +56,11 @@ NVIDIA_TOOLS_APP=(
 # (mesa, audio, X11, injection libs) is installed separately by
 # multilib.sh, so it isn't duplicated here.
 NVIDIA_MULTILIB=(
+  libnvidia-fbc.i686
   nvidia-driver.i686
   nvidia-driver-libs.i686
-  nvidia-driver-cuda-libs.i686
   nvidia-driver-common.i686
-  libnvidia-fbc.i686
-  libva-nvidia-driver.i686
+  nvidia-driver-cuda-libs.i686
 )
 
 # ---------------------------------------------------------------------------
