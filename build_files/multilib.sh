@@ -56,8 +56,12 @@ MULTILIB_X11=(
   libX11.i686
   libXext.i686
   libXrandr.i686
+  libjpeg-turbo.i686
   libXcursor.i686
   libXi.i686
+  libpng.i686
+  libdrm.i686
+  libFAudio.i686
   libXinerama.i686
   libXcomposite.i686
   libXfixes.i686
