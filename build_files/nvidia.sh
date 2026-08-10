@@ -57,7 +57,6 @@ NVIDIA_TOOLS_APP=(
 # multilib.sh, so it isn't duplicated here.
 NVIDIA_MULTILIB=(
   libnvidia-fbc.i686
-  nvidia-driver.i686
   nvidia-driver-libs.i686
   nvidia-driver-common.i686
   nvidia-driver-cuda-libs.i686
