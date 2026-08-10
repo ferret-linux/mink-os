@@ -25,11 +25,13 @@ GAMING_PLATFORMS=(
   protontricks
 )
 
-# Vulkan/DX translation + diagnostics. vkd3d gives Proton titles DX12-over-
-# Vulkan support; vulkan-tools/libva-utils are diagnostic CLIs (vulkaninfo,
-# vainfo) commonly requested by users when troubleshooting GPU issues.
+# Vulkan/DX translation + diagnostics. libvkd3d is the actual package name
+# for the DX12-over-Vulkan runtime (verified via repoquery — "vkd3d" alone
+# doesn't resolve). vulkan-tools/libva-utils are diagnostic CLIs
+# (vulkaninfo, vainfo) commonly requested by users when troubleshooting
+# GPU issues.
 GAMING_GRAPHICS_EXTRA=(
-  vkd3d
+  libvkd3d
   vulkan-tools
   libva-utils
 )
