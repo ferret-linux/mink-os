@@ -142,7 +142,7 @@ fi
 # the child process instead of editing sudoers directly.
 
 if [[ -z "$DISABLE_SUDO_PATH_FIX" ]]; then
-  alias sudo='sudo env PATH=$PATH'
+  alias sudo='sudo --preserve-env=PATH '
 fi
 
 # ---- Modern CLI suggestions ----
