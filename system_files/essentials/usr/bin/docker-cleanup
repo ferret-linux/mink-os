@@ -1,0 +1,52 @@
+#!/usr/bin/env bash
+set -euo pipefail
+
+if ! command -v docker &>/dev/null; then
+    echo "docker not found in PATH" >&2
+    exit 1
+fi
+
+gum style \
+    --border rounded \
+    --border-foreground 212 \
+    --padding "0 1" \
+    "$(gum style --foreground 212 --bold 'docker cleanup')" \
+    "" \
+    "Running:" \
+    "  • docker network prune -f" \
+    "  • docker builder prune -f" \
+    "  • docker image prune [-a] -f (asks first)"
+
+echo
+
+# ── step 1: unused networks ────────────────────────────────────────────────────
+_tmp=$(mktemp)
+gum spin --spinner dot --title "Removing unused networks..." -- \
+    bash -c "docker network prune -f > '$_tmp' 2>&1"
+gum log --level info "$(tail -1 "$_tmp")"
+rm -f "$_tmp"
+
+# ── step 2: build cache ─────────────────────────────────────────────────────────
+_tmp=$(mktemp)
+gum spin --spinner dot --title "Pruning build cache..." -- \
+    bash -c "docker builder prune -f > '$_tmp' 2>&1"
+gum log --level info "$(tail -1 "$_tmp")"
+rm -f "$_tmp"
+
+# ── step 3: images (prompted) ───────────────────────────────────────────────────
+if gum confirm "Remove all unused images (not just dangling)?"; then
+    _tmp=$(mktemp)
+    gum spin --spinner dot --title "Removing all unused images..." -- \
+        bash -c "docker image prune -a -f > '$_tmp' 2>&1"
+    gum log --level info "$(tail -1 "$_tmp")"
+    rm -f "$_tmp"
+else
+    _tmp=$(mktemp)
+    gum spin --spinner dot --title "Removing dangling images..." -- \
+        bash -c "docker image prune -f > '$_tmp' 2>&1"
+    gum log --level info "$(tail -1 "$_tmp")"
+    rm -f "$_tmp"
+fi
+
+echo
+gum style --foreground 212 --bold "  Done"
