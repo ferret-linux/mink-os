@@ -7,7 +7,7 @@
 #
 #   Checks first whether the key is already enrolled (confirmed at a
 #   prior MOK Manager boot screen). If so, nothing is done unless you
-#   confirm you want to re-queue it. Otherwise it enrolls directly —
+#   confirm you want to re-queue it. Otherwise it enrolls directly -
 #   if it's already pending, mokutil reports SKIP and exits cleanly.
 #
 #   Secure Boot must be enabled for MOK enrollment to have any effect.
@@ -16,29 +16,29 @@ set -euo pipefail
 MOK="/etc/pki/akmods/certs/ferret-mok.der"
 PASSWORD="ferret"
 
-sudo test -f "$MOK" || { echo "✗  MOK file not found: $MOK" >&2; exit 1; }
+ok()   { printf '\033[1;32m%s\033[0m\n' "$*"; }
+info() { printf '\033[1;36m%s\033[0m\n' "$*"; }
+warn() { printf '\033[1;33m%s\033[0m\n' "$*"; }
+die()  { printf '\033[1;31m%s\033[0m\n' "$*" >&2; exit 1; }
 
-# ── Already enrolled? ────────────────────────────────────────
-TEST=$(sudo mokutil --test-key "$MOK" 2>&1)
+sudo test -f "$MOK" || die "MOK file not found: $MOK"
+
+# -- Already enrolled? -----------------------------------------
+TEST=$(sudo mokutil --test-key "$MOK" 2>&1) || true
 
 if [[ "$TEST" == *"is already enrolled"* ]]; then
-    printf '✔  Key already enrolled — Secure Boot trusts it, nothing to do\n'
-    gum confirm "Re-queue it in the pending list anyway?" || exit 0
-    echo
+    ok "Key already enrolled - Secure Boot trusts it, nothing to do"
+    read -rp "Re-queue it in the pending list anyway? [y/N] " YN
+    [[ "${YN,,}" == "y" ]] || exit 0
 fi
 
-# ── Enroll (or re-queue) ──────────────────────────────────────
+# -- Enroll (or re-queue) --------------------------------------
 OUT=$(printf '%s\n%s\n' "$PASSWORD" "$PASSWORD" | sudo mokutil --import "$MOK" 2>&1) || true
 
 if [[ "$OUT" == *"SKIP:"* ]]; then
-    printf '◇  Key already pending — no changes made\n'
+    warn "Key already pending - no changes made"
 else
-    printf '✔  MOK enrollment queued\n'
+    ok "MOK enrollment queued"
 fi
 
-printf '
-  Next steps:
-  1) Reboot
-  2) Select "Enroll MOK" in the MOK menu
-  3) Enter password: %s
-  4) Confirm and reboot\n\n' "$PASSWORD"
+printf '\n  Next steps:\n  1) Reboot\n  2) Select "Enroll MOK" in the MOK menu\n  3) Enter password: %s\n  4) Confirm and reboot\n' "$PASSWORD"
