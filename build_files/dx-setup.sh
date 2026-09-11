@@ -6,6 +6,18 @@ set -euxo pipefail
 # they all get flattened into ONE dnf transaction below.
 # ---------------------------------------------------------------------------
 
+BUILD_TOOLS=(
+  doxygen
+  gcc-c++
+  diffstat
+  systemtap
+  patchutils
+  subversion
+  glibc-devel
+  libxcrypt-compat
+  pkgconf-pkg-config
+)
+
 DOCKER=(
   docker-ce
   docker-ce-cli
@@ -54,7 +66,6 @@ CLI_UTILS=(
 )
 
 GIT_TOOLS=(
-  gh
   gitui
   gitleaks
   git-annex
@@ -113,6 +124,7 @@ GSTREAMER=(
 # dnf transaction. Order in the array doesn't matter to dnf's resolver.
 # ---------------------------------------------------------------------------
 ALL_PACKAGES=(
+  "${BUILD_TOOLS[@]}"
   "${DOCKER[@]}"
   "${PODMAN[@]}"
   "${LXC[@]}"

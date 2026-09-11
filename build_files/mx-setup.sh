@@ -12,7 +12,6 @@ FUSE_TOOLS=(
   fuse-libs
   fuse3-libs
   fuse-common
-  fuse-overlayfs
 )
 
 FIRMWARES=(
@@ -86,8 +85,6 @@ FFMPEG_MEDIA=(
   libfdk-aac
   ffmpeg-libs
   libfreeaptx
-  glycin-loaders
-  ffmpegthumbnailer
 )
 
 GRAPHICS_GPU=(
@@ -142,23 +139,10 @@ CORE_SYSTEM=(
   plymouth-plugin-two-step
 )
 
-NIX=(
-  nix
-  patch
-  nix-doc
-  busybox
-  binutils
-  nix-libs
-  nix-legacy
-  nix-system
-  nix-daemon
-  nix-filesystem
-)
-
 SHELL_TERMINAL=(
   zsh
-  bash
-  bash-completion
+  fish
+  nushell
   zsh-autosuggestions
   zsh-syntax-highlighting
 )
@@ -171,7 +155,6 @@ CLI_TOOLS=(
   dust
   btop
   curl
-  zrun
   procs
   neovim
   zfetch
@@ -253,7 +236,6 @@ FONTS_LANGPACKS=(
 # dnf transaction. Order in the array doesn't matter to dnf's resolver.
 # ---------------------------------------------------------------------------
 ALL_PACKAGES=(
-  "${NIX[@]}"
   "${AUDIO[@]}"
   "${GIT_TOOLS[@]}"
   "${CLI_TOOLS[@]}"

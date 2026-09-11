@@ -23,18 +23,9 @@ BUILD_TOOLS=(
   glibc
   rsync
   sqlite
-  doxygen
-  gcc-c++
-  diffstat
   procps-ng
-  systemtap
   wget2-libs
   wget2-wget
-  patchutils
-  subversion
-  glibc-devel
-  libxcrypt-compat
-  pkgconf-pkg-config
 )
 
 SYSTEM_TOOLS_HW=(

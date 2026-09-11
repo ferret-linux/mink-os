@@ -47,8 +47,6 @@ RUN dnf install -y --refresh --setopt=install_weak_deps=False dnf5-plugins && \
     dnf clean packages && \
     dnf clean all
 
-RUN dnf --refresh makecache && dnf upgrade --setopt=install_weak_deps=False -y
-
 # ── Mini packages (ALL image variants) ─────────────────────────
 # The minimal/core package set. Every single image flavor gets this,
 # including the *-mx and *-mx-nvidia variants.
@@ -134,16 +132,6 @@ RUN --mount=type=bind,from=ctx,source=/,target=/ctx \
         *) : ;; \
     esac
 
-# ── ROCm packages (*-dx / *-vx image variants only, non-nvidia) ──
-RUN --mount=type=bind,from=ctx,source=/,target=/ctx \
-    --mount=type=cache,dst=/var/cache \
-    --mount=type=cache,dst=/var/log \
-    --mount=type=tmpfs,dst=/tmp \
-    case "${IMAGE_NAME}" in \
-        *-dx|*-vx) bash /ctx/rocm.sh ;; \
-        *) : ;; \
-    esac
-
 # ── /opt → immutable tree migration ───────────────────────────
 # Move /opt contents into the immutable /usr tree and create
 # tmpfiles.d entries to symlink them back at runtime.
@@ -197,9 +185,7 @@ RUN dnf config-manager setopt fedora-multimedia.enabled=0 && \
 RUN rm -rf /opt && ln -s /var/opt /opt && \
     mkdir -p /var/roothome && \
     mkdir -p /var/tmp && \
-    chmod -R 1777 /var/tmp && \
-    mkdir -p /nix && \
-    mkdir -p /var/nix
+    chmod -R 1777 /var/tmp
 
 # ── OS release metadata ─────────────────────────────────────────
 RUN sed -i 's/^NAME=.*/NAME="MinkOS"/' /usr/lib/os-release && \
@@ -251,9 +237,7 @@ RUN systemctl enable ferret-libvirt-fix.service || true && \
     systemctl enable ferret-hostname.service && \
     systemctl enable ferret-flatpak.service && \
     systemctl enable ferret-groups.service && \
-    systemctl enable ferret-rfkill.service && \
-    systemctl enable nix-daemon && \
-    systemctl enable nix.mount
+    systemctl enable ferret-rfkill.service
 
 # ── Shell defaults & Plymouth theme cleanup ───────────────────
 RUN sed -i 's|^SHELL=.*|SHELL=/usr/bin/zsh|' /etc/default/useradd && \

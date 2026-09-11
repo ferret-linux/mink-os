@@ -15,7 +15,6 @@ NVIDIA_CUDA_TOOLKIT=(
   cuda
   cuda-gcc
   cuda-libs
-  cuda-devel
   cuda-extra-libs
   criu-cuda-plugin
 )
