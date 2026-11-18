@@ -1,7 +1,7 @@
 # SPDX-License-Identifier: GPL-3.0-only
 #
-# Temporary probe: prove that cosign can sign an already-published image
-# in this registry and that the verify job can find that signature.
+# Temporary probe: sign every published mink variant with cosign and
+# verify the signatures the same way the verify job does.
 # Delete after use.
 
 name: sign probe
@@ -15,8 +15,21 @@ permissions:
 
 jobs:
   probe:
-    name: Sign and verify mink-os:latest
+    name: Sign and verify published images
     runs-on: ubuntu-26.04
+
+    env:
+      IMAGES: >-
+        mink-os
+        mink-os-dx
+        mink-os-vx
+        mink-os-gx
+        mink-os-mx
+        mink-os-nvidia
+        mink-os-dx-nvidia
+        mink-os-vx-nvidia
+        mink-os-gx-nvidia
+        mink-os-mx-nvidia
 
     steps:
       - name: Checkout
@@ -30,29 +43,28 @@ jobs:
       - name: Login to GHCR
         run: echo "${{ secrets.GITHUB_TOKEN }}" | cosign login ghcr.io -u ${{ github.actor }} --password-stdin
 
-      - name: Resolve digest
-        id: digest
-        run: |
-          TOKEN=$(curl -fsSL "https://ghcr.io/token?scope=repository:ferret-linux/mink-os:pull" | jq -r .token)
-          DIGEST=$(curl -fsSLI \
-            -H "Authorization: Bearer ${TOKEN}" \
-            -H "Accept: application/vnd.oci.image.manifest.v1+json,application/vnd.oci.image.index.v1+json,application/vnd.docker.distribution.manifest.v2+json" \
-            "https://ghcr.io/v2/ferret-linux/mink-os/manifests/latest" \
-            | tr -d '\r' | awk -F': ' 'tolower($1)=="docker-content-digest"{print $2}')
-          test -n "${DIGEST}"
-          echo "digest=${DIGEST}" >> $GITHUB_OUTPUT
-
-      - name: Sign
+      - name: Sign and verify
         env:
           SIGNING_SECRET: ${{ secrets.SIGNING_SECRET }}
         run: |
           PRIVATE_KEY_FILE="$(mktemp)"
           echo "${SIGNING_SECRET}" > "${PRIVATE_KEY_FILE}"
           trap 'rm -f $PRIVATE_KEY_FILE' EXIT
-          COSIGN_PASSWORD="" cosign sign --yes \
-            --registry-referrers-mode=legacy \
-            --key "${PRIVATE_KEY_FILE}" \
-            "ghcr.io/ferret-linux/mink-os@${{ steps.digest.outputs.digest }}"
 
-      - name: Verify
-        run: cosign verify --key cosign.pub "ghcr.io/ferret-linux/mink-os@${{ steps.digest.outputs.digest }}"
+          for image in ${IMAGES}; do
+            TOKEN=$(curl -fsSL "https://ghcr.io/token?scope=repository:ferret-linux/${image}:pull" | jq -r .token)
+            digest=$(curl -fsSLI \
+              -H "Authorization: Bearer ${TOKEN}" \
+              -H "Accept: application/vnd.oci.image.manifest.v1+json,application/vnd.oci.image.index.v1+json,application/vnd.docker.distribution.manifest.v2+json" \
+              "https://ghcr.io/v2/ferret-linux/${image}/manifests/latest" \
+              | tr -d '\r' | awk -F': ' 'tolower($1)=="docker-content-digest"{print $2}')
+            test -n "${digest}"
+
+            echo "=== ${image}@${digest}"
+            COSIGN_PASSWORD="" cosign sign --yes \
+              --registry-referrers-mode=legacy \
+              --key "${PRIVATE_KEY_FILE}" \
+              "ghcr.io/ferret-linux/${image}@${digest}"
+
+            cosign verify --key cosign.pub "ghcr.io/ferret-linux/${image}@${digest}"
+          done
