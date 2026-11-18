@@ -73,7 +73,8 @@ QEMU=(
   qemu-block-blkio
   qemu-sanity-check
   qemu-ui-spice-app
-  qemu-block-gluster
+  # qemu-block-gluster: QEMU 11 dropped the Gluster block driver and Fedora 45
+  # retires the subpackage (qemu.spec obsoletes qemu-block-gluster).
   qemu-ui-spice-core
   qemu-audio-pipewire
   qemu-device-usb-host
@@ -169,7 +170,9 @@ INCUS=(
   incus-ui
   incus-tools
   incus-client
-  incus-selinux
+  # incus-selinux: dropped upstream in 6.19.1-4, superseded by container-selinux
+  # (which incus requires whenever selinux-policy is installed). Fedora 45
+  # no longer ships the subpackage.
 )
 
 HW_DIAGNOSTICS=(
