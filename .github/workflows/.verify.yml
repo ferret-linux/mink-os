@@ -46,23 +46,27 @@ jobs:
 
       - name: Verify Signature
         run: |
+          ok=false
           for i in 1 2 3; do
             cosign verify \
               --key cosign.pub \
-              ghcr.io/ferret-linux/${{ matrix.image_name }}:latest && break
+              ghcr.io/ferret-linux/${{ matrix.image_name }}:latest && { ok=true; break; }
             echo "Attempt $i/3 failed, retrying in 15s..."
             sleep 15
           done
+          $ok || { echo "Retries exhausted after 3 attempts"; exit 1; }
         env:
           COSIGN_EXPERIMENTAL: false
 
       - name: Pull Image
         run: |
+          ok=false
           for i in 1 2 3; do
-            podman pull ghcr.io/ferret-linux/${{ matrix.image_name }}:latest && break
+            podman pull ghcr.io/ferret-linux/${{ matrix.image_name }}:latest && { ok=true; break; }
             echo "Attempt $i/3 failed, retrying in 15s..."
             sleep 15
           done
+          $ok || { echo "Retries exhausted after 3 attempts"; exit 1; }
 
       - name: Run Image
         run: |

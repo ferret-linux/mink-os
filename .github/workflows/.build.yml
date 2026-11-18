@@ -63,14 +63,17 @@ jobs:
 
       - name: Pull Base Image
         run: |
+          ok=false
           for i in 1 2 3; do
-            podman pull ${{ matrix.base_image }} && break
+            podman pull ${{ matrix.base_image }} && { ok=true; break; }
             echo "Attempt $i/3 failed, retrying in 15s..."
             sleep 15
           done
+          $ok || { echo "Retries exhausted after 3 attempts"; exit 1; }
 
       - name: Build Image
         run: |
+          ok=false
           for i in 1 2 3; do
             podman build \
               --build-arg BASE_IMAGE=${{ matrix.base_image }} \
@@ -86,11 +89,12 @@ jobs:
               --label "containers.bootc=1" \
               --file Containerfile \
               --tag ghcr.io/ferret-linux/${{ matrix.image_name }}:latest \
-              . && break
+              . && { ok=true; break; }
             echo "Attempt $i/3 failed, pruning and retrying in 30s..."
             podman system prune -af
             sleep 30
           done
+          $ok || { echo "Retries exhausted after 3 attempts"; exit 1; }
 
       - name: Prune
         run: |

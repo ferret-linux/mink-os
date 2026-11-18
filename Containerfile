@@ -26,11 +26,16 @@ RUN rm -rf /opt && mkdir -p /opt
 RUN echo "install_weak_deps=False" >> /etc/dnf/dnf.conf
 
 # ── Repositories: add Ferret/negativo17, strip Fedora repos ─────
+# The openapv pre-install is a temporary shim: negativo17's ffmpeg links
+# liboapv.so.11, which Fedora currently only ships in updates-testing. Once
+# openapv 1.1 reaches the stable repos the repoquery check succeeds and the
+# install is skipped, so the shim removes itself with no maintenance. The
+# updates-testing repo file is deleted below and never ships in the image.
 RUN dnf install -y --refresh --setopt=install_weak_deps=False dnf5-plugins && \
     dnf config-manager addrepo --from-repofile=https://negativo17.org/repos/fedora-multimedia.repo && \
     dnf config-manager addrepo --from-repofile=https://negativo17.org/repos/fedora-cdrtools.repo && \
-    dnf config-manager addrepo --from-repofile=https://ferretlinux.org/repo/ferret-kmods.repo && \
-    dnf config-manager addrepo --from-repofile=https://ferretlinux.org/repo/ferret-pkgs.repo && \
+    dnf config-manager addrepo --from-repofile=https://ferret-linux.github.io/repo/ferret-kmods.repo && \
+    dnf config-manager addrepo --from-repofile=https://ferret-linux.github.io/repo/ferret-pkgs.repo && \
     dnf config-manager setopt fedora-multimedia.enabled=1 && \
     dnf config-manager setopt fedora-cdrtools.enabled=1 && \
     dnf config-manager setopt ferret-kmods.enabled=1 && \
@@ -39,6 +44,11 @@ RUN dnf install -y --refresh --setopt=install_weak_deps=False dnf5-plugins && \
     dnf config-manager setopt fedora-cdrtools.priority=90 && \
     dnf config-manager setopt ferret-kmods.priority=50 && \
     dnf config-manager setopt ferret-pkgs.priority=60 && \
+    dnf --refresh makecache && \
+    if ! dnf -q repoquery --available --whatprovides 'liboapv.so.11()(64bit)' | grep -q .; then \
+        dnf install -y --setopt=install_weak_deps=False \
+            --enablerepo=updates-testing openapv-libs; \
+    fi && \
     dnf remove -y fedora-repos-archive && \
     rm -f /etc/yum.repos.d/fedora-updates-testing.repo && \
     rm -f /etc/yum.repos.d/fedora-updates-archive.repo && \

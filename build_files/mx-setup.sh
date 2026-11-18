@@ -155,7 +155,6 @@ CLI_TOOLS=(
   dust
   btop
   curl
-  procs
   neovim
   zfetch
   zoxide

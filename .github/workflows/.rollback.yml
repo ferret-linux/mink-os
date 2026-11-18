@@ -55,21 +55,25 @@ jobs:
       - name: Retag Old Digest as Latest
         if: steps.info.outputs.old_digest != ''
         run: |
+          ok=false
           for i in 1 2 3; do
-            podman pull ghcr.io/ferret-linux/${{ matrix.image_name }}@${{ steps.info.outputs.old_digest }} && break
+            podman pull ghcr.io/ferret-linux/${{ matrix.image_name }}@${{ steps.info.outputs.old_digest }} && { ok=true; break; }
             echo "Attempt $i/3 failed, retrying in 15s..."
             sleep 15
           done
+          $ok || { echo "Retries exhausted after 3 attempts"; exit 1; }
 
           podman tag \
             ghcr.io/ferret-linux/${{ matrix.image_name }}@${{ steps.info.outputs.old_digest }} \
             ghcr.io/ferret-linux/${{ matrix.image_name }}:latest
 
+          ok=false
           for i in 1 2 3; do
-            podman push ghcr.io/ferret-linux/${{ matrix.image_name }}:latest && break
+            podman push ghcr.io/ferret-linux/${{ matrix.image_name }}:latest && { ok=true; break; }
             echo "Attempt $i/3 failed, retrying in 15s..."
             sleep 15
           done
+          $ok || { echo "Retries exhausted after 3 attempts"; exit 1; }
 
           echo "✓ Rolled back :latest to ${{ steps.info.outputs.old_digest }}"
 
@@ -79,15 +83,17 @@ jobs:
 
       - name: Delete Broken New Version
         run: |
+          ok=false
           for i in 1 2 3; do
             gh api \
               --method DELETE \
               -H "Accept: application/vnd.github+json" \
               -H "X-GitHub-Api-Version: 2022-11-28" \
-              /orgs/ferret-linux/packages/container/${{ matrix.image_name }}/versions/${{ steps.info.outputs.new_version_id }} && break
+              /orgs/ferret-linux/packages/container/${{ matrix.image_name }}/versions/${{ steps.info.outputs.new_version_id }} && { ok=true; break; }
             echo "Attempt $i/3 failed, retrying in 15s..."
             sleep 15
           done
+          $ok || { echo "Retries exhausted after 3 attempts"; exit 1; }
           echo "✓ Deleted broken version ${{ steps.info.outputs.new_version_id }}"
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
