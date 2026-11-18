@@ -63,6 +63,14 @@ jobs:
             ghcr.io/ferret-linux/${{ matrix.image_name }}:rechunked \
             ghcr.io/ferret-linux/${{ matrix.image_name }}:latest
 
+      - name: Install Cosign
+        uses: sigstore/cosign-installer@6f9f17788090df1f26f669e9d70d6ae9567deba6 # v4.1.2
+        with:
+          cosign-release: 'v2.6.3'
+
+      - name: Login Cosign to GHCR
+        run: echo "${{ secrets.GITHUB_TOKEN }}" | cosign login ghcr.io -u ${{ github.actor }} --password-stdin
+
       - name: Push and Sign
         env:
           SIGNING_SECRET: ${{ secrets.SIGNING_SECRET }}
@@ -70,10 +78,6 @@ jobs:
           PRIVATE_KEY_FILE="$(mktemp)"
           echo "${SIGNING_SECRET}" > "${PRIVATE_KEY_FILE}"
           trap 'rm -f $PRIVATE_KEY_FILE' EXIT
-
-          sudo mkdir -p /etc/containers/registries.d/
-          echo -e "docker:\n  ghcr.io/ferret-linux:\n    use-sigstore-attachments: true" \
-            | sudo tee /etc/containers/registries.d/ferret-linux.yaml
 
           DIGESTFILE="$(mktemp)"
           rm -f "${DIGESTFILE}"
@@ -86,12 +90,25 @@ jobs:
               --compression-format=zstd:chunked \
               --compression-level=20 \
               --digestfile="${DIGESTFILE}" \
-              "--sign-passphrase-file=/dev/null" \
-              "--sign-by-sigstore-private-key=${PRIVATE_KEY_FILE}" \
               ghcr.io/ferret-linux/${{ matrix.image_name }}:latest
           done
 
-          echo "remote_digest=$(< "${DIGESTFILE}")" >> $GITHUB_OUTPUT
+          DIGEST="$(< "${DIGESTFILE}")"
+          echo "remote_digest=${DIGEST}" >> $GITHUB_OUTPUT
+
+          # Sign the exact manifest that ended up in the registry. podman's
+          # own sigstore attachment is not reliably published, so the tag
+          # could end up with no verifiable signature at all. cosign signs
+          # the pushed digest and uploads the entry to Rekor, which is what
+          # the verify job checks.
+          #
+          # Force the legacy tag scheme (sha256-<digest>.sig) instead of
+          # OCI 1.1 referrers: GHCR drops the untagged referrer artifacts,
+          # which makes the signature vanish a few minutes after the push.
+          COSIGN_PASSWORD="" cosign sign --yes \
+            --registry-referrers-mode=legacy \
+            --key "${PRIVATE_KEY_FILE}" \
+            "ghcr.io/ferret-linux/${{ matrix.image_name }}@${DIGEST}"
         id: push
 
       - name: Save New Version ID
