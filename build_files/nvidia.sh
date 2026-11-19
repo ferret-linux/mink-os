@@ -42,7 +42,9 @@ NVIDIA_X11=(
 
 NVIDIA_CONTAINER_TOOLKIT=(
   nvidia-container-toolkit
-  nvidia-container-services
+  nvidia-container-toolkit-base
+  libnvidia-container-tools
+  libnvidia-container1
   nvidia-container-toolkit-selinux
 )
 
@@ -85,7 +87,10 @@ dnf install --setopt=install_weak_deps=False -y "${ALL_PACKAGES[@]}"
 # Nvidia Services
 systemctl enable nvidia-persistenced.service
 systemctl enable nvidia-powerd.service
-systemctl enable nvidia-cdi.service
+# Upstream toolkit (>= 1.19.1) ships these; .path regenerates on driver/toolkit
+# changes, .service guarantees a fresh CDI spec at every boot (/run is tmpfs).
+systemctl enable nvidia-cdi-refresh.path
+systemctl enable nvidia-cdi-refresh.service
 
 # Fix Kmods Tree & loading
 depmod -a "${KERNEL_VERSION}"

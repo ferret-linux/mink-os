@@ -24,6 +24,7 @@ DOCKER=(
   containerd.io
   docker-buildx-plugin
   docker-compose-plugin
+  lazydocker
 )
 
 PODMAN=(
@@ -63,6 +64,7 @@ CLI_UTILS=(
   ncdu
   direnv
   hyperfine
+  yazi
 )
 
 GIT_TOOLS=(
@@ -72,7 +74,7 @@ GIT_TOOLS=(
   git-delta
   git-crypt
   difftastic
-  git-cinnabar
+  lazygit
   git-filter-repo
 )
 
