@@ -58,6 +58,7 @@ COCKPIT=(
 )
 
 CLI_UTILS=(
+  gh
   jq
   yq
   tmux

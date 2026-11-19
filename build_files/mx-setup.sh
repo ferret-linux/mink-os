@@ -85,6 +85,7 @@ FFMPEG_MEDIA=(
   libfdk-aac
   ffmpeg-libs
   libfreeaptx
+  openapv-libs
 )
 
 GRAPHICS_GPU=(
