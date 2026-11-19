@@ -26,11 +26,13 @@ RUN rm -rf /opt && mkdir -p /opt
 RUN echo "install_weak_deps=False" >> /etc/dnf/dnf.conf
 
 # ── Repositories: add Ferret/negativo17, strip Fedora repos ─────
-# The openapv pre-install is a temporary shim: negativo17's ffmpeg links
-# liboapv.so.11, which Fedora currently only ships in updates-testing. Once
-# openapv 1.1 reaches the stable repos the repoquery check succeeds and the
-# install is skipped, so the shim removes itself with no maintenance. The
-# updates-testing repo file is deleted below and never ships in the image.
+# negativo17's ffmpeg links liboapv.so.11, which Fedora first shipped in
+# updates-testing. Bake the provider into the image in this layer instead of
+# relying on a later layer's repo metadata: a stale mirrorsync once made the
+# x86_64 libavcodec resolve fail with "nothing provides liboapv.so.11". The
+# guard makes this a no-op once openapv-libs is already installed, so the
+# --enablerepo=updates-testing fallback only fires before openapv 1.1 lands
+# in the stable repos.
 RUN dnf install -y --refresh --setopt=install_weak_deps=False dnf5-plugins && \
     dnf config-manager addrepo --from-repofile=https://negativo17.org/repos/fedora-multimedia.repo && \
     dnf config-manager addrepo --from-repofile=https://negativo17.org/repos/fedora-cdrtools.repo && \
@@ -45,7 +47,7 @@ RUN dnf install -y --refresh --setopt=install_weak_deps=False dnf5-plugins && \
     dnf config-manager setopt ferret-kmods.priority=50 && \
     dnf config-manager setopt ferret-pkgs.priority=60 && \
     dnf --refresh makecache && \
-    if ! dnf -q repoquery --available --whatprovides 'liboapv.so.11()(64bit)' | grep -q .; then \
+    if ! dnf -q repoquery --installed --whatprovides 'liboapv.so.11()(64bit)' | grep -q .; then \
         dnf install -y --setopt=install_weak_deps=False \
             --enablerepo=updates-testing openapv-libs; \
     fi && \
