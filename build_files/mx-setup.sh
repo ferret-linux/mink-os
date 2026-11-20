@@ -129,6 +129,7 @@ CORE_SYSTEM=(
   i2c-tools
   uresourced
   dbus-daemon
+  brew-helpers
   shadow-utils
   inotify-tools
   unbound-anchor

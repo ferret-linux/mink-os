@@ -28,9 +28,11 @@ DOCKER=(
 )
 
 NERDCTL=(
+  nerdctl
   rootlesskit
   fuse-overlayfs
   stargz-snapshotter
+  containernetworking-plugins
 )
 
 PODMAN=(

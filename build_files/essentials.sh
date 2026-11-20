@@ -55,8 +55,6 @@ FIRMWARES=(
   linux-firmware
   atmel-firmware
   mt7xxx-firmware
-  # zd1211-firmware was dropped from Fedora in 45 (the package no longer
-  # exists in any enabled repo), so it is intentionally absent here.
   amd-gpu-firmware
   atheros-firmware
   realtek-firmware
