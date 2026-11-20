@@ -157,6 +157,7 @@ CLI_TOOLS=(
   btop
   curl
   neovim
+  mise
   zfetch
   zoxide
   fd-find
