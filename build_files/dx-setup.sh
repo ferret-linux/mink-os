@@ -20,11 +20,17 @@ BUILD_TOOLS=(
 
 DOCKER=(
   docker-ce
+  lazydocker
   docker-ce-cli
   containerd.io
   docker-buildx-plugin
   docker-compose-plugin
-  lazydocker
+)
+
+NERDCTL=(
+  rootlesskit
+  fuse-overlayfs
+  stargz-snapshotter
 )
 
 PODMAN=(
@@ -63,19 +69,19 @@ CLI_UTILS=(
   yq
   tmux
   ncdu
+  yazi
   direnv
   hyperfine
-  yazi
 )
 
 GIT_TOOLS=(
   gitui
+  lazygit
   gitleaks
   git-annex
   git-delta
   git-crypt
   difftastic
-  lazygit
   git-filter-repo
 )
 
@@ -131,6 +137,7 @@ ALL_PACKAGES=(
   "${DOCKER[@]}"
   "${PODMAN[@]}"
   "${LXC[@]}"
+  "${NERDCTL[@]}"
   "${COCKPIT[@]}"
   "${CLI_UTILS[@]}"
   "${GIT_TOOLS[@]}"

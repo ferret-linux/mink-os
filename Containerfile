@@ -260,7 +260,8 @@ RUN rm -rf /usr/share/applications/input-remapper-gtk.desktop && \
     rm -rf /usr/share/applications/echomixer.desktop && \
     rm -rf /usr/share/applications/hdspconf.desktop && \
     rm -rf /usr/share/applications/btop.desktop && \
-    rm -rf /usr/share/applications/nvim.desktop
+    rm -rf /usr/share/applications/nvim.desktop && \
+    rm -rf /usr/share/applications/yazi.desktop
 
 # ── Installed package count ──────────────────────────────────
 # Just a quick sanity check/log of how many packages ended up
