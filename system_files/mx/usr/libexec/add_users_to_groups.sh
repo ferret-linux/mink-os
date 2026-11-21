@@ -9,6 +9,7 @@ set -euo pipefail
 GROUPS_TO_ADD=(
     gamemode    # gamemode needs it
     kvm         # kernel virtual machine
+    input       # input device access (/dev/input/*)
     docker      # docker access
     plugdev     # openrazer needs it
     libvirt     # kvm/libvirt needs it
