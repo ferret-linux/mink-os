@@ -118,6 +118,8 @@ GSTREAMER_PLUGINS=(
 )
 
 CORE_SYSTEM=(
+  xsel
+  xclip
   otter
   audit
   fwupd
@@ -131,6 +133,7 @@ CORE_SYSTEM=(
   dbus-daemon
   brew-helpers
   shadow-utils
+  wl-clipboard
   inotify-tools
   unbound-anchor
   usb_modeswitch
