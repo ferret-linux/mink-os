@@ -128,6 +128,7 @@ CORE_SYSTEM=(
   flatpak
   freerdp
   plymouth
+  cliphist
   i2c-tools
   uresourced
   dbus-daemon
